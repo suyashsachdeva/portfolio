@@ -1,422 +1,276 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Suyash Sachdeva — Portfolio</title>
-  <meta name="description" content="Suyash Sachdeva — Deep Learning Researcher | Computer Vision | AI/ML" />
-  <meta name="color-scheme" content="dark light">
-  <style>
-    /* ==========================
-       Dynamic Glassmorphic Portfolio
-       Single-file HTML/CSS/JS
-       ========================== */
-    :root{
-      --bg1: #07142b;
-      --bg2: #07192b;
-      --glass: rgba(255,255,255,0.06);
-      --glass-2: rgba(255,255,255,0.02);
-      --muted: #9fb0d6;
-      --accent: #60a5fa;
-      --accent2: #7c3aed;
-      --accent3: #06b6d4;
-      --text: #e8f1ff;
-      --radius: 14px;
-      --card-shadow: 0 12px 40px rgba(2,6,23,0.6);
-      --glass-border: rgba(255,255,255,0.06);
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Suyash Sachdeva — Neural Portfolio</title>
+<meta name="description" content="Suyash Sachdeva — Deep Learning Researcher | Computer Vision" />
+<style>
+  /* ====== Neural Portfolio - Dark / Cool Tech ====== */
+  :root{
+    --bg1:#020617; --bg2:#07122a; --glass: rgba(255,255,255,0.04);
+    --muted:#9fb0d6; --accent:#45b3ff; --accent2:#6d5bff; --accent3:#60e0d8;
+    --text:#e9f3ff; --card-radius:16px; --glass-border:rgba(255,255,255,0.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    background: radial-gradient(800px 400px at 10% 10%, rgba(69,179,255,0.04), transparent 12%),
+                linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:var(--text); -webkit-font-smoothing:antialiased;
+  }
+  /* container */
+  .wrap{max-width:1100px;margin:36px auto;padding:22px;position:relative;z-index:2;}
+  .glass{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--card-radius); padding:14px; border:1px solid var(--glass-border);
+    backdrop-filter: blur(8px) saturate(1.05);
+  }
 
-    /* theme variants */
-    :root[data-theme="academic"]{
-      --accent: #06b6d4;
-      --accent2: #7dd3fc;
-      --accent3: #60a5fa;
-      --bg1: #041028;
-      --bg2: #061433;
-      --muted: #a9c8e6;
-    }
-    :root[data-theme="modern"]{
-      --accent: #7c3aed;
-      --accent2: #a78bfa;
-      --accent3: #f472b6;
-      --bg1: #071226;
-      --bg2: #07192b;
-      --muted: #bfb7ff;
-    }
-    :root[data-theme="creative"]{
-      --accent: #ef4444;
-      --accent2: #f97316;
-      --accent3: #f472b6;
-      --bg1: #050816;
-      --bg2: #0a0b2e;
-      --muted: #ffd7de;
-    }
+  /* header / nav */
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:700;color:#022;box-shadow:0 8px 30px rgba(13,18,30,0.6)}
+  .brand h1{font-size:18px;margin:0} .brand p{margin:0;color:var(--muted);font-size:13px}
+  .nav{display:flex;gap:10px;align-items:center}
+  .nav a{color:var(--text);text-decoration:none;padding:8px 12px;border-radius:10px}
+  .nav a:hover{transform:translateY(-3px);opacity:0.95}
+  .btn{padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;color:var(--text);cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#001f2d}
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      color:var(--text);background:linear-gradient(120deg,var(--bg1) 0%,var(--bg2) 100%);
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      overflow-y:scroll;
-    }
+  /* hero with neural canvas */
+  .hero-wrap{position:relative; border-radius:18px; overflow:hidden; min-height:320px; margin-bottom:22px;}
+  canvas#neural{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+  .hero-overlay{position:relative;z-index:2;padding:28px;display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:center}
+  .intro{padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid var(--glass-border)}
+  .eyebrow{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .intro h2{margin:0;font-size:30px}
+  .intro p{color:var(--muted);margin-top:8px;line-height:1.5}
+  .intro .ctas{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .pill{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);border:1px solid var(--glass-border);text-decoration:none}
 
-    /* animated gradient overlay */
-    .animated-bg{
-      position:fixed; inset:0; z-index:0; pointer-events:none;
-      background:
-        radial-gradient(600px 400px at 10% 10%, rgba(124,58,237,0.08), transparent 10%),
-        radial-gradient(600px 300px at 90% 80%, rgba(6,182,212,0.06), transparent 10%);
-      filter: blur(28px);
-      transform: translateZ(0);
-      transition: opacity .6s ease;
-    }
+  .profile{padding:16px;border-radius:12px;border:1px solid var(--glass-border);background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.00))}
+  .profile h3{margin:0 0 6px 0} .profile .meta{color:var(--muted);font-size:13px}
+  .links{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .link{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.02);text-decoration:none;color:var(--text);border:1px solid var(--glass-border)}
 
-    /* particle canvas sits under content */
-    #particle-canvas{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.6; }
+  /* sections */
+  section{margin-top:18px}
+  h3.section-title{margin:0;font-size:18px}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
 
-    .container{
-      max-width:1100px; margin:40px auto; padding:28px; position:relative; z-index:10;
-      backdrop-filter: blur(8px) saturate(1.05);
-      border-radius:18px; border:1px solid var(--glass-border); box-shadow: var(--card-shadow);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      overflow:hidden;
-    }
+  .card{padding:14px;border-radius:12px;border:1px solid var(--glass-border);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));transition:transform .28s,box-shadow .28s}
+  .card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(2,6,23,0.6)}
 
-    /* NAV */
-    .nav{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:10px 6px; margin-bottom:18px;
-    }
-    .brand{ display:flex; gap:12px; align-items:center; }
-    .logo{
-      width:52px;height:52px;border-radius:12px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent2)); font-weight:700; color:#fff;
-      font-size:18px; box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    }
-    .brand h1{ font-size:18px; margin:0 }
-    .brand p{ margin:0; font-size:13px; color:var(--muted) }
+  /* research cards */
+  .research-grid{display:grid;grid-template-columns: repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:12px}
+  .research-card{position:relative;border-radius:12px;min-height:180px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;color:var(--text);cursor:pointer;border:1px solid var(--glass-border)}
+  .research-card .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter: blur(10px) brightness(.65) saturate(.9);transform:scale(1.05);transition:filter .35s,transform .35s;z-index:0}
+  .research-card:hover .bg{filter: blur(4px) brightness(.85) saturate(1.05);transform:scale(1.06)}
+  .research-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.15), rgba(2,6,23,0.6));z-index:1}
+  .research-inner{position:relative;z-index:2}
+  .research-meta{font-size:13px;color:var(--muted)}
+  .research-title{font-weight:700;margin:6px 0 8px 0}
+  .read-btn{padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#001f2d;text-decoration:none;border:none}
 
-    .main-nav{ display:flex; gap:8px; align-items:center; }
-    .main-nav a{
-      color:var(--text); padding:8px 12px; border-radius:10px; font-size:14px; text-decoration:none;
-      transition: transform .18s, background .18s;
-    }
-    .main-nav a:hover{ transform:translateY(-3px); text-decoration:underline }
+  /* responsiveness */
+  @media (max-width:920px){
+    .hero-overlay{grid-template-columns:1fr}
+    .intro h2{font-size:24px}
+    .profile{order:2}
+  }
+  @media (max-width:560px){
+    .wrap{padding:14px;margin:20px auto}
+    .logo{width:48px;height:48px}
+  }
 
-    .controls{ display:flex; gap:8px; align-items:center }
-
-    .btn{
-      padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);
-      background:transparent;color:var(--text); cursor:pointer; font-size:14px;
-      backdrop-filter: blur(6px);
-    }
-    .btn.primary{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:white;border:none; box-shadow: 0 8px 30px rgba(2,6,23,0.35);
-    }
-
-    /* HERO */
-    .hero{
-      display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:center; margin-bottom:22px;
-    }
-    .hero-left{
-      padding:22px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-      border:1px solid var(--glass-border);
-    }
-    .eyebrow{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-    .hero-left h2{ font-size:30px; margin:0 0 8px 0 }
-    .lead{ margin:0;color:var(--muted); line-height:1.5 }
-
-    .hero-ctas{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap }
-    .pill{ padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.02); color:var(--muted); font-size:13px; text-decoration:none; border:1px solid var(--glass-border) }
-
-    .stats{ display:flex; gap:12px; margin-top:18px }
-    .stat{ padding:10px 12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid var(--glass-border); }
-
-    .hero-right{ padding:18px; border-radius:12px; border:1px solid var(--glass-border); background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); }
-    .quick-links{ display:flex; flex-direction:column; gap:8px }
-    .link{ display:inline-flex; gap:10px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.02); color:var(--text); text-decoration:none; border:1px solid var(--glass-border) }
-
-    /* SECTIONS & CARDS */
-    section{ margin-bottom:18px; }
-    h3.section-title{ margin:0 0 12px 0; font-size:18px }
-    .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-
-    .card{
-      position:relative; overflow:hidden; border-radius:12px; padding:14px; min-height:110px;
-      border:1px solid var(--glass-border); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-      transition: transform .3s ease, box-shadow .3s ease;
-    }
-    .card:hover{ transform: translateY(-8px); box-shadow: 0 24px 60px rgba(2,6,23,0.6) }
-
-    /* Research card specifics */
-    .research-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
-    .research-card{
-      border-radius:12px; min-height:200px; display:flex; flex-direction:column; justify-content:flex-end; padding:16px;
-      color:var(--text); overflow:hidden; position:relative; cursor:pointer;
-      border:1px solid var(--glass-border);
-    }
-    .research-card .meta{ font-size:13px; color:var(--muted) }
-    .research-card .title{ font-weight:700; font-size:16px; margin:6px 0 10px 0; text-shadow: 0 6px 20px rgba(0,0,0,0.6) }
-    .research-card .actions{ display:flex; gap:8px; align-items:center }
-
-    /* blurred background logo as a decorative layer */
-    .research-card .bg-logo{
-      position:absolute; inset:0; z-index:0; background-size:cover; background-position:center; filter: blur(8px) saturate(.9) contrast(.9) brightness(.7); transform:scale(1.05);
-      transition: filter .4s ease, transform .4s ease, opacity .4s;
-      opacity:0.95;
-    }
-    .research-card:hover .bg-logo{ filter: blur(3px) saturate(1.1) contrast(1.05) brightness(0.95); transform: scale(1.06); opacity:1 }
-
-    .research-card::after{
-      content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(180deg, rgba(2,6,23,0.2), rgba(2,6,23,0.5));
-    }
-    .research-inner{ position:relative; z-index:2 }
-
-    .read-btn{
-      padding:8px 12px; border-radius:10px; background:linear-gradient(90deg,var(--accent),var(--accent2)); color:white; border:none; cursor:pointer;
-      text-decoration:none; display:inline-flex; gap:8px; align-items:center;
-    }
-
-    /* filters / overlays */
-    .glass-strip{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
-    .chip{ padding:8px 10px; border-radius:999px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.015); color:var(--muted) }
-
-    /* reveal animation */
-    .reveal{ opacity:0; transform:translateY(16px); transition: transform .6s cubic-bezier(.2,.9,.2,1), opacity .6s }
-    .reveal.visible{ opacity:1; transform:translateY(0) }
-
-    /* responsive */
-    @media (max-width:900px){
-      .hero{ grid-template-columns:1fr; }
-      .grid-2{ grid-template-columns:1fr; }
-    }
-    @media (max-width:560px){
-      .container{ margin:18px 14px; padding:18px }
-      .logo{ width:46px; height:46px; font-size:16px }
-    }
-  </style>
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(18px);transition:all .6s cubic-bezier(.2,.9,.2,1)}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+</style>
 </head>
-<body data-theme="academic">
-  <div class="animated-bg" aria-hidden="true"></div>
-  <canvas id="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="container" role="main">
-    <!-- NAV -->
-    <div class="nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">SS</div>
-        <div>
-          <h1>Suyash Sachdeva</h1>
-          <p>Deep Learning Researcher • Computer Vision • NIT Hamirpur</p>
+<body>
+  <!-- neural canvas sits behind -->
+  <div class="hero-wrap" style="max-width:1100px;margin:18px auto 0;position:relative;">
+    <canvas id="neural"></canvas>
+    <div class="wrap" style="position:relative;z-index:2;">
+      <!-- top nav -->
+      <div class="top">
+        <div class="brand">
+          <div class="logo">SS</div>
+          <div>
+            <h1>Suyash Sachdeva</h1>
+            <p>NIT Hamirpur • Deep Learning Researcher</p>
+          </div>
         </div>
-      </div>
-
-      <div class="main-nav">
-        <a href="#about">About</a>
-        <a href="#work">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#research">Research</a>
-        <a href="#contact">Contact</a>
-
-        <div class="controls" style="margin-left:8px">
-          <button class="btn" id="theme-academic" title="Academic">🎓</button>
-          <button class="btn" id="theme-modern" title="Modern">💻</button>
-          <button class="btn" id="theme-creative" title="Creative">🎨</button>
+        <div class="nav">
+          <a href="#about">About</a>
+          <a href="#work">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#research">Research</a>
+          <a href="#contact">Contact</a>
           <a class="btn primary" href="/resume.pdf" download>Resume</a>
         </div>
       </div>
-    </div>
 
-    <!-- HERO -->
-    <section class="hero" id="home" aria-label="Introduction">
-      <div class="hero-left">
-        <div class="eyebrow">Hello — I'm</div>
-        <h2> Suyash <span style="color:var(--accent)">Sachdeva</span></h2>
-        <p class="lead">I build robust computer vision systems and hybrid ML architectures — from adversarially-robust models to few-shot detection pipelines for satellite imagery.</p>
-
-        <div class="hero-ctas">
-          <a href="#projects" class="pill">Featured projects</a>
-          <a href="#research" class="pill">Research</a>
-          <a href="mailto:suyashsachdeva2403@gmail.com" class="pill">Email</a>
+      <!-- hero overlay -->
+      <div class="hero-overlay">
+        <div class="intro glass">
+          <div class="eyebrow">Hello — I'm</div>
+          <h2 id="typeTarget">Suyash <span style="color:var(--accent)">Sachdeva</span></h2>
+          <p>I build robust computer vision systems and hybrid ML models — from adversarially resilient architectures to few-shot detection for satellite imagery.</p>
+          <div class="ctas">
+            <a class="pill" href="#projects">Featured projects</a>
+            <a class="pill" href="#research">Research</a>
+            <a class="pill" href="mailto:suyashsachdeva2403@gmail.com">Email</a>
+          </div>
         </div>
 
-        <div class="stats">
-          <div class="stat"><strong>4</strong><div style="font-size:12px;color:var(--muted)">Papers</div></div>
-          <div class="stat"><strong>10+</strong><div style="font-size:12px;color:var(--muted)">Projects</div></div>
-          <div class="stat"><strong>M.Tech</strong><div style="font-size:12px;color:var(--muted)">Thesis</div></div>
-        </div>
-      </div>
-
-      <aside class="hero-right" aria-label="Quick links and contact">
-        <div class="quick-links">
-          <a class="link" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Google Scholar</a>
-          <a class="link" href="https://www.linkedin.com/in/suyash-sachdeva-3096b3202/" target="_blank">LinkedIn</a>
-          <a class="link" href="https://github.com/suyashsachdeva" target="_blank">GitHub</a>
-
-          <div style="margin-top:12px">
-            <div style="font-size:13px;color:var(--muted)">Contact</div>
-            <div style="margin-top:6px;font-weight:600">suyashsachdeva2403@gmail.com</div>
+        <aside class="profile glass">
+          <h3>Quick Links</h3>
+          <div class="meta">Scholar • LinkedIn • GitHub</div>
+          <div class="links">
+            <a class="link" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Google Scholar</a>
+            <a class="link" href="https://www.linkedin.com/in/suyash-sachdeva-3096b3202/" target="_blank">LinkedIn</a>
+            <a class="link" href="https://github.com/suyashsachdeva" target="_blank">GitHub</a>
+            <div style="margin-top:8px;color:var(--muted);font-size:13px">Contact</div>
+            <div style="font-weight:600">suyashsachdeva2403@gmail.com</div>
             <div style="font-size:13px;color:var(--muted)">+91 8889557788</div>
           </div>
+        </aside>
+      </div>
+    </div>
+  </div>
 
-          <div style="margin-top:12px">
-            <div style="font-size:13px;color:var(--muted)">Education</div>
-            <div style="margin-top:6px;font-weight:600">NIT Hamirpur — Integrated B.Tech + M.Tech (ECE)</div>
-            <div style="font-size:13px;color:var(--muted)">Minor: Neural Networks</div>
-          </div>
-        </div>
-      </aside>
-    </section>
-
+  <!-- main content -->
+  <div class="wrap">
     <!-- ABOUT -->
     <section id="about" class="reveal">
       <h3 class="section-title">About</h3>
-      <p>I combine physics-inspired modeling and machine learning. My master's thesis focused on electron device modeling using neural networks. I enjoy improving model robustness, designing hybrid statistical-ML systems, and deploying reliable pipelines for real-world data.</p>
-      <div class="glass-strip">
-        <span class="chip">Computer Vision</span>
-        <span class="chip">Adversarial Robustness</span>
-        <span class="chip">PyTorch</span>
-        <span class="chip">Neural ODEs</span>
-      </div>
+      <p>I combine physics-inspired modeling and deep learning. My M.Tech thesis focused on electron device modeling using neural networks. I build robust, production-capable models with emphasis on adversarial resilience and real-world performance.</p>
     </section>
 
     <!-- EXPERIENCE -->
     <section id="work" class="reveal">
       <h3 class="section-title">Experience</h3>
-      <div class="grid-2" style="margin-top:12px">
+      <div class="grid-2">
         <div class="card">
           <strong>Computer Vision Intern — Arcturus Business Solutions</strong>
-          <div style="font-size:13px;color:var(--muted)">May 2024 — Apr 2025</div>
-          <p style="margin-top:8px;color:var(--muted)">Built a statistical+ML+DL few-shot object detection pipeline for satellite images; engineered customizable detection for production use-cases.</p>
+          <div style="color:var(--muted);font-size:13px">May 2024 — Apr 2025</div>
+          <p style="color:var(--muted);margin-top:8px">Developed a hybrid few-shot object detection pipeline for satellite imagery and customizable pipelines for industrial usage.</p>
         </div>
-
         <div class="card">
           <strong>Deep Learning Researcher Intern — BIT Sindri</strong>
-          <div style="font-size:13px;color:var(--muted)">May 2024 — Apr 2025</div>
-          <p style="margin-top:8px;color:var(--muted)">Designed architectures and training processes to improve accuracy on non-uniform material datasets, and improved adversarial robustness via preprocessing and ensembles.</p>
+          <div style="color:var(--muted);font-size:13px">May 2024 — Apr 2025</div>
+          <p style="color:var(--muted);margin-top:8px">Designed architectures to raise accuracy on non-uniform material datasets and improved adversarial robustness via novel preprocessing.</p>
         </div>
-
         <div class="card">
           <strong>AI/ML Intern — Oculosense Pvt Ltd</strong>
-          <div style="font-size:13px;color:var(--muted)">May 2022 — Nov 2022</div>
-          <p style="margin-top:8px;color:var(--muted)">Synthetic data generation for robustness, one-shot facial recognition pipelines, voice-controlled detection systems.</p>
+          <div style="color:var(--muted);font-size:13px">May 2022 — Nov 2022</div>
+          <p style="color:var(--muted);margin-top:8px">Synthetic dataset generation, one-shot facial recognition, and a voice-controlled detection pipeline.</p>
         </div>
-
         <div class="card">
           <strong>Coordinator & Organizer</strong>
-          <div style="font-size:13px;color:var(--muted)">SPEC, VIBHAV, ELECTROTHON</div>
-          <p style="margin-top:8px;color:var(--muted)">Led teams and organized workshops and hackathons at scale (50–2000 participants).</p>
+          <div style="color:var(--muted);font-size:13px">SPEC • VIBHAV • ELECTROTHON</div>
+          <p style="color:var(--muted);margin-top:8px">Led teams to run workshops and large hackathons (50–2000 participants).</p>
         </div>
       </div>
     </section>
 
     <!-- PROJECTS -->
     <section id="projects" class="reveal">
-      <h3 class="section-title">Selected Projects</h3>
-      <div class="research-grid" style="margin-top:12px">
-        <div class="research-card card">
-          <div class="bg-logo" style="background-image:url('https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b8f7f8f95b1b8ffb4b3be0b7dbe6f42');"></div>
+      <h3 class="section-title">Projects</h3>
+      <div class="research-grid">
+        <!-- project cards (reuse research style) -->
+        <div class="research-card" onclick="location.href='https://github.com/suyashsachdeva/COVID-Cough-Detection'">
+          <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1581091870623-8d2b9f8ec9e9?q=80&w=1400&auto=format&fit=crop');"></div>
           <div class="research-inner">
-            <div class="meta">COVIDX • 2022</div>
-            <div class="title">COVIDX — Cough Classification</div>
-            <div style="color:var(--muted);font-size:13px">LSTM-based contactless cough classifier for rapid screening.</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://github.com/suyashsachdeva/COVID-Cough-Detection" target="_blank">View Code</a>
-            </div>
+            <div class="research-meta">COVIDX • 2022</div>
+            <div class="research-title">COVIDX — Cough Classification</div>
+            <div style="color:var(--muted)">LSTM-based audio classifier for contactless screening.</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://github.com/suyashsachdeva/COVID-Cough-Detection" target="_blank">View Code</a></div>
           </div>
         </div>
 
-        <div class="research-card card">
-          <div class="bg-logo" style="background-image:url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3a2034b863d1d2f3e4d5f6f0b1b0f3f1');"></div>
+        <div class="research-card" onclick="location.href='https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main'">
+          <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1580281657523-6f9c2b24a3cc?q=80&w=1400&auto=format&fit=crop');"></div>
           <div class="research-inner">
-            <div class="meta">EyeCAD • 2022</div>
-            <div class="title">EyeCAD — Diabetic Retinopathy Screening</div>
-            <div style="color:var(--muted);font-size:13px">DenseNet-based retinal image classifier for automated screening.</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main" target="_blank">View Code</a>
-            </div>
+            <div class="research-meta">EyeCAD • 2022</div>
+            <div class="research-title">EyeCAD — Diabetic Retinopathy</div>
+            <div style="color:var(--muted)">DenseNet-based retinal classifier for automated screening.</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main" target="_blank">View Code</a></div>
           </div>
         </div>
 
-        <div class="research-card" style="background:linear-gradient(180deg, rgba(12,12,30,0.4), rgba(2,6,23,0.4));">
-          <div class="bg-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/1f/IEEE_logo.svg'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
+        <div class="research-card" onclick="location.href='https://github.com/priyapahwa/Dais-Militia'">
+          <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1564866657310-3f0d0b4c8f5b?q=80&w=1400&auto=format&fit=crop');"></div>
           <div class="research-inner">
-            <div class="meta">IITC • 2025</div>
-            <div class="title">Knowledge-Based Multi-Path Neural Networks for Modeling Through Packaging Glass Vias</div>
-            <div style="color:var(--muted);font-size:13px">Conference paper (IEEE IITC 2025)</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank">Read Paper</a>
-            </div>
+            <div class="research-meta">Militia • 2021</div>
+            <div class="research-title">Militia — Encrypted Collaboration</div>
+            <div style="color:var(--muted)">Anonymous collaboration app with GRU-based threat verification.</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://github.com/priyapahwa/Dais-Militia" target="_blank">View Code</a></div>
           </div>
         </div>
 
-        <div class="research-card">
-          <div class="bg-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Elsevier_logo.svg'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
+        <div class="research-card" onclick="location.href='https://github.com/rashika170/Learning_Pocket'">
+          <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?q=80&w=1400&auto=format&fit=crop');"></div>
           <div class="research-inner">
-            <div class="meta">Computers & Electrical Eng. • 2025</div>
-            <div class="title">Three-Phased Multi-Scale Residual-Dense Modified U-Net for Deep Image Steganography</div>
-            <div style="color:var(--muted);font-size:13px">Journal (Elsevier)</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank">Read Paper</a>
-            </div>
+            <div class="research-meta">LearningPocket • 2021</div>
+            <div class="research-title">LearningPocket — OCR for Diagrams</div>
+            <div style="color:var(--muted)">Interprets hand-drawn physics diagrams with OCR and statistical models.</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://github.com/rashika170/Learning_Pocket" target="_blank">View Code</a></div>
           </div>
         </div>
-
-        <div class="research-card">
-          <div class="bg-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/10/Springer_logo.svg'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
-          <div class="research-inner">
-            <div class="meta">Springer Journal • Under Review</div>
-            <div class="title">Adversarially Robust Classification of Metallurgical Microstructures</div>
-            <div style="color:var(--muted);font-size:13px">Journal of Intelligent Manufacturing — Under Review</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">View Details</a>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <!-- RESEARCH (more) -->
+    <!-- RESEARCH CARDS (publisher logos blurred) -->
     <section id="research" class="reveal">
-      <h3 class="section-title">Publications & Conference Talks</h3>
-      <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-weight:700; width:36px; color:var(--accent)">2025</div>
-          <div>
-            <div style="font-weight:700">Knowledge-Based Multi-Path Neural Networks for Modeling Through Packaging Glass Vias</div>
-            <div style="color:var(--muted); font-size:13px">IEEE IITC 2025 — <a href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank" style="color:var(--accent)">Read</a></div>
+      <h3 class="section-title">Research — Papers & Links</h3>
+      <div class="research-grid">
+        <div class="research-card" onclick="window.open('https://ieeexplore.ieee.org/abstract/document/11075494','_blank')">
+          <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/1f/IEEE_logo.svg');background-size:220px;background-repeat:no-repeat;background-position:center;"></div>
+          <div class="research-inner">
+            <div class="research-meta">IITC — 2025</div>
+            <div class="research-title">Knowledge-Based Multi-Path Neural Networks for Modeling Through Packaging Glass Vias</div>
+            <div style="color:var(--muted)">Conference paper — IEEE IITC 2025</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank">Read Paper</a></div>
           </div>
         </div>
 
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-weight:700; width:36px; color:var(--accent)">2025</div>
-          <div>
-            <div style="font-weight:700">Three-Phased Multi-Scale Residual-Dense Modified U-Net Architecture for Deep Image Steganography</div>
-            <div style="color:var(--muted); font-size:13px">Computers & Electrical Engineering (Elsevier) — <a href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank" style="color:var(--accent)">Read</a></div>
+        <div class="research-card" onclick="window.open('https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423','_blank')">
+          <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Elsevier_logo.svg');background-size:220px;background-repeat:no-repeat;background-position:center;"></div>
+          <div class="research-inner">
+            <div class="research-meta">Journal — 2025</div>
+            <div class="research-title">Three-Phased Multi-Scale Residual-Dense Modified U-Net for Deep Image Steganography</div>
+            <div style="color:var(--muted)">Computers & Electrical Engineering (Elsevier)</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank">Read Paper</a></div>
           </div>
         </div>
 
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-weight:700; width:36px; color:var(--accent)">2024</div>
-          <div>
-            <div style="font-weight:700">Transient Analysis & RNN-Based Signal Integrity Assessment for Through Glass Vias</div>
-            <div style="color:var(--muted); font-size:13px">EDTM 2024 & SCEECS 2024 — <a href="https://ieeexplore.ieee.org" target="_blank" style="color:var(--accent)">Proceedings</a></div>
+        <div class="research-card" onclick="window.open('https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en','_blank')">
+          <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/10/Springer_logo.svg');background-size:220px;background-repeat:no-repeat;background-position:center;"></div>
+          <div class="research-inner">
+            <div class="research-meta">Journal — Under Review</div>
+            <div class="research-title">Adversarially Robust Classification of Metallurgical Microstructures</div>
+            <div style="color:var(--muted)">Journal of Intelligent Manufacturing (Springer)</div>
+            <div style="margin-top:10px"><a class="read-btn" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Details</a></div>
           </div>
         </div>
+
+        <!-- add more as needed -->
       </div>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" class="reveal">
       <h3 class="section-title">Contact</h3>
-      <p style="color:var(--muted)">Open for research collaborations, internships, and job opportunities. Email works best.</p>
-      <form id="contactForm" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px;" onsubmit="return handleContact(event)">
-        <input name="name" type="text" placeholder="Your name" required style="padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)">
-        <input name="email" type="email" placeholder="Your email" required style="padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)">
-        <textarea name="message" placeholder="Message" required style="grid-column:1/3;padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)"></textarea>
+      <p style="color:var(--muted)">Open to research collaborations, internships and full-time roles. Best way to reach me: email.</p>
+      <form onsubmit="return sendMail(event)" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+        <input name="name" placeholder="Your name" required style="padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)">
+        <input name="email" placeholder="Your email" type="email" required style="padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)">
+        <textarea name="msg" placeholder="Message" required style="grid-column:1/3;padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)"></textarea>
         <div style="grid-column:1/3;display:flex;justify-content:flex-end;gap:8px">
           <button type="button" class="btn" onclick="mailtoQuick()">Email</button>
           <button type="submit" class="btn primary">Send</button>
@@ -424,687 +278,134 @@
       </form>
     </section>
 
-    <footer style="margin-top:18px;text-align:center;color:var(--muted);padding:18px 0;">
-      © <span id="year"></span> Suyash Sachdeva — Built with passion • NIT Hamirpur
-    </footer>
+    <footer style="margin-top:20px;color:var(--muted);text-align:center;padding:18px">© <span id="yr"></span> Suyash Sachdeva</footer>
   </div>
 
-  <script>
-    /* =============================
-       Interactivity & Particles JS
-       ============================= */
+<script>
+  // small helpers
+  document.getElementById('yr').innerText = new Date().getFullYear();
 
-    // year
-    document.getElementById('year').innerText = new Date().getFullYear();
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.12});
+  revealEls.forEach(el=> io.observe(el));
 
-    // theme switching
-    const root = document.documentElement;
-    document.getElementById('theme-academic').addEventListener('click', ()=> root.setAttribute('data-theme','academic'));
-    document.getElementById('theme-modern').addEventListener('click', ()=> root.setAttribute('data-theme','modern'));
-    document.getElementById('theme-creative').addEventListener('click', ()=> root.setAttribute('data-theme','creative'));
+  // send mail (mailto fallback)
+  function sendMail(e){
+    e.preventDefault();
+    const f = e.target, name=f.name.value.trim(), email=f.email.value.trim(), msg=f.msg.value.trim();
+    if(!name||!email||!msg){ alert('Please fill all fields'); return false; }
+    const subj = encodeURIComponent('Portfolio contact — ' + name);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+    window.location.href = `mailto:suyashsachdeva2403@gmail.com?subject=${subj}&body=${body}`;
+    return true;
+  }
+  function mailtoQuick(){ window.location.href='mailto:suyashsachdeva2403@gmail.com' }
 
-    // reveal on scroll
-    const reveals = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting) e.target.classList.add('visible');
-      });
-    }, {threshold: 0.12});
-    reveals.forEach(r=> io.observe(r));
-
-    // contact form - mailto fallback (front-end only)
-    function handleContact(e){
-      e.preventDefault();
-      const f = e.target;
-      const name = f.name.value.trim();
-      const email = f.email.value.trim();
-      const message = f.message.value.trim();
-      if(!name || !email || !message){ alert('Please fill all fields'); return false; }
-      const subject = encodeURIComponent('Portfolio contact — ' + name);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-      window.location.href = `mailto:suyashsachdeva2403@gmail.com?subject=${subject}&body=${body}`;
-      return true;
+  // Typewriter effect for small intro (optional)
+  (function(){
+    const target = document.getElementById('typeTarget');
+    const phrases = ["Suyash Sachdeva", "Deep Learning Researcher", "Computer Vision • Robust ML"];
+    let i=0, idx=0, forward=true;
+    function step(){
+      const p = phrases[i];
+      target.innerHTML = p.slice(0, idx) + '<span style="color:var(--accent)">|</span>';
+      if(forward){ idx++; if(idx>p.length){ forward=false; setTimeout(step,900); return; } }
+      else{ idx--; if(idx<0){ forward=true; i=(i+1)%phrases.length; idx=0; } }
+      setTimeout(step, forward?60:25);
     }
-    function mailtoQuick(){ window.location.href = 'mailto:suyashsachdeva2403@gmail.com' }
+    step();
+  })();
 
-    // small keyboard shortcut to cycle themes (press 't')
-    const themes = ['academic','modern','creative']; let idx=0;
-    window.addEventListener('keydown', e=> { if(e.key.toLowerCase()==='t'){ idx=(idx+1)%themes.length; root.setAttribute('data-theme', themes[idx]); }});
+  // Neural canvas animation (nodes + links) - lightweight and responsive
+  (function(){
+    const canvas = document.getElementById('neural');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = window.innerWidth, H = canvas.height = Math.max(360, window.innerHeight*0.45);
+    canvas.style.width = '100%'; canvas.style.height = H + 'px';
+    const DPR = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * DPR; canvas.height = H * DPR; ctx.scale(DPR, DPR);
 
-    /* -------------------
-      Minimal particle system
-       - lightweight, canvas-based
-       - not heavy; adjustable count
-    ------------------- */
-    (function(){
-      const canvas = document.getElementById('particle-canvas');
-      const ctx = canvas.getContext('2d');
-      let w=canvas.width=innerWidth, h=canvas.height=innerHeight;
-      const DPR = window.devicePixelRatio || 1;
-      canvas.width = innerWidth * DPR; canvas.height = innerHeight * DPR; canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px';
-      ctx.scale(DPR,DPR);
+    const nodes = [];
+    const N = Math.max(14, Math.floor(window.innerWidth/120));
+    for(let i=0;i<N;i++){
+      nodes.push({
+        x: Math.random()*W,
+        y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.35,
+        vy: (Math.random()-0.5)*0.35,
+        r: 1.2 + Math.random()*2.4,
+        a: 0.2 + Math.random()*0.6
+      });
+    }
 
-      let particles = [];
-      const COUNT = Math.max(20, Math.min(80, Math.floor(window.innerWidth / 12)));
-      for(let i=0;i<COUNT;i++){
-        particles.push({
-          x: Math.random()*w, y: Math.random()*h,
-          vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
-          r: 0.6 + Math.random()*2.2, alpha: 0.12 + Math.random()*0.22
-        });
+    let mouse = {x: W/2, y: H/2, down:false};
+    document.addEventListener('mousemove', e=>{ const rect=canvas.getBoundingClientRect(); mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top; });
+    document.addEventListener('mouseleave', ()=>{ mouse.x = W/2; mouse.y = H/2; });
+
+    function step(){
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      // soft radial glow
+      const g = ctx.createLinearGradient(0,0,W,0);
+      g.addColorStop(0,'rgba(69,179,255,0.02)'); g.addColorStop(1,'rgba(109,91,255,0.02)');
+      ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+      // update nodes
+      for(let i=0;i<nodes.length;i++){
+        const n = nodes[i];
+        // slight attraction to mouse for parallax
+        const dx = mouse.x - n.x, dy = mouse.y - n.y;
+        n.vx += dx * 0.00002; n.vy += dy * 0.00002;
+        n.x += n.vx; n.y += n.vy;
+        // bounds
+        if(n.x < 0 || n.x > W) n.vx *= -1;
+        if(n.y < 0 || n.y > H) n.vy *= -1;
       }
 
-      function step(){
-        ctx.clearRect(0,0,w,h);
-        // subtle connecting lines between close particles
-        for(let i=0;i<particles.length;i++){
-          let p = particles[i];
-          p.x += p.vx; p.y += p.vy;
-          if(p.x<0||p.x>w) p.vx *= -1;
-          if(p.y<0||p.y>h) p.vy *= -1;
-          ctx.beginPath();
-          ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
-          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-          ctx.fill();
-        }
-        // draw lines
-        for(let i=0;i<particles.length;i++){
-          for(let j=i+1;j<particles.length;j++){
-            const a=particles[i], b=particles[j];
-            const dx = a.x-b.x, dy = a.y-b.y;
-            const d = Math.sqrt(dx*dx+dy*dy);
-            if(d<110){
-              ctx.beginPath();
-              ctx.strokeStyle = `rgba(255,255,255,${Math.max(0,0.06 - d*0.0006)})`;
-              ctx.lineWidth = 1;
-              ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-            }
+      // draw links
+      for(let i=0;i<nodes.length;i++){
+        for(let j=i+1;j<nodes.length;j++){
+          const a=nodes[i], b=nodes[j];
+          const dx=a.x-b.x, dy=a.y-b.y, d = Math.sqrt(dx*dx + dy*dy);
+          if(d < Math.max(80, W/12)){
+            const alpha = Math.max(0, 0.12 - d*0.0009);
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(109,91,255,${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
-
-        requestAnimationFrame(step);
       }
-      step();
 
-      window.addEventListener('resize', ()=>{
-        w = canvas.width = innerWidth * DPR; h = canvas.height = innerHeight * DPR;
-        canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px';
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-      });
+      // draw nodes
+      for(let i=0;i<nodes.length;i++){
+        const n = nodes[i];
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(69,179,255,${0.6*n.a})`;
+        ctx.arc(n.x, n.y, Math.max(1.0, n.r), 0, Math.PI*2); ctx.fill();
+        // small halo
+        const g2 = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 20);
+        g2.addColorStop(0, 'rgba(69,179,255,0.08)'); g2.addColorStop(1,'rgba(69,179,255,0)');
+        ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(n.x,n.y,20,0,Math.PI*2); ctx.fill();
+      }
 
-      // subtle parallax on mouse move
-      document.addEventListener('mousemove', (ev)=>{
-        const mx = (ev.clientX / innerWidth) - 0.5;
-        const my = (ev.clientY / innerHeight) - 0.5;
-        particles.forEach((p,i)=>{
-          p.x += mx*0.2*(i%3);
-          p.y += my*0.2*(i%3);
-        });
-      });
+      requestAnimationFrame(step);
+    }
+    step();
 
-    })();
+    // handle resize
+    window.addEventListener('resize', ()=>{
+      W = canvas.width = window.innerWidth; H = Math.max(300, window.innerHeight*0.45);
+      canvas.style.height = H + 'px';
+      // recreate nodes if too small/large
+    });
 
-    // accessibility: reduce motion
+    // reduce motion
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      document.getElementById('particle-canvas').style.display = 'none';
-      document.querySelector('.animated-bg').style.display = 'none';
-      document.querySelectorAll('.reveal').forEach(r => r.classList.add('visible'));
+      cancelAnimationFrame(step);
+      canvas.style.display='none';
     }
-  </script>
-</body>
-</html>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Suyash Sachdeva — Portfolio</title>
-  <meta name="description" content="Suyash Sachdeva — Deep Learning Researcher | Computer Vision | AI/ML" />
-  <meta name="color-scheme" content="dark light">
-  <style>
-    /* ==========================
-       Dynamic Glassmorphic Portfolio
-       Single-file HTML/CSS/JS
-       ========================== */
-    :root{
-      --bg1: #07142b;
-      --bg2: #07192b;
-      --glass: rgba(255,255,255,0.06);
-      --glass-2: rgba(255,255,255,0.02);
-      --muted: #9fb0d6;
-      --accent: #60a5fa;
-      --accent2: #7c3aed;
-      --accent3: #06b6d4;
-      --text: #e8f1ff;
-      --radius: 14px;
-      --card-shadow: 0 12px 40px rgba(2,6,23,0.6);
-      --glass-border: rgba(255,255,255,0.06);
-    }
-
-    /* theme variants */
-    :root[data-theme="academic"]{
-      --accent: #06b6d4;
-      --accent2: #7dd3fc;
-      --accent3: #60a5fa;
-      --bg1: #041028;
-      --bg2: #061433;
-      --muted: #a9c8e6;
-    }
-    :root[data-theme="modern"]{
-      --accent: #7c3aed;
-      --accent2: #a78bfa;
-      --accent3: #f472b6;
-      --bg1: #071226;
-      --bg2: #07192b;
-      --muted: #bfb7ff;
-    }
-    :root[data-theme="creative"]{
-      --accent: #ef4444;
-      --accent2: #f97316;
-      --accent3: #f472b6;
-      --bg1: #050816;
-      --bg2: #0a0b2e;
-      --muted: #ffd7de;
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-      color:var(--text);background:linear-gradient(120deg,var(--bg1) 0%,var(--bg2) 100%);
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      overflow-y:scroll;
-    }
-
-    /* animated gradient overlay */
-    .animated-bg{
-      position:fixed; inset:0; z-index:0; pointer-events:none;
-      background:
-        radial-gradient(600px 400px at 10% 10%, rgba(124,58,237,0.08), transparent 10%),
-        radial-gradient(600px 300px at 90% 80%, rgba(6,182,212,0.06), transparent 10%);
-      filter: blur(28px);
-      transform: translateZ(0);
-      transition: opacity .6s ease;
-    }
-
-    /* particle canvas sits under content */
-    #particle-canvas{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.6; }
-
-    .container{
-      max-width:1100px; margin:40px auto; padding:28px; position:relative; z-index:10;
-      backdrop-filter: blur(8px) saturate(1.05);
-      border-radius:18px; border:1px solid var(--glass-border); box-shadow: var(--card-shadow);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      overflow:hidden;
-    }
-
-    /* NAV */
-    .nav{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:10px 6px; margin-bottom:18px;
-    }
-    .brand{ display:flex; gap:12px; align-items:center; }
-    .logo{
-      width:52px;height:52px;border-radius:12px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent2)); font-weight:700; color:#fff;
-      font-size:18px; box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    }
-    .brand h1{ font-size:18px; margin:0 }
-    .brand p{ margin:0; font-size:13px; color:var(--muted) }
-
-    .main-nav{ display:flex; gap:8px; align-items:center; }
-    .main-nav a{
-      color:var(--text); padding:8px 12px; border-radius:10px; font-size:14px; text-decoration:none;
-      transition: transform .18s, background .18s;
-    }
-    .main-nav a:hover{ transform:translateY(-3px); text-decoration:underline }
-
-    .controls{ display:flex; gap:8px; align-items:center }
-
-    .btn{
-      padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);
-      background:transparent;color:var(--text); cursor:pointer; font-size:14px;
-      backdrop-filter: blur(6px);
-    }
-    .btn.primary{
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
-      color:white;border:none; box-shadow: 0 8px 30px rgba(2,6,23,0.35);
-    }
-
-    /* HERO */
-    .hero{
-      display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:center; margin-bottom:22px;
-    }
-    .hero-left{
-      padding:22px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-      border:1px solid var(--glass-border);
-    }
-    .eyebrow{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-    .hero-left h2{ font-size:30px; margin:0 0 8px 0 }
-    .lead{ margin:0;color:var(--muted); line-height:1.5 }
-
-    .hero-ctas{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap }
-    .pill{ padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.02); color:var(--muted); font-size:13px; text-decoration:none; border:1px solid var(--glass-border) }
-
-    .stats{ display:flex; gap:12px; margin-top:18px }
-    .stat{ padding:10px 12px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid var(--glass-border); }
-
-    .hero-right{ padding:18px; border-radius:12px; border:1px solid var(--glass-border); background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); }
-    .quick-links{ display:flex; flex-direction:column; gap:8px }
-    .link{ display:inline-flex; gap:10px; align-items:center; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.02); color:var(--text); text-decoration:none; border:1px solid var(--glass-border) }
-
-    /* SECTIONS & CARDS */
-    section{ margin-bottom:18px; }
-    h3.section-title{ margin:0 0 12px 0; font-size:18px }
-    .grid-2{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-
-    .card{
-      position:relative; overflow:hidden; border-radius:12px; padding:14px; min-height:110px;
-      border:1px solid var(--glass-border); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-      transition: transform .3s ease, box-shadow .3s ease;
-    }
-    .card:hover{ transform: translateY(-8px); box-shadow: 0 24px 60px rgba(2,6,23,0.6) }
-
-    /* Research card specifics */
-    .research-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
-    .research-card{
-      border-radius:12px; min-height:200px; display:flex; flex-direction:column; justify-content:flex-end; padding:16px;
-      color:var(--text); overflow:hidden; position:relative; cursor:pointer;
-      border:1px solid var(--glass-border);
-    }
-    .research-card .meta{ font-size:13px; color:var(--muted) }
-    .research-card .title{ font-weight:700; font-size:16px; margin:6px 0 10px 0; text-shadow: 0 6px 20px rgba(0,0,0,0.6) }
-    .research-card .actions{ display:flex; gap:8px; align-items:center }
-
-    /* blurred background logo as a decorative layer */
-    .research-card .bg-logo{
-      position:absolute; inset:0; z-index:0; background-size:cover; background-position:center; filter: blur(8px) saturate(.9) contrast(.9) brightness(.7); transform:scale(1.05);
-      transition: filter .4s ease, transform .4s ease, opacity .4s;
-      opacity:0.95;
-    }
-    .research-card:hover .bg-logo{ filter: blur(3px) saturate(1.1) contrast(1.05) brightness(0.95); transform: scale(1.06); opacity:1 }
-
-    .research-card::after{
-      content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(180deg, rgba(2,6,23,0.2), rgba(2,6,23,0.5));
-    }
-    .research-inner{ position:relative; z-index:2 }
-
-    .read-btn{
-      padding:8px 12px; border-radius:10px; background:linear-gradient(90deg,var(--accent),var(--accent2)); color:white; border:none; cursor:pointer;
-      text-decoration:none; display:inline-flex; gap:8px; align-items:center;
-    }
-
-    /* filters / overlays */
-    .glass-strip{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
-    .chip{ padding:8px 10px; border-radius:999px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.015); color:var(--muted) }
-
-    /* reveal animation */
-    .reveal{ opacity:0; transform:translateY(16px); transition: transform .6s cubic-bezier(.2,.9,.2,1), opacity .6s }
-    .reveal.visible{ opacity:1; transform:translateY(0) }
-
-    /* responsive */
-    @media (max-width:900px){
-      .hero{ grid-template-columns:1fr; }
-      .grid-2{ grid-template-columns:1fr; }
-    }
-    @media (max-width:560px){
-      .container{ margin:18px 14px; padding:18px }
-      .logo{ width:46px; height:46px; font-size:16px }
-    }
-  </style>
-</head>
-<body data-theme="academic">
-  <div class="animated-bg" aria-hidden="true"></div>
-  <canvas id="particle-canvas" aria-hidden="true"></canvas>
-
-  <div class="container" role="main">
-    <!-- NAV -->
-    <div class="nav">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">SS</div>
-        <div>
-          <h1>Suyash Sachdeva</h1>
-          <p>Deep Learning Researcher • Computer Vision • NIT Hamirpur</p>
-        </div>
-      </div>
-
-      <div class="main-nav">
-        <a href="#about">About</a>
-        <a href="#work">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#research">Research</a>
-        <a href="#contact">Contact</a>
-
-        <div class="controls" style="margin-left:8px">
-          <button class="btn" id="theme-academic" title="Academic">🎓</button>
-          <button class="btn" id="theme-modern" title="Modern">💻</button>
-          <button class="btn" id="theme-creative" title="Creative">🎨</button>
-          <a class="btn primary" href="/resume.pdf" download>Resume</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- HERO -->
-    <section class="hero" id="home" aria-label="Introduction">
-      <div class="hero-left">
-        <div class="eyebrow">Hello — I'm</div>
-        <h2> Suyash <span style="color:var(--accent)">Sachdeva</span></h2>
-        <p class="lead">I build robust computer vision systems and hybrid ML architectures — from adversarially-robust models to few-shot detection pipelines for satellite imagery.</p>
-
-        <div class="hero-ctas">
-          <a href="#projects" class="pill">Featured projects</a>
-          <a href="#research" class="pill">Research</a>
-          <a href="mailto:suyashsachdeva2403@gmail.com" class="pill">Email</a>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><strong>4</strong><div style="font-size:12px;color:var(--muted)">Papers</div></div>
-          <div class="stat"><strong>10+</strong><div style="font-size:12px;color:var(--muted)">Projects</div></div>
-          <div class="stat"><strong>M.Tech</strong><div style="font-size:12px;color:var(--muted)">Thesis</div></div>
-        </div>
-      </div>
-
-      <aside class="hero-right" aria-label="Quick links and contact">
-        <div class="quick-links">
-          <a class="link" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Google Scholar</a>
-          <a class="link" href="https://www.linkedin.com/in/suyash-sachdeva-3096b3202/" target="_blank">LinkedIn</a>
-          <a class="link" href="https://github.com/suyashsachdeva" target="_blank">GitHub</a>
-
-          <div style="margin-top:12px">
-            <div style="font-size:13px;color:var(--muted)">Contact</div>
-            <div style="margin-top:6px;font-weight:600">suyashsachdeva2403@gmail.com</div>
-            <div style="font-size:13px;color:var(--muted)">+91 8889557788</div>
-          </div>
-
-          <div style="margin-top:12px">
-            <div style="font-size:13px;color:var(--muted)">Education</div>
-            <div style="margin-top:6px;font-weight:600">NIT Hamirpur — Integrated B.Tech + M.Tech (ECE)</div>
-            <div style="font-size:13px;color:var(--muted)">Minor: Neural Networks</div>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="reveal">
-      <h3 class="section-title">About</h3>
-      <p>I combine physics-inspired modeling and machine learning. My master's thesis focused on electron device modeling using neural networks. I enjoy improving model robustness, designing hybrid statistical-ML systems, and deploying reliable pipelines for real-world data.</p>
-      <div class="glass-strip">
-        <span class="chip">Computer Vision</span>
-        <span class="chip">Adversarial Robustness</span>
-        <span class="chip">PyTorch</span>
-        <span class="chip">Neural ODEs</span>
-      </div>
-    </section>
-
-    <!-- EXPERIENCE -->
-    <section id="work" class="reveal">
-      <h3 class="section-title">Experience</h3>
-      <div class="grid-2" style="margin-top:12px">
-        <div class="card">
-          <strong>Computer Vision Intern — Arcturus Business Solutions</strong>
-          <div style="font-size:13px;color:var(--muted)">May 2024 — Apr 2025</div>
-          <p style="margin-top:8px;color:var(--muted)">Built a statistical+ML+DL few-shot object detection pipeline for satellite images; engineered customizable detection for production use-cases.</p>
-        </div>
-
-        <div class="card">
-          <strong>Deep Learning Researcher Intern — BIT Sindri</strong>
-          <div style="font-size:13px;color:var(--muted)">May 2024 — Apr 2025</div>
-          <p style="margin-top:8px;color:var(--muted)">Designed architectures and training processes to improve accuracy on non-uniform material datasets, and improved adversarial robustness via preprocessing and ensembles.</p>
-        </div>
-
-        <div class="card">
-          <strong>AI/ML Intern — Oculosense Pvt Ltd</strong>
-          <div style="font-size:13px;color:var(--muted)">May 2022 — Nov 2022</div>
-          <p style="margin-top:8px;color:var(--muted)">Synthetic data generation for robustness, one-shot facial recognition pipelines, voice-controlled detection systems.</p>
-        </div>
-
-        <div class="card">
-          <strong>Coordinator & Organizer</strong>
-          <div style="font-size:13px;color:var(--muted)">SPEC, VIBHAV, ELECTROTHON</div>
-          <p style="margin-top:8px;color:var(--muted)">Led teams and organized workshops and hackathons at scale (50–2000 participants).</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="reveal">
-      <h3 class="section-title">Selected Projects</h3>
-      <div class="research-grid" style="margin-top:12px">
-        <div class="research-card card">
-          <div class="bg-logo" style="background-image:url('https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b8f7f8f95b1b8ffb4b3be0b7dbe6f42');"></div>
-          <div class="research-inner">
-            <div class="meta">COVIDX • 2022</div>
-            <div class="title">COVIDX — Cough Classification</div>
-            <div style="color:var(--muted);font-size:13px">LSTM-based contactless cough classifier for rapid screening.</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://github.com/suyashsachdeva/COVID-Cough-Detection" target="_blank">View Code</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="research-card card">
-          <div class="bg-logo" style="background-image:url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3a2034b863d1d2f3e4d5f6f0b1b0f3f1');"></div>
-          <div class="research-inner">
-            <div class="meta">EyeCAD • 2022</div>
-            <div class="title">EyeCAD — Diabetic Retinopathy Screening</div>
-            <div style="color:var(--muted);font-size:13px">DenseNet-based retinal image classifier for automated screening.</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main" target="_blank">View Code</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="research-card" style="background:linear-gradient(180deg, rgba(12,12,30,0.4), rgba(2,6,23,0.4));">
-          <div class="bg-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/1f/IEEE_logo.svg'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
-          <div class="research-inner">
-            <div class="meta">IITC • 2025</div>
-            <div class="title">Knowledge-Based Multi-Path Neural Networks for Modeling Through Packaging Glass Vias</div>
-            <div style="color:var(--muted);font-size:13px">Conference paper (IEEE IITC 2025)</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank">Read Paper</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="research-card">
-          <div class="bg-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Elsevier_logo.svg'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
-          <div class="research-inner">
-            <div class="meta">Computers & Electrical Eng. • 2025</div>
-            <div class="title">Three-Phased Multi-Scale Residual-Dense Modified U-Net for Deep Image Steganography</div>
-            <div style="color:var(--muted);font-size:13px">Journal (Elsevier)</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank">Read Paper</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="research-card">
-          <div class="bg-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/10/Springer_logo.svg'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
-          <div class="research-inner">
-            <div class="meta">Springer Journal • Under Review</div>
-            <div class="title">Adversarially Robust Classification of Metallurgical Microstructures</div>
-            <div style="color:var(--muted);font-size:13px">Journal of Intelligent Manufacturing — Under Review</div>
-            <div class="actions" style="margin-top:10px">
-              <a class="read-btn" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">View Details</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- RESEARCH (more) -->
-    <section id="research" class="reveal">
-      <h3 class="section-title">Publications & Conference Talks</h3>
-      <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-weight:700; width:36px; color:var(--accent)">2025</div>
-          <div>
-            <div style="font-weight:700">Knowledge-Based Multi-Path Neural Networks for Modeling Through Packaging Glass Vias</div>
-            <div style="color:var(--muted); font-size:13px">IEEE IITC 2025 — <a href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank" style="color:var(--accent)">Read</a></div>
-          </div>
-        </div>
-
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-weight:700; width:36px; color:var(--accent)">2025</div>
-          <div>
-            <div style="font-weight:700">Three-Phased Multi-Scale Residual-Dense Modified U-Net Architecture for Deep Image Steganography</div>
-            <div style="color:var(--muted); font-size:13px">Computers & Electrical Engineering (Elsevier) — <a href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank" style="color:var(--accent)">Read</a></div>
-          </div>
-        </div>
-
-        <div style="display:flex; gap:12px; align-items:flex-start;">
-          <div style="font-weight:700; width:36px; color:var(--accent)">2024</div>
-          <div>
-            <div style="font-weight:700">Transient Analysis & RNN-Based Signal Integrity Assessment for Through Glass Vias</div>
-            <div style="color:var(--muted); font-size:13px">EDTM 2024 & SCEECS 2024 — <a href="https://ieeexplore.ieee.org" target="_blank" style="color:var(--accent)">Proceedings</a></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="reveal">
-      <h3 class="section-title">Contact</h3>
-      <p style="color:var(--muted)">Open for research collaborations, internships, and job opportunities. Email works best.</p>
-      <form id="contactForm" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px;" onsubmit="return handleContact(event)">
-        <input name="name" type="text" placeholder="Your name" required style="padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)">
-        <input name="email" type="email" placeholder="Your email" required style="padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)">
-        <textarea name="message" placeholder="Message" required style="grid-column:1/3;padding:10px;border-radius:8px;border:1px solid var(--glass-border);background:transparent;color:var(--text)"></textarea>
-        <div style="grid-column:1/3;display:flex;justify-content:flex-end;gap:8px">
-          <button type="button" class="btn" onclick="mailtoQuick()">Email</button>
-          <button type="submit" class="btn primary">Send</button>
-        </div>
-      </form>
-    </section>
-
-    <footer style="margin-top:18px;text-align:center;color:var(--muted);padding:18px 0;">
-      © <span id="year"></span> Suyash Sachdeva — Built with passion • NIT Hamirpur
-    </footer>
-  </div>
-
-  <script>
-    /* =============================
-       Interactivity & Particles JS
-       ============================= */
-
-    // year
-    document.getElementById('year').innerText = new Date().getFullYear();
-
-    // theme switching
-    const root = document.documentElement;
-    document.getElementById('theme-academic').addEventListener('click', ()=> root.setAttribute('data-theme','academic'));
-    document.getElementById('theme-modern').addEventListener('click', ()=> root.setAttribute('data-theme','modern'));
-    document.getElementById('theme-creative').addEventListener('click', ()=> root.setAttribute('data-theme','creative'));
-
-    // reveal on scroll
-    const reveals = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting) e.target.classList.add('visible');
-      });
-    }, {threshold: 0.12});
-    reveals.forEach(r=> io.observe(r));
-
-    // contact form - mailto fallback (front-end only)
-    function handleContact(e){
-      e.preventDefault();
-      const f = e.target;
-      const name = f.name.value.trim();
-      const email = f.email.value.trim();
-      const message = f.message.value.trim();
-      if(!name || !email || !message){ alert('Please fill all fields'); return false; }
-      const subject = encodeURIComponent('Portfolio contact — ' + name);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-      window.location.href = `mailto:suyashsachdeva2403@gmail.com?subject=${subject}&body=${body}`;
-      return true;
-    }
-    function mailtoQuick(){ window.location.href = 'mailto:suyashsachdeva2403@gmail.com' }
-
-    // small keyboard shortcut to cycle themes (press 't')
-    const themes = ['academic','modern','creative']; let idx=0;
-    window.addEventListener('keydown', e=> { if(e.key.toLowerCase()==='t'){ idx=(idx+1)%themes.length; root.setAttribute('data-theme', themes[idx]); }});
-
-    /* -------------------
-      Minimal particle system
-       - lightweight, canvas-based
-       - not heavy; adjustable count
-    ------------------- */
-    (function(){
-      const canvas = document.getElementById('particle-canvas');
-      const ctx = canvas.getContext('2d');
-      let w=canvas.width=innerWidth, h=canvas.height=innerHeight;
-      const DPR = window.devicePixelRatio || 1;
-      canvas.width = innerWidth * DPR; canvas.height = innerHeight * DPR; canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px';
-      ctx.scale(DPR,DPR);
-
-      let particles = [];
-      const COUNT = Math.max(20, Math.min(80, Math.floor(window.innerWidth / 12)));
-      for(let i=0;i<COUNT;i++){
-        particles.push({
-          x: Math.random()*w, y: Math.random()*h,
-          vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
-          r: 0.6 + Math.random()*2.2, alpha: 0.12 + Math.random()*0.22
-        });
-      }
-
-      function step(){
-        ctx.clearRect(0,0,w,h);
-        // subtle connecting lines between close particles
-        for(let i=0;i<particles.length;i++){
-          let p = particles[i];
-          p.x += p.vx; p.y += p.vy;
-          if(p.x<0||p.x>w) p.vx *= -1;
-          if(p.y<0||p.y>h) p.vy *= -1;
-          ctx.beginPath();
-          ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
-          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-          ctx.fill();
-        }
-        // draw lines
-        for(let i=0;i<particles.length;i++){
-          for(let j=i+1;j<particles.length;j++){
-            const a=particles[i], b=particles[j];
-            const dx = a.x-b.x, dy = a.y-b.y;
-            const d = Math.sqrt(dx*dx+dy*dy);
-            if(d<110){
-              ctx.beginPath();
-              ctx.strokeStyle = `rgba(255,255,255,${Math.max(0,0.06 - d*0.0006)})`;
-              ctx.lineWidth = 1;
-              ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-            }
-          }
-        }
-
-        requestAnimationFrame(step);
-      }
-      step();
-
-      window.addEventListener('resize', ()=>{
-        w = canvas.width = innerWidth * DPR; h = canvas.height = innerHeight * DPR;
-        canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px';
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-      });
-
-      // subtle parallax on mouse move
-      document.addEventListener('mousemove', (ev)=>{
-        const mx = (ev.clientX / innerWidth) - 0.5;
-        const my = (ev.clientY / innerHeight) - 0.5;
-        particles.forEach((p,i)=>{
-          p.x += mx*0.2*(i%3);
-          p.y += my*0.2*(i%3);
-        });
-      });
-
-    })();
-
-    // accessibility: reduce motion
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      document.getElementById('particle-canvas').style.display = 'none';
-      document.querySelector('.animated-bg').style.display = 'none';
-      document.querySelectorAll('.reveal').forEach(r => r.classList.add('visible'));
-    }
-  </script>
+  })();
+</script>
 </body>
 </html>
