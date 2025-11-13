@@ -2,148 +2,143 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Suyash Sachdeva — Neural Portfolio</title>
-  <meta name="description" content="Deep Learning Researcher | Computer Vision | NIT Hamirpur" />
+  <meta name="description" content="Suyash Sachdeva — Deep Learning Researcher | Computer Vision | NIT Hamirpur" />
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <!-- Neural animation background -->
-  <div class="hero-wrap">
-    <canvas id="neural"></canvas>
-    <div class="wrap">
-      <div class="top">
-        <div class="brand">
-          <div class="logo">SS</div>
-          <div>
-            <h1>Suyash Sachdeva</h1>
-            <p>NIT Hamirpur • Deep Learning Researcher</p>
-          </div>
-        </div>
-
-        <div class="nav">
-          <a href="#about">About</a>
-          <a href="#work">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#research">Research</a>
-          <a href="#contact">Contact</a>
-          <a class="btn primary" href="resume.pdf" download>Resume</a>
+  <!-- Fullscreen Neural Hero -->
+  <header id="hero" class="hero-full">
+    <canvas id="neural-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="eyebrow">Hello — I'm</div>
+        <h1 id="hero-title">Suyash <span class="accent">Sachdeva</span></h1>
+        <p class="hero-sub">Deep Learning Researcher • Computer Vision • Robust ML</p>
+        <div class="hero-ctas">
+          <a class="btn primary" href="#research">View Research</a>
+          <a class="btn ghost" href="resume.pdf" download>Resume</a>
         </div>
       </div>
 
-      <!-- Hero Section -->
-      <div class="hero-overlay">
-        <div class="intro glass">
-          <div class="eyebrow">Hello — I'm</div>
-          <h2 id="typeTarget">Suyash <span class="accent">Sachdeva</span></h2>
-          <p>I build robust computer vision systems and hybrid ML models — from adversarially resilient architectures to few-shot detection for satellite imagery.</p>
-          <div class="ctas">
-            <a class="pill" href="#projects">Featured projects</a>
-            <a class="pill" href="#research">Research</a>
-            <a class="pill" href="mailto:suyashsachdeva2403@gmail.com">Email</a>
-          </div>
+      <div class="hero-side" aria-hidden="true">
+        <div class="stats">
+          <div class="stat"><strong>4</strong><span>Papers</span></div>
+          <div class="stat"><strong>10+</strong><span>Projects</span></div>
+          <div class="stat"><strong>M.Tech</strong><span>Thesis</span></div>
         </div>
-
-        <aside class="profile glass">
-          <h3>Quick Links</h3>
-          <div class="links">
-            <a class="link" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Google Scholar</a>
-            <a class="link" href="https://www.linkedin.com/in/suyash-sachdeva-3096b3202/" target="_blank">LinkedIn</a>
-            <a class="link" href="https://github.com/suyashsachdeva" target="_blank">GitHub</a>
-          </div>
-          <p class="meta">📧 suyashsachdeva2403@gmail.com <br> 📞 +91 8889557788</p>
-        </aside>
       </div>
     </div>
-  </div>
 
-  <!-- Main Content -->
-  <div class="wrap">
-    <section id="about" class="reveal">
-      <h3 class="section-title">About</h3>
-      <p>I combine physics-inspired modeling and deep learning. My M.Tech thesis focused on electron device modeling using neural networks. I build robust, production-capable models emphasizing adversarial resilience and real-world performance.</p>
-    </section>
+    <button id="scrollDown" class="scroll-down" aria-label="Scroll to content">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"><path d="M12 5v14M19 12l-7 7-7-7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </header>
 
-    <section id="work" class="reveal">
-      <h3 class="section-title">Experience</h3>
-      <div class="grid-2">
-        <div class="card">
-          <strong>Computer Vision Intern — Arcturus Business Solutions</strong>
-          <p class="meta">May 2024 — Apr 2025</p>
-          <p>Developed a hybrid few-shot object detection pipeline for satellite imagery and customizable pipelines for industrial usage.</p>
+  <!-- Main container (glass) -->
+  <main class="site" id="site">
+    <div class="container">
+      <section id="about" class="panel reveal">
+        <h2>About</h2>
+        <p>I combine physics-inspired modelling and deep learning. My M.Tech thesis focused on electron device modelling using neural networks. I build robust, production-capable models emphasizing adversarial resilience and real-world performance.</p>
+      </section>
+
+      <section id="work" class="panel reveal">
+        <h2>Experience</h2>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Computer Vision Intern</h3>
+            <p class="muted">Arcturus Business Solutions — May 2024–Apr 2025</p>
+            <p>Built hybrid few-shot object detection pipelines for satellite imagery and customizable detection systems.</p>
+          </article>
+
+          <article class="card">
+            <h3>Deep Learning Researcher Intern</h3>
+            <p class="muted">BIT Sindri — May 2024–Apr 2025</p>
+            <p>Designed architectures to improve accuracy on non-uniform datasets and applied techniques for adversarial robustness.</p>
+          </article>
+
+          <article class="card">
+            <h3>AI/ML Intern</h3>
+            <p class="muted">Oculosense Pvt. Ltd — May 2022–Nov 2022</p>
+            <p>Data synthesis, one-shot face recognition and voice-controlled detection pipeline.</p>
+          </article>
+
+          <article class="card">
+            <h3>Coordinator & Organizer</h3>
+            <p class="muted">SPEC • VIBHAV • ELECTROTHON</p>
+            <p>Led and organized workshops, hackathons and events (50–2000 participants).</p>
+          </article>
         </div>
+      </section>
 
-        <div class="card">
-          <strong>Deep Learning Researcher Intern — BIT Sindri</strong>
-          <p class="meta">May 2024 — Apr 2025</p>
-          <p>Designed architectures to raise accuracy on non-uniform datasets and improved adversarial robustness via novel preprocessing.</p>
-        </div>
+      <section id="projects" class="panel reveal">
+        <h2>Projects</h2>
+        <div class="research-grid">
+          <div class="research-card" onclick="window.open('https://github.com/suyashsachdeva/COVID-Cough-Detection','_blank')">
+            <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1581091870623-8d2b9f8ec9e9?q=80&w=1400');"></div>
+            <div class="research-inner">
+              <div class="muted">COVIDX • 2022</div>
+              <div class="title">COVIDX — Cough Classification</div>
+            </div>
+          </div>
 
-        <div class="card">
-          <strong>AI/ML Intern — Oculosense Pvt Ltd</strong>
-          <p class="meta">May 2022 — Nov 2022</p>
-          <p>Created synthetic datasets, one-shot face recognition, and a voice-controlled detection pipeline.</p>
-        </div>
-
-        <div class="card">
-          <strong>Coordinator & Organizer</strong>
-          <p class="meta">SPEC • VIBHAV • ELECTROTHON</p>
-          <p>Led teams and organized workshops/hackathons with 50–2000 participants.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects" class="reveal">
-      <h3 class="section-title">Projects</h3>
-      <div class="research-grid">
-        <div class="research-card" onclick="window.open('https://github.com/suyashsachdeva/COVID-Cough-Detection','_blank')">
-          <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1581091870623-8d2b9f8ec9e9?q=80&w=1200');"></div>
-          <div class="research-inner">
-            <div class="research-meta">COVIDX • 2022</div>
-            <div class="research-title">COVIDX — Cough Classification</div>
+          <div class="research-card" onclick="window.open('https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main','_blank')">
+            <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1580281657523-6f9c2b24a3cc?q=80&w=1400');"></div>
+            <div class="research-inner">
+              <div class="muted">EyeCAD • 2022</div>
+              <div class="title">EyeCAD — Diabetic Retinopathy</div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="research-card" onclick="window.open('https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main','_blank')">
-          <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1580281657523-6f9c2b24a3cc?q=80&w=1200');"></div>
-          <div class="research-inner">
-            <div class="research-meta">EyeCAD • 2022</div>
-            <div class="research-title">EyeCAD — Diabetic Retinopathy</div>
+      <section id="research" class="panel reveal">
+        <h2>Research</h2>
+        <div class="research-grid">
+          <div class="research-card" onclick="window.open('https://ieeexplore.ieee.org/abstract/document/11075494','_blank')">
+            <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/1f/IEEE_logo.svg'); background-size:220px;background-position:center;"></div>
+            <div class="research-inner">
+              <div class="muted">IEEE IITC — 2025</div>
+              <div class="title">Knowledge-Based Multi-Path Neural Networks for Modeling Through Glass Vias</div>
+              <a class="btn small" href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank">Read</a>
+            </div>
+          </div>
+
+          <div class="research-card" onclick="window.open('https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423','_blank')">
+            <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Elsevier_logo.svg'); background-size:220px;background-position:center;"></div>
+            <div class="research-inner">
+              <div class="muted">Elsevier — 2025</div>
+              <div class="title">Residual-Dense U-Net for Deep Image Steganography</div>
+              <a class="btn small" href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank">Read</a>
+            </div>
+          </div>
+
+          <div class="research-card" onclick="window.open('https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en','_blank')">
+            <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/10/Springer_logo.svg'); background-size:220px;background-position:center;"></div>
+            <div class="research-inner">
+              <div class="muted">Springer — Under Review</div>
+              <div class="title">Adversarially Robust Classification of Metallurgical Microstructures</div>
+              <a class="btn small" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Details</a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="research" class="reveal">
-      <h3 class="section-title">Research — Papers</h3>
-      <div class="research-grid">
-        <div class="research-card" onclick="window.open('https://ieeexplore.ieee.org/abstract/document/11075494','_blank')">
-          <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/1f/IEEE_logo.svg');background-size:contain;background-repeat:no-repeat;background-position:center;"></div>
-          <div class="research-inner">
-            <div class="research-meta">IEEE IITC — 2025</div>
-            <div class="research-title">Knowledge-Based Multi-Path Neural Networks for Modeling Through Glass Vias</div>
-          </div>
+      <section id="contact" class="panel reveal">
+        <h2>Contact</h2>
+        <p class="muted">Open to collaborations, internships, and research roles. Email is the fastest way.</p>
+        <div style="margin-top:12px">
+          <button class="btn primary" onclick="mailtoQuick()">Email Me</button>
         </div>
+      </section>
 
-        <div class="research-card" onclick="window.open('https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423','_blank')">
-          <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Elsevier_logo.svg');background-size:contain;background-repeat:no-repeat;background-position:center;"></div>
-          <div class="research-inner">
-            <div class="research-meta">Elsevier — 2025</div>
-            <div class="research-title">Residual-Dense U-Net for Deep Image Steganography</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="reveal">
-      <h3 class="section-title">Contact</h3>
-      <p>Open to collaborations, internships, and full-time opportunities.</p>
-      <button class="btn primary" onclick="mailtoQuick()">Email Me</button>
-    </section>
-
-    <footer>© <span id="year"></span> Suyash Sachdeva</footer>
-  </div>
+      <footer class="site-footer">
+        © <span id="year"></span> Suyash Sachdeva
+      </footer>
+    </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
