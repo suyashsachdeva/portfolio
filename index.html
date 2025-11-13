@@ -4,16 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Suyash Sachdeva — Neural Portfolio</title>
-  <meta name="description" content="Suyash Sachdeva — Deep Learning Researcher | Computer Vision | NIT Hamirpur" />
+  <meta name="description" content="Deep Learning Researcher | Computer Vision | NIT Hamirpur" />
   <link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
-
 </head>
 <body>
+
+  <!-- Simple top-level check (will show if HTML loads) -->
+  <noscript style="color:#fff;background:#111;padding:8px;display:block;text-align:center;">
+    JavaScript is required for the full experience — please enable JS.
+  </noscript>
+
   <!-- Fullscreen Neural Hero -->
   <header id="hero" class="hero-full">
     <canvas id="neural-canvas" aria-hidden="true"></canvas>
-    <div class="hero-inner">
+
+    <div class="hero-inner" role="region" aria-label="Hero">
       <div class="hero-content">
         <div class="eyebrow">Hello — I'm</div>
         <h1 id="hero-title">Suyash <span class="accent">Sachdeva</span></h1>
@@ -34,13 +39,16 @@
     </div>
 
     <button id="scrollDown" class="scroll-down" aria-label="Scroll to content">
-      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"><path d="M12 5v14M19 12l-7 7-7-7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor">
+        <path d="M12 5v14M19 12l-7 7-7-7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </button>
   </header>
 
-  <!-- Main container (glass) -->
+  <!-- Main content -->
   <main class="site" id="site">
     <div class="container">
+
       <section id="about" class="panel reveal">
         <h2>About</h2>
         <p>I combine physics-inspired modelling and deep learning. My M.Tech thesis focused on electron device modelling using neural networks. I build robust, production-capable models emphasizing adversarial resilience and real-world performance.</p>
@@ -50,27 +58,27 @@
         <h2>Experience</h2>
         <div class="grid-2">
           <article class="card">
-            <h3>Computer Vision Intern</h3>
-            <p class="muted">Arcturus Business Solutions — May 2024–Apr 2025</p>
-            <p>Built hybrid few-shot object detection pipelines for satellite imagery and customizable detection systems.</p>
+            <h3>Computer Vision Intern — Arcturus Business Solutions</h3>
+            <p class="muted">May 2024 — Apr 2025</p>
+            <p>Built hybrid few-shot object detection pipelines for satellite imagery and customizable production pipelines.</p>
           </article>
 
           <article class="card">
-            <h3>Deep Learning Researcher Intern</h3>
-            <p class="muted">BIT Sindri — May 2024–Apr 2025</p>
-            <p>Designed architectures to improve accuracy on non-uniform datasets and applied techniques for adversarial robustness.</p>
+            <h3>Deep Learning Researcher Intern — BIT Sindri</h3>
+            <p class="muted">May 2024 — Apr 2025</p>
+            <p>Designed architectures to improve accuracy on non-uniform datasets; improved adversarial robustness.</p>
           </article>
 
           <article class="card">
-            <h3>AI/ML Intern</h3>
-            <p class="muted">Oculosense Pvt. Ltd — May 2022–Nov 2022</p>
-            <p>Data synthesis, one-shot face recognition and voice-controlled detection pipeline.</p>
+            <h3>AI/ML Intern — Oculosense Pvt Ltd</h3>
+            <p class="muted">May 2022 — Nov 2022</p>
+            <p>Synthetic dataset generation, one-shot face recognition, voice-controlled detection pipeline.</p>
           </article>
 
           <article class="card">
             <h3>Coordinator & Organizer</h3>
             <p class="muted">SPEC • VIBHAV • ELECTROTHON</p>
-            <p>Led and organized workshops, hackathons and events (50–2000 participants).</p>
+            <p>Led and organized workshops and hackathons (50–2000 participants).</p>
           </article>
         </div>
       </section>
@@ -117,28 +125,18 @@
             </div>
           </div>
 
-          <div class="research-card" onclick="window.open('https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en','_blank')">
-            <div class="bg" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/1/10/Springer_logo.svg'); background-size:220px;background-position:center;"></div>
-            <div class="research-inner">
-              <div class="muted">Springer — Under Review</div>
-              <div class="title">Adversarially Robust Classification of Metallurgical Microstructures</div>
-              <a class="btn small" href="https://scholar.google.com/citations?user=eCbBzCkAAAAJ&hl=en" target="_blank">Details</a>
-            </div>
-          </div>
         </div>
       </section>
 
       <section id="contact" class="panel reveal">
         <h2>Contact</h2>
-        <p class="muted">Open to collaborations, internships, and research roles. Email is the fastest way.</p>
+        <p class="muted">Open to collaborations, internships, and research roles — email is the fastest way.</p>
         <div style="margin-top:12px">
           <button class="btn primary" onclick="mailtoQuick()">Email Me</button>
         </div>
       </section>
 
-      <footer class="site-footer">
-        © <span id="year"></span> Suyash Sachdeva
-      </footer>
+      <footer class="site-footer">© <span id="year"> </span> Suyash Sachdeva</footer>
     </div>
   </main>
 
