@@ -3,177 +3,270 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Suyash Sachdeva – Portfolio</title>
+<title>Suyash Sachdeva — Portfolio</title>
 
-<!-- ========== BASIC SAFE CSS (NO BREAKAGE) ========== -->
 <style>
-  body {
-    margin: 0;
-    font-family: Inter, Arial, sans-serif;
-    background: #030418;
-    color: #e9f3ff;
-  }
+/* ---------------------------------------------------
+   BASE
+--------------------------------------------------- */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #030418;
+  color: #e9f3ff;
+  overflow-x: hidden;
+}
 
-  /* HERO */
+/* ---------------------------------------------------
+   HERO SECTION (LEFT-ALIGNED)
+--------------------------------------------------- */
+#hero {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 60px;
+  padding-right: 120px;
+}
+
+/* neural canvas */
+#neural-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* hero content left side */
+.hero-left {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.eyebrow {
+  color: #9fb0d6;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+#hero-title {
+  font-size: 54px;
+  font-weight: 700;
+  margin: 0;
+}
+.accent {
+  color: #45b3ff;
+  background: rgba(69,179,255,0.15);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.hero-sub {
+  color: #9fb0d6;
+  font-size: 17px;
+  margin: 14px 0;
+}
+
+/* buttons */
+.hero-ctas {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+}
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  font-size: 14px;
+}
+.btn.primary {
+  border: none;
+  background: linear-gradient(90deg,#45b3ff,#6d5bff);
+  color: #001f2d;
+}
+
+/* right side stats */
+.hero-right {
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 2;
+}
+
+.stat {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 14px 20px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 90px;
+}
+.stat strong {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+/* scroll button */
+.scroll-down {
+  position: absolute;
+  bottom: 30px;
+  left: 60px;
+  z-index: 3;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 10px 12px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------
+   MAIN CONTENT
+--------------------------------------------------- */
+
+.site {
+  padding: 50px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.panel {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 22px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.card {
+  background: rgba(255,255,255,0.03);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.muted {
+  color: #9fb0d6;
+}
+
+/* Responsive */
+@media(max-width:900px){
   #hero {
-    height: 100vh;
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-  }
-
-  #hero-title {
-    font-size: 48px;
-    margin: 0;
-  }
-  .accent {
-    color: #45b3ff;
-  }
-  .hero-sub {
-    color: #9fb0d6;
-    max-width: 70%;
-    margin: 15px auto;
-  }
-
-  .hero-ctas {
-    margin-top: 20px;
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-  }
-
-  .btn {
-    padding: 10px 14px;
-    border-radius: 8px;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: white;
-    font-size: 14px;
-  }
-  .btn.primary {
-    background: linear-gradient(90deg,#45b3ff,#6d5bff);
-    color: #001f2d;
-    border: none;
-  }
-
-  .scroll-down {
-    position: absolute;
-    bottom: 30px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: white;
-    padding: 10px 12px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-
-  /* MAIN CONTENT */
-  .site {
     padding: 40px 20px;
-    max-width: 900px;
-    margin: auto;
+    justify-content: center;
   }
-
-  h2 {
-    margin-top: 0;
-    font-size: 24px;
+  .hero-right {
+    position: static;
+    transform: none;
+    margin-top: 20px;
   }
-
-  .panel {
-    background: rgba(255,255,255,0.04);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(255,255,255,0.05);
-  }
-
-  .muted {
-    color: #9fb0d6;
-  }
-
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  .card {
-    background: rgba(255,255,255,0.03);
-    border-radius: 10px;
-    padding: 14px;
-    border: 1px solid rgba(255,255,255,0.06);
-  }
-
-  @media(max-width:700px){
-    .grid-2 { grid-template-columns: 1fr; }
-    #hero-title { font-size: 32px; }
-  }
+  #hero-title { font-size: 40px; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
 </style>
-
 </head>
+
 <body>
 
-<!-- ========== HERO SECTION ========== -->
+<!-- ===================================================
+     HERO SECTION (LEFT-ALIGNED WITH STATS)
+======================================================= -->
 <header id="hero">
-  <h1 id="hero-title">Suyash <span class="accent">Sachdeva</span></h1>
 
-  <p class="hero-sub">
-    Deep Learning Researcher • Computer Vision • Robust ML • Adversarial Safety • Satellite Image AI
-  </p>
+  <canvas id="neural-canvas"></canvas>
 
-  <div class="hero-ctas">
-    <a class="btn primary" href="#research">View Research</a>
-    <a class="btn" href="resume.pdf" download>Download Resume</a>
+  <div class="hero-left">
+    <div class="eyebrow">Hello — I'm</div>
+
+    <h1 id="hero-title">
+      Suyash <span class="accent">Sachdeva</span>
+    </h1>
+
+    <p class="hero-sub">
+      Deep Learning Researcher • Computer Vision • Robust ML
+    </p>
+
+    <div class="hero-ctas">
+      <a class="btn primary" href="#research">View Research</a>
+      <a class="btn" href="resume.pdf" download>Resume</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat">
+      <strong>4</strong>Papers
+    </div>
+    <div class="stat">
+      <strong>10+</strong>Projects
+    </div>
+    <div class="stat">
+      <strong>M.Tech</strong>Thesis
+    </div>
   </div>
 
   <button id="scrollDown" class="scroll-down">↓</button>
 </header>
 
-<!-- ========== MAIN CONTENT ========== -->
+<!-- ===================================================
+     MAIN CONTENT
+======================================================= -->
 <main class="site">
 
-  <section class="panel" id="about">
+  <section id="about" class="panel">
     <h2>About Me</h2>
     <p>
-      I combine physics-based modeling and deep learning to build robust,
-      production-grade models. My M.Tech work focuses on electron device
-      modeling using neural networks.
+      I combine physics-inspired modelling and deep learning. My M.Tech thesis focuses
+      on electron device modelling using neural networks.
     </p>
   </section>
 
-  <section class="panel" id="work">
+  <section id="work" class="panel">
     <h2>Experience</h2>
     <div class="grid-2">
       <div class="card">
-        <h3>Computer Vision Intern – Arcturus Business Solutions</h3>
-        <p class="muted">May 2024 – Apr 2025</p>
-        <p>Built hybrid few-shot detection pipelines for satellite imagery.</p>
+        <h3>Computer Vision Intern — Arcturus</h3>
+        <p class="muted">May 2024 — Apr 2025</p>
+        <p>Built few-shot satellite detection pipelines.</p>
       </div>
 
       <div class="card">
-        <h3>Deep Learning Research Intern – BIT Sindri</h3>
-        <p class="muted">May 2024 – Apr 2025</p>
-        <p>Worked on dataset imbalance and adversarial robustness.</p>
+        <h3>Deep Learning Intern — BIT Sindri</h3>
+        <p class="muted">May 2024 — Apr 2025</p>
+        <p>Worked on adversarial robustness and dataset imbalance.</p>
       </div>
 
       <div class="card">
-        <h3>AI/ML Intern – Oculosense</h3>
-        <p class="muted">May 2022 – Nov 2022</p>
-        <p>Synthetic data generation and one-shot face recognition.</p>
+        <h3>AI/ML Intern — Oculosense</h3>
+        <p class="muted">May 2022 — Nov 2022</p>
+        <p>Data synthesis, one-shot face recognition, voice control.</p>
       </div>
 
       <div class="card">
         <h3>Coordinator & Organizer</h3>
         <p class="muted">SPEC • VIBHAV • ELECTROTHON</p>
-        <p>Organized workshops & hackathons (50–2000 participants).</p>
+        <p>Organized large-scale technical events.</p>
       </div>
     </div>
   </section>
 
-  <section class="panel" id="projects">
+  <section id="projects" class="panel">
     <h2>Projects</h2>
 
     <div class="card">
@@ -183,13 +276,14 @@
     </div>
 
     <div class="card">
-      <h3>EyeCAD – Diabetic Retinopathy Detection</h3>
+      <h3>EyeCAD – Diabetic Retinopathy</h3>
       <p class="muted">2022</p>
       <a class="btn" href="https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main" target="_blank">Repo →</a>
     </div>
+
   </section>
 
-  <section class="panel" id="research">
+  <section id="research" class="panel">
     <h2>Research</h2>
 
     <div class="card">
@@ -199,34 +293,28 @@
     </div>
 
     <div class="card">
-      <h3>Residual-Dense U-Net for Deep Image Steganography</h3>
+      <h3>Residual-Dense U-Net for Image Steganography</h3>
       <p class="muted">Elsevier • 2025</p>
       <a class="btn" target="_blank" href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423">Read →</a>
     </div>
   </section>
 
-  <section class="panel" id="contact">
-    <h2>Contact</h2>
-    <p class="muted">Email is the fastest way.</p>
-    <a class="btn primary" href="mailto:suyashsachdeva2403@gmail.com">Email Me</a>
-  </section>
-
 </main>
 
-<!-- ========== INLINE JS (NO BREAKAGE) ========== -->
+<!-- ===================================================
+     JS — TYPEWRITER + SCROLL + NEURAL ANIMATION
+======================================================= -->
 <script>
-document.addEventListener("DOMContentLoaded",()=>{
-
-  // Scroll down button
-  const scrollBtn = document.getElementById("scrollDown");
-  scrollBtn.addEventListener("click",()=>{
-    document.querySelector(".site").scrollIntoView({behavior:"smooth"});
-  });
-
-  // Typewriter
+/* typewriter */
+document.addEventListener("DOMContentLoaded", () => {
   const el = document.getElementById("hero-title");
-  const phrases = ["Suyash Sachdeva","Deep Learning Researcher","Computer Vision Specialist","Robust ML Architect"];
-  let pi=0,ci=0,fw=true;
+  const phrases = [
+    "Suyash Sachdeva",
+    "Deep Learning Researcher",
+    "Computer Vision Specialist",
+    "Robust ML Architect"
+  ];
+  let pi=0, ci=0, fw=true;
 
   function type(){
     const p = phrases[pi];
@@ -235,8 +323,63 @@ document.addEventListener("DOMContentLoaded",()=>{
     else { ci--; if(ci<0){ fw=true; pi=(pi+1)%phrases.length; ci=0; } }
     setTimeout(type, fw?60:35);
   }
-  
   type();
+
+  /* scroll down */
+  document.getElementById("scrollDown").onclick = () =>
+    document.querySelector(".site").scrollIntoView({behavior:"smooth"});
+
+  /* neural animation */
+  const canvas=document.getElementById("neural-canvas");
+  const ctx=canvas.getContext("2d");
+  function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+  }
+  resize();
+  window.onresize=resize;
+
+  let nodes=[];
+  for(let i=0;i<35;i++){
+    nodes.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      vx:(Math.random()-.5)*.4,
+      vy:(Math.random()-.5)*.4
+    });
+  }
+
+  function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    nodes.forEach(n=>{
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>canvas.width) n.vx*=-1;
+      if(n.y<0||n.y>canvas.height) n.vy*=-1;
+
+      ctx.beginPath();
+      ctx.fillStyle="rgba(69,179,255,0.9)";
+      ctx.arc(n.x,n.y,2,0,Math.PI*2);
+      ctx.fill();
+    });
+
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        let a=nodes[i],b=nodes[j];
+        let dx=a.x-b.x,dy=a.y-b.y;
+        let d=Math.hypot(dx,dy);
+        if(d<150){
+          ctx.beginPath();
+          ctx.strokeStyle="rgba(69,179,255,"+(0.15-d/150)+")";
+          ctx.lineWidth=1;
+          ctx.moveTo(a.x,a.y);
+          ctx.lineTo(b.x,b.y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
 });
 </script>
 
