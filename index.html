@@ -1,330 +1,277 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Suyash Sachdeva — Neural Landing</title>
-<meta name="description" content="Suyash Sachdeva — Deep Learning • Computer Vision • Robust ML" />
-<style>
-  :root{
-    --bg:#07101a; --panel: rgba(255,255,255,0.02);
-    --muted:#9fb0d6; --text:#eaf4ff;
-    --accent1:#45b3ff; --accent2:#6d5bff;
-    --glass-border: rgba(255,255,255,0.04);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text);background:linear-gradient(180deg,#05101a 0%, #071224 100%)}
-  a{color:inherit}
+// Defensive startup
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('year')?.textContent = new Date().getFullYear();
 
-  /* -------------------------
-     HERO - left aligned
-     ------------------------- */
-  header.hero {
-    position:relative;
-    height:100vh;
-    min-height:600px;
-    display:flex;
-    align-items:center;
-    padding:60px 8vw;
-    gap:40px;
-    overflow:hidden;
-  }
-
-  /* RIGHT cinematic media container */
-  .hero-media{
-    position:absolute;
-    right:6vw;
-    top:10%;
-    width:48%;
-    height:80%;
-    border-radius:14px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.03);
-    box-shadow: 0 30px 80px rgba(2,6,23,0.6);
-    background:linear-gradient(180deg, rgba(6,10,20,0.45), rgba(6,8,14,0.25));
-    z-index:1;
-  }
-  .hero-media video{
-    width:100%; height:100%; object-fit:cover; display:block;
-    filter: saturate(.95) contrast(.95) brightness(.9);
-    transform: translateZ(0);
-  }
-
-  /* subtle overlay gradient to match Dribbble aesthetics */
-  .hero-media::after{
-    content:"";
-    position:absolute; inset:0; pointer-events:none;
-    background: linear-gradient(90deg, rgba(5,6,10,0.25), rgba(0,0,0,0.3));
-    mix-blend-mode: overlay;
-  }
-
-  /* Canvas neural overlay (adds depth / particles) */
-  canvas#neuralOverlay{
-    position:absolute; right:6vw; top:10%; width:48%; height:80%; z-index:2; pointer-events:none;
-    border-radius:14px; mix-blend-mode: screen;
-  }
-
-  /* LEFT content */
-  .hero-content{ position:relative; z-index:3; width:44%; max-width:760px; }
-  .eyebrow{ color:var(--muted); font-size:14px; margin-bottom:12px }
-  h1.title{ font-size:64px; line-height:0.95; margin:0 0 14px 0; font-weight:800; letter-spacing:-0.6px }
-  .title .accent{ background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#051927; padding:8px 12px; border-radius:8px; display:inline-block }
-  .subtitle{ color:var(--muted); font-size:16px; margin-bottom:22px }
-
-  .ctas{ display:flex; gap:12px; margin-bottom:22px }
-  .btn{ display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:12px; text-decoration:none; font-weight:600; cursor:pointer; border:1px solid var(--glass-border); }
-  .btn.primary{ background: linear-gradient(90deg,var(--accent1),var(--accent2)); color:#001e28; border:none; box-shadow:0 12px 40px rgba(45,85,200,0.12) }
-  .btn.ghost{ background:transparent; color:var(--text) }
-
-  /* stats left (below CTAs) */
-  .stats-row{ display:flex; gap:14px; margin-top:10px; align-items:center; flex-wrap:wrap }
-  .stat{
-    background: rgba(255,255,255,0.02); border-radius:12px; padding:12px 14px; min-width:110px;
-    border:1px solid rgba(255,255,255,0.03); text-align:center;
-  }
-  .stat strong{ display:block; font-size:16px; margin-bottom:6px }
-
-  /* scroll hint */
-  .scroll-hint{ position:absolute; left:6vw; bottom:30px; z-index:4; color:var(--muted); font-size:13px; display:flex; gap:10px; align-items:center }
-
-  /* main content styling (under hero) */
-  main.site{ max-width:1060px; margin: 36px auto 120px; padding:0 30px; }
-  .panel{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,0.03); margin-bottom:18px }
-  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px }
-
-  /* responsive */
-  @media (max-width:1100px){
-    header.hero{ padding:48px 5vw; flex-direction:column; align-items:flex-start; gap:18px; min-height:680px }
-    .hero-media, canvas#neuralOverlay{ position:relative; width:100%; height:360px; right:auto; top:auto; border-radius:12px }
-    .hero-content{ width:100% }
-    .title{ font-size:44px }
-    .scroll-hint{ left:5vw }
-  }
-  @media (max-width:520px){
-    .title{ font-size:32px }
-    .subtitle{ font-size:14px }
-  }
-</style>
-</head>
-<body>
-
-  <!-- HERO -->
-  <header class="hero" role="banner" aria-label="Landing">
-    <div class="hero-content">
-      <div class="eyebrow">Hello — I'm</div>
-
-      <!-- NOTE: No duplicate name. Big heading left. -->
-      <h1 class="title">Deep Learning Researcher <span class="accent">Sachdeva</span></h1>
-
-      <div class="subtitle">Deep Learning • Computer Vision • Robust ML</div>
-
-      <div class="ctas">
-        <a class="btn primary" href="#research">View Research</a>
-        <a class="btn ghost" href="resume.pdf" download>Resume</a>
-      </div>
-
-      <div class="stats-row" aria-hidden="true">
-        <div class="stat"><strong>4</strong>Papers</div>
-        <div class="stat"><strong>10+</strong>Projects</div>
-        <div class="stat"><strong>M.Tech</strong>Thesis</div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Cinematic video background (placeholder) -->
-    <div class="hero-media" aria-hidden="true">
-      <!-- Replace the src below with your cinematic brain video (e.g. 'brain.mp4' uploaded to repo root) -->
-      <!-- Placeholder uses a CC0 sample; swap for a high-quality neural brain mp4/webm to match Dribbble -->
-      <video id="bgVideo" autoplay muted loop playsinline preload="auto">
-        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
-        <!-- Fallback content -->
-      </video>
-    </div>
-
-    <!-- Canvas overlay for glow/particles on top of video (adds depth) -->
-    <canvas id="neuralOverlay" aria-hidden="true"></canvas>
-
-    <div class="scroll-hint">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 5v14M19 12l-7 7-7-7" stroke="rgba(255,255,255,0.6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div>Scroll to discover</div>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <main class="site" id="site">
-    <section class="panel" id="about">
-      <h2>About</h2>
-      <p>I combine physics-inspired modelling and deep learning. My M.Tech thesis focused on electron device modelling using neural networks. I build robust, production-grade ML systems with attention to adversarial safety and real-world deployment.</p>
-    </section>
-
-    <section class="panel" id="projects">
-      <h2>Projects</h2>
-      <div class="grid-2">
-        <div>
-          <h3>COVIDX — Cough Classification</h3>
-          <p class="muted">2022 • LSTM-based audio classifier</p>
-        </div>
-        <div>
-          <h3>EyeCAD — Diabetic Retinopathy</h3>
-          <p class="muted">2022 • DenseNet retinal screening</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="research">
-      <h2>Research</h2>
-      <div>
-        <h3>Knowledge-Based Multi-Path Neural Networks</h3>
-        <p class="muted">IEEE IITC — 2025 • <a href="https://ieeexplore.ieee.org/abstract/document/11075494" target="_blank" rel="noopener">Read</a></p>
-        <h3>Residual-Dense U-Net for Image Steganography</h3>
-        <p class="muted">Elsevier — 2025 • <a href="https://www.sciencedirect.com/science/article/abs/pii/S0045790625002423" target="_blank" rel="noopener">Read</a></p>
-      </div>
-    </section>
-
-    <section class="panel" id="contact">
-      <h2>Contact</h2>
-      <p class="muted">Open to collaborations, internships, and research roles. Email is the fastest way: <a href="mailto:suyashsachdeva2403@gmail.com">suyashsachdeva2403@gmail.com</a></p>
-    </section>
-  </main>
-
-<script>
-/* ======= neuralOverlay: lightweight particles + connection lines for cinematic depth ======= */
-(function(){
-  const canvas = document.getElementById('neuralOverlay');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let W, H, DPR = window.devicePixelRatio || 1;
-  function resize(){
-    const rect = canvas.getBoundingClientRect();
-    W = Math.max(300, rect.width);
-    H = Math.max(200, rect.height);
-    canvas.width = Math.floor(W * DPR);
-    canvas.height = Math.floor(H * DPR);
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-
-  // initial sizing: the canvas sits where .hero-media is; call after layout
-  function initResize(){
-    const media = document.querySelector('.hero-media');
-    if(!media) return;
-    // position canvas to match media
-    const rect = media.getBoundingClientRect();
-    canvas.style.position = 'absolute';
-    canvas.style.left = rect.left + 'px';
-    canvas.style.top = rect.top + 'px';
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
-    resize();
-  }
-  // run once after layout
-  setTimeout(initResize, 80);
-  window.addEventListener('resize', ()=>{ setTimeout(initResize, 80); });
-
-  // particles
-  let nodes = [];
-  function createNodes(){
-    nodes = [];
-    const count = Math.max(18, Math.floor((W*H)/(12000)));
-    for(let i=0;i<count;i++){
-      nodes.push({
-        x: Math.random()*W,
-        y: Math.random()*H,
-        vx: (Math.random()-0.5)*0.25,
-        vy: (Math.random()-0.5)*0.25,
-        r: 0.8 + Math.random()*2.2,
-        alpha: 0.12 + Math.random()*0.5
-      });
-    }
-  }
-
-  let mouse = {x: W/2, y: H/2};
-  window.addEventListener('mousemove', e=>{
-    const mediaRect = document.querySelector('.hero-media')?.getBoundingClientRect();
-    if(!mediaRect) return;
-    const mx = e.clientX - mediaRect.left;
-    const my = e.clientY - mediaRect.top;
-    mouse.x = mx; mouse.y = my;
+  // Scroll hint
+  document.getElementById('scrollHint')?.addEventListener('click', () => {
+    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   });
 
-  function step(){
-    if(!canvas) return;
-    ctx.clearRect(0,0,W,H);
-
-    // soft background vignette
-    const g = ctx.createLinearGradient(0,0,W,0);
-    g.addColorStop(0, 'rgba(0,0,0,0.08)');
-    g.addColorStop(1, 'rgba(0,0,0,0.05)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,W,H);
-
-    // update and draw nodes
-    for(let n of nodes){
-      n.vx += (mouse.x - n.x) * 0.00001;
-      n.vy += (mouse.y - n.y) * 0.00001;
-      n.x += n.vx; n.y += n.vy;
-      if(n.x < 0 || n.x > W) n.vx *= -1;
-      if(n.y < 0 || n.y > H) n.vy *= -1;
+  // Intersection observer for alternating slide-in sections
+  (function handlePanels(){
+    const panels = Array.from(document.querySelectorAll('.panel.alternating'));
+    panels.forEach((p, i) => {
+      // alternate sides: even index -> slide-left, odd -> slide-right
+      p.classList.add(i % 2 === 0 ? 'slide-left' : 'slide-right');
+    });
+    if (!('IntersectionObserver' in window)) {
+      panels.forEach(p => p.classList.add('visible'));
+      return;
     }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+    panels.forEach(p => io.observe(p));
+  })();
 
-    // connections
-    for(let i=0;i<nodes.length;i++){
-      for(let j=i+1;j<nodes.length;j++){
-        const a = nodes[i], b = nodes[j];
-        const dx = a.x-b.x, dy = a.y-b.y, d = Math.hypot(dx,dy);
-        if(d < Math.max(80, Math.min(W,H)/6)){
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(69,179,255,${Math.max(0, 0.12 - d*0.0009)})`;
-          ctx.lineWidth = 0.9;
-          ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-        }
+  // Left neural background (subtle): points + connecting lines
+  (function leftNeural(){
+    const canvas = document.getElementById('neuralLeft');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W = 100, H = 100, DPR = window.devicePixelRatio || 1;
+    function resize() {
+      const hero = document.querySelector('.hero-left');
+      if (!hero) return;
+      const rect = hero.getBoundingClientRect();
+      canvas.style.left = rect.left + 'px';
+      canvas.style.top = rect.top + 'px';
+      canvas.width = Math.floor(rect.width * DPR);
+      canvas.height = Math.floor(rect.height * DPR);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      W = rect.width; H = rect.height;
+    }
+    let nodes = [];
+    function createNodes() {
+      nodes = [];
+      const count = Math.max(8, Math.floor((W * H) / 16000));
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          r: 0.9 + Math.random() * 1.8
+        });
       }
     }
 
-    // draw nodes (glowing points)
-    for(let n of nodes){
-      const rg = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,18);
-      rg.addColorStop(0, `rgba(69,179,255,${0.08})`);
-      rg.addColorStop(1, `rgba(69,179,255,0)`);
-      ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(n.x,n.y,18,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.fillStyle = `rgba(69,179,255,${n.alpha})`; ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
+    let mouse = { x: -9999, y: -9999 };
+    window.addEventListener('mousemove', (e) => {
+      const rect = document.querySelector('.hero-left')?.getBoundingClientRect();
+      if (!rect) return;
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    window.addEventListener('mouseleave', () => mouse = { x: -9999, y: -9999 });
+
+    function step() {
+      ctx.clearRect(0, 0, W, H);
+      // soft background
+      ctx.fillStyle = 'rgba(0,0,0,0)';
+      ctx.fillRect(0, 0, W, H);
+
+      // update nodes
+      for (let n of nodes) {
+        if (mouse.x > -900) {
+          n.vx += (mouse.x - n.x) * 0.00001;
+          n.vy += (mouse.y - n.y) * 0.00001;
+        }
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > W) n.vx *= -1;
+        if (n.y < 0 || n.y > H) n.vy *= -1;
+      }
+
+      // connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d = Math.hypot(dx, dy);
+          if (d < Math.max(80, Math.min(W, H) / 5)) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(69,179,255,${Math.max(0, 0.10 - d * 0.0009)})`;
+            ctx.lineWidth = 0.9;
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+      // draw nodes
+      for (let n of nodes) {
+        const rg = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 18);
+        rg.addColorStop(0, 'rgba(69,179,255,0.06)');
+        rg.addColorStop(1, 'rgba(69,179,255,0)');
+        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(n.x, n.y, 16, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.fillStyle = 'rgba(69,179,255,0.9)'; ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+      }
+      requestAnimationFrame(step);
     }
 
-    requestAnimationFrame(step);
-  }
+    function init() {
+      resize();
+      createNodes();
+      step();
+    }
+    init();
+    let tResize;
+    window.addEventListener('resize', () => {
+      clearTimeout(tResize); tResize = setTimeout(() => { resize(); createNodes(); }, 120);
+    });
+  })();
 
-  // initialize after first sizing
-  function start(){
-    const mediaRect = document.querySelector('.hero-media')?.getBoundingClientRect();
-    if(!mediaRect) { setTimeout(start, 80); return; }
-    canvas.style.left = mediaRect.left + 'px';
-    canvas.style.top = mediaRect.top + 'px';
-    resize();
-    createNodes();
-    step();
-  }
-  start();
+  // Overlay neural on video (right)
+  (function overlayNeural(){
+    const canvas = document.getElementById('neuralOverlay');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let DPR = window.devicePixelRatio || 1;
+    let W = 300, H = 150;
+    function updateBounds(){
+      const media = document.querySelector('.hero-media');
+      if(!media) return;
+      const rect = media.getBoundingClientRect();
+      canvas.style.left = rect.left + 'px';
+      canvas.style.top = rect.top + 'px';
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      W = Math.max(200, rect.width); H = Math.max(150, rect.height);
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    let nodes = [];
+    function create(){ nodes=[]; const count = Math.max(16, Math.floor((W*H)/16000)); for(let i=0;i<count;i++){ nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*0.35,vy:(Math.random()-.5)*0.35,r:0.9+Math.random()*2}) } }
+    function anim(){
+      ctx.clearRect(0,0,W,H);
+      for(let n of nodes){ n.x+=n.vx; n.y+=n.vy; if(n.x<0||n.x>W) n.vx*=-1; if(n.y<0||n.y>H) n.vy*=-1; }
+      for(let i=0;i<nodes.length;i++){ for(let j=i+1;j<nodes.length;j++){ const a=nodes[i],b=nodes[j]; const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy); if(d < Math.max(80,Math.min(W,H)/6)){ ctx.beginPath(); ctx.strokeStyle=`rgba(69,179,255,${Math.max(0,0.12 - d*0.0009)})`; ctx.lineWidth = 0.9; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } } }
+      for(let n of nodes){ const rg = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,20); rg.addColorStop(0,'rgba(69,179,255,0.08)'); rg.addColorStop(1,'rgba(69,179,255,0)'); ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(n.x,n.y,18,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.fillStyle='rgba(69,179,255,0.9)'; ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill(); }
+      requestAnimationFrame(anim);
+    }
+    updateBounds(); create(); anim();
+    let tr; window.addEventListener('resize',()=>{ clearTimeout(tr); tr=setTimeout(()=>{updateBounds(); create();},120); });
+  })();
 
-})(); // end neuralOverlay
+  // H4: Neural Sphere hologram in contact
+  (function holoSphere(){
+    const canvas = document.getElementById('holoSphere');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W=320, H=260, DPR = window.devicePixelRatio || 1;
+    function resize(){
+      const wrap = document.querySelector('.holo-wrap');
+      if(!wrap) return;
+      const rect = wrap.getBoundingClientRect();
+      W = rect.width; H = rect.height;
+      canvas.width = Math.floor(W * DPR); canvas.height = Math.floor(H * DPR);
+      canvas.style.width = rect.width + 'px'; canvas.style.height = rect.height + 'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    // build sphere points
+    const points = [];
+    const R = 70;
+    const lat = 14, lon = 28;
+    for(let i=0;i<lat;i++){
+      const theta = (i/(lat-1)) * Math.PI;
+      for(let j=0;j<lon;j++){
+        const phi = (j/ lon) * Math.PI * 2;
+        const x = Math.sin(theta) * Math.cos(phi);
+        const y = Math.cos(theta);
+        const z = Math.sin(theta) * Math.sin(phi);
+        points.push({x,y,z});
+      }
+    }
+    let rot = 0;
+    function draw(){
+      resize();
+      ctx.clearRect(0,0,W,H);
+      // background vignette
+      const g = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H));
+      g.addColorStop(0, 'rgba(10,15,22,0.0)');
+      g.addColorStop(1, 'rgba(2,6,10,0.5)');
+      ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
 
-/* Smooth scroll button */
-document.addEventListener('DOMContentLoaded', ()=> {
-  const btn = document.querySelector('.scroll-hint');
-  btn?.addEventListener('click', ()=> {
-    document.querySelector('#about')?.scrollIntoView({behavior:'smooth'});
-  });
+      // center
+      const cx = W/2, cy = H/2 + 6;
+
+      // compute rotated positions
+      const cosr = Math.cos(rot), sinr = Math.sin(rot);
+      const projected = [];
+      for(const p of points){
+        // rotate around Y axis
+        const x = p.x * cosr + p.z * sinr;
+        const z = -p.x * sinr + p.z * cosr;
+        const y = p.y;
+        // perspective
+        const dist = 2.8;
+        const scale = (dist) / (dist + z);
+        const sx = cx + x * R * scale;
+        const sy = cy + y * R * scale;
+        const sz = z;
+        projected.push({sx, sy, sz, scale});
+      }
+
+      // sort by depth
+      projected.sort((a,b)=> a.z - b.z);
+
+      // draw connecting lines for some neighbors
+      ctx.lineWidth = 0.9;
+      for(let i=0;i<projected.length;i++){
+        const a = projected[i];
+        // draw small glow
+        const rad = 2.0 * a.scale;
+        const rg = ctx.createRadialGradient(a.sx,a.sy,0,a.sx,a.sy,14);
+        rg.addColorStop(0, `rgba(69,179,255,${0.9*a.scale})`);
+        rg.addColorStop(1, `rgba(69,179,255,0)`);
+        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(a.sx,a.sy,8*a.scale,0,Math.PI*2); ctx.fill();
+        // optionally draw point
+        ctx.beginPath(); ctx.fillStyle = `rgba(120,180,255,${0.9*a.scale})`; ctx.arc(a.sx,a.sy,rad,0,Math.PI*2); ctx.fill();
+      }
+
+      // draw faint gridlines by connecting neighbors in longitude/latitude
+      ctx.strokeStyle = 'rgba(100,160,255,0.06)';
+      for(let i=0;i<lat;i++){
+        for(let j=0;j<lon;j++){
+          const idx = i*lon + j;
+          const cur = projected[idx];
+          const right = projected[i*lon + ((j+1)%lon)];
+          const down = projected[((i+1)%lat)*lon + j] || null;
+          if(right){
+            ctx.beginPath(); ctx.moveTo(cur.sx,cur.sy); ctx.lineTo(right.sx,right.sy); ctx.stroke();
+          }
+          if(down){
+            ctx.beginPath(); ctx.moveTo(cur.sx,cur.sy); ctx.lineTo(down.sx,down.sy); ctx.stroke();
+          }
+        }
+      }
+
+      // subtle outer glow / base ring
+      const ring = ctx.createRadialGradient(cx,cy,R*0.2,cx,cy,R*1.6);
+      ring.addColorStop(0,'rgba(70,160,255,0.06)');
+      ring.addColorStop(1,'rgba(70,160,255,0)');
+      ctx.fillStyle = ring; ctx.beginPath(); ctx.arc(cx,cy,R*1.3,0,Math.PI*2); ctx.fill();
+
+      rot += 0.008;
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+    let rt;
+    window.addEventListener('resize', ()=>{ clearTimeout(rt); rt = setTimeout(()=>resize(), 120); });
+  })();
+
+  // Respect reduced motion: pause video + stop heavy anime
+  (function reduceMotion(){
+    const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const v = document.getElementById('bgVideo');
+    if (prefersReduce && v) try{ v.pause(); }catch(e){}
+    if (prefersReduce) {
+      // reduce animations by revealing panels immediately
+      document.querySelectorAll('.panel').forEach(p=>p.classList.add('visible'));
+    }
+  })();
 });
-
-/* Accessibility: pause video if user prefers reduced motion */
-(function(){
-  const video = document.getElementById('bgVideo');
-  const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(video && prefersReduce){
-    video.pause();
-  }
-})();
-</script>
-</body>
-</html>
