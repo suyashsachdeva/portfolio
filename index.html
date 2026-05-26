@@ -97,6 +97,9 @@
     font-family: var(--serif);
     font-size: 22px;
     letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
   }
   .brand .dot {
     display: inline-block;
@@ -182,16 +185,25 @@
   }
 
   /* ─── Hero ──────────────────────────────────────────────────────────── */
-  .hero { padding: 120px 0 110px; position: relative; }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 64px;
+  .hero {
+    padding: 56px 0 64px;
+    position: relative;
+    min-height: calc(100vh - 64px);
+    display: flex;
     align-items: center;
   }
-  @media (max-width: 880px) {
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 56px;
+    align-items: center;
+    width: 100%;
+  }
+  @media (max-width: 980px) {
+    .hero { min-height: 0; padding: 40px 0 56px; }
     .hero-grid { grid-template-columns: 1fr; gap: 40px; }
   }
+  .hero-left { min-width: 0; }
   .hero-meta {
     font-family: var(--mono);
     font-size: 11px;
@@ -218,9 +230,9 @@
   .hero h1 {
     font-family: var(--serif);
     font-weight: 400;
-    font-size: clamp(54px, 7.6vw, 96px);
-    line-height: 1.02;
-    letter-spacing: -0.022em;
+    font-size: clamp(40px, 5.2vw, 68px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
     margin: 0 0 24px;
   }
   .hero h1 em {
@@ -233,6 +245,217 @@
     line-height: 1.6;
     max-width: 52ch;
     margin: 0 0 32px;
+  }
+
+  /* Rotating hero tagline */
+  .hero-tag-wrap {
+    position: relative;
+    margin: 0 0 40px;
+    max-width: 52ch;
+    min-height: 172px;
+  }
+  .hero-tag-wrap .hero-tag {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .55s ease, transform .55s ease;
+    pointer-events: none;
+  }
+  .hero-tag-wrap .hero-tag.in {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .hero-tag-lbl {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    padding-left: 18px;
+    position: relative;
+  }
+  .hero-tag-lbl::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 50%;
+    width: 12px; height: 1px;
+    background: var(--accent);
+  }
+  .hero-tag-wrap .hero-tag p {
+    font-family: var(--serif);
+    color: var(--ink);
+    font-size: clamp(17px, 1.45vw, 21px);
+    line-height: 1.45;
+    margin: 0;
+    text-wrap: pretty;
+    letter-spacing: -0.005em;
+    max-width: 52ch;
+  }
+  .hero-tag-dots {
+    position: absolute;
+    left: 0;
+    bottom: -24px;
+    display: flex;
+    gap: 8px;
+  }
+  .htd {
+    width: 28px; height: 2px;
+    background: var(--line);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: background .25s, transform .25s;
+  }
+  .htd.active { background: var(--accent); }
+  .htd:hover { background: var(--ink-mute); transform: scaleY(1.6); }
+  .htd.active:hover { background: var(--accent); }
+
+  /* Architecture slideshow */
+  .arch-slide {
+    position: relative;
+    background: oklch(15% 0.02 260 / 0.5);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    max-width: 540px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .arch-slide::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 20px; right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
+  }
+  .arch-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .arch-head .arch-tag {
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 9.5px;
+  }
+  .arch-tag-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .arch-tag-link:hover {
+    background: var(--accent);
+    color: oklch(20% 0.04 60);
+    transform: translateY(-1px);
+  }
+  .arch-tag-link svg { opacity: 0.7; }
+  .arch-tag-link:hover svg { opacity: 1; }
+
+  .arch-colab {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 8px;
+    color: var(--ink-mute);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 7px 12px 7px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    align-self: flex-start;
+    transition: all .2s;
+    background: oklch(13% 0.02 260 / 0.5);
+  }
+  .arch-colab:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .arch-colab svg { opacity: 0.65; transition: opacity .2s, transform .2s; }
+  .arch-colab:hover svg { opacity: 1; transform: translate(1px, -1px); }
+  .arch-canvas {
+    width: 100%;
+    aspect-ratio: 23 / 15;
+    display: grid;
+    place-items: center;
+  }
+  .arch-canvas svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .arch-foot {
+    min-height: 76px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .arch-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .arch-desc {
+    color: var(--ink-mute);
+    font-size: 13px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+  .arch-dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .arch-dot {
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background .2s;
+  }
+  .arch-dot:hover { background: var(--ink-mute); }
+  .arch-dot.done { background: var(--ink-mute); }
+  .arch-dot .arch-dot-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-100%);
+  }
+  .arch-dot.active .arch-dot-fill {
+    animation: arch-fill 5.2s linear forwards;
+  }
+  @keyframes arch-fill {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
   }
   .hero-cta-row {
     display: flex;
@@ -303,7 +526,8 @@
     stroke: var(--accent);
     filter: drop-shadow(0 0 8px oklch(82% 0.12 75 / 0.5));
   }
-  .nn-svg .layer-label {
+  .nn-svg .layer-label,
+  .arch-canvas svg .layer-label {
     font-family: var(--mono);
     font-size: 6px;
     letter-spacing: 0.22em;
@@ -782,6 +1006,396 @@
   .foot a { color: var(--ink-mute); text-decoration: none; }
   .foot a:hover { color: var(--accent); }
 
+  /* ─── Training-pipeline rail (fixed, left side) ─────────────────── */
+  .rail {
+    position: fixed;
+    top: 50%;
+    left: 28px;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 18px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: oklch(13% 0.02 260 / 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .rail::before {
+    content: "";
+    position: absolute;
+    left: 50%; top: 18px; bottom: 18px;
+    width: 1px;
+    background: var(--line);
+    transform: translateX(-0.5px);
+  }
+  .rail a {
+    position: relative;
+    width: 20px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    color: var(--ink-dim);
+    transition: color .25s;
+  }
+  .rail a .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--ink-mute);
+    transition: all .3s ease;
+    position: relative;
+    z-index: 2;
+  }
+  .rail a .num {
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity .25s, transform .25s;
+    pointer-events: none;
+    background: oklch(15% 0.02 260 / 0.9);
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    text-transform: uppercase;
+  }
+  .rail a:hover .num { opacity: 1; transform: translateY(-50%) translateX(-6px); }
+  .rail a.active .dot {
+    border-color: var(--phase, var(--accent));
+    background: var(--phase, var(--accent));
+    box-shadow: 0 0 14px var(--phase, var(--accent));
+    transform: scale(1.25);
+  }
+  .rail a.done .dot {
+    background: var(--ink-mute);
+    border-color: var(--ink-mute);
+  }
+  @media (max-width: 1100px) { .rail { display: none; } }
+
+  /* ─── Phase eyebrow & glyph (per-section header) ───────────────── */
+  .phase-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .phase-eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--phase, var(--accent));
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 18px;
+  }
+  .phase-eyebrow .pn {
+    display: inline-grid;
+    place-items: center;
+    width: 26px; height: 26px;
+    border: 1px solid var(--phase, var(--accent));
+    border-radius: 50%;
+    color: var(--phase, var(--accent));
+    font-size: 10px;
+    background: oklch(13% 0.02 260);
+  }
+  .phase-eyebrow .pname { color: var(--phase, var(--accent)); }
+  .phase-eyebrow .pdash { color: var(--ink-dim); }
+  .phase-eyebrow .ptag {
+    color: var(--ink-mute);
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-family: var(--serif);
+    font-size: 16px;
+  }
+  .phase-glyph {
+    width: 200px;
+    height: 100px;
+    color: var(--phase, var(--accent));
+    flex-shrink: 0;
+  }
+  .phase-glyph svg { width: 100%; height: 100%; overflow: visible; }
+  @media (max-width: 720px) {
+    .phase-head { grid-template-columns: 1fr; }
+    .phase-glyph { width: 160px; height: 80px; }
+  }
+
+  /* ─── Inline link styling ──────────────────────────────────────── */
+  .lnk {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: color .2s, background-size .2s;
+  }
+  .lnk:hover {
+    color: var(--phase, var(--accent));
+  }
+  .lnk .ext {
+    display: inline-block;
+    margin-left: 4px;
+    opacity: 0.55;
+    transform: translateY(-1px);
+    transition: opacity .2s, transform .2s;
+  }
+  .lnk:hover .ext { opacity: 1; transform: translateY(-2px) translateX(1px); }
+
+  /* role title can be a link */
+  .exp-role.lnk {
+    background-size: 0% 1px;
+    background-image: linear-gradient(var(--phase, var(--accent)), var(--phase, var(--accent)));
+  }
+  .exp-role.lnk:hover { background-size: 100% 1px; color: var(--phase, var(--accent)); }
+
+  .pub-title.lnk {
+    background-size: 0% 1px;
+    background-image: linear-gradient(var(--phase, var(--accent)), var(--phase, var(--accent)));
+  }
+  .pub-title.lnk:hover { background-size: 100% 1px; }
+  .pub:hover .pub-title { color: var(--phase, var(--accent)); }
+
+  /* override the existing eyebrow ::before bar to use phase hue */
+  section { --phase: var(--accent); }
+
+  /* ─── Per-section animated backdrop ───────────────────────────── */
+  section { isolation: isolate; }
+  .section-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    color: var(--phase, var(--accent));
+    /* fade in/out at section edges so the motif blends */
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 12%, black 88%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, black 12%, black 88%, transparent 100%);
+  }
+  .bd-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ─── Data-section social logos ─────────────────────────────────── */
+  .data-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .data-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 10px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-mute);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: all .2s;
+    background: oklch(15% 0.02 260 / 0.4);
+  }
+  .data-link svg { transition: transform .2s; }
+  .data-link:hover {
+    border-color: var(--phase, var(--accent));
+    color: var(--phase, var(--accent));
+    transform: translateY(-1px);
+  }
+  .data-link:hover svg { transform: scale(1.08); }
+
+  /* ─── Colab floating prompt ─────────────────────────────────────── */
+  .colab-prompt {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 200;
+    animation: colab-rise .5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes colab-rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .colab-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px 11px 16px;
+    background: oklch(17% 0.025 260 / 0.92);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 0 24px oklch(82% 0.12 75 / 0.18), 0 4px 24px oklch(0% 0 0 / 0.4);
+    transition: background .2s, transform .2s;
+  }
+  .colab-pill:hover { background: oklch(20% 0.03 260 / 0.95); transform: translateY(-1px); }
+  .colab-pill svg:first-child { color: var(--accent); }
+  .colab-pill > span { color: var(--ink-mute); }
+  .colab-dismiss {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-dim);
+    padding: 2px;
+    display: inline-grid;
+    place-items: center;
+    transition: color .2s;
+    line-height: 1;
+  }
+  .colab-dismiss:hover { color: var(--ink); }
+  .colab-panel {
+    background: oklch(16% 0.022 260 / 0.96);
+    border: 1px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 8px;
+    padding: 20px;
+    width: 280px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 40px oklch(0% 0 0 / 0.5), 0 0 30px oklch(82% 0.12 75 / 0.12);
+  }
+  .colab-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .colab-panel-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .colab-panel-sub {
+    color: var(--ink-mute);
+    font-size: 13px;
+    margin: 0 0 18px;
+    line-height: 1.5;
+  }
+  .colab-panel-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .colab-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color .2s, background .2s, transform .2s;
+    background: oklch(13% 0.02 260 / 0.5);
+  }
+  .colab-link:hover {
+    border-color: var(--accent);
+    background: oklch(18% 0.024 260 / 0.8);
+    transform: translateX(2px);
+  }
+  .colab-link-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    min-width: 32px;
+  }
+  .colab-link-name {
+    flex: 1;
+    font-size: 13.5px;
+    color: var(--ink-mute);
+  }
+  .colab-link:hover .colab-link-name { color: var(--ink); }
+  .colab-link svg { opacity: 0.5; transition: opacity .2s, transform .2s; }
+  .colab-link:hover svg { opacity: 1; transform: translate(1px, -1px); }
+
+  /* ─── Section divider rule ──────────────────────────────────────── */
+  .phase-rule {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin: 8px 0 56px;
+    color: var(--phase, var(--accent));
+  }
+  .phase-rule .pr-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--phase, var(--accent)) 35%, var(--phase, var(--accent)) 65%, transparent);
+    opacity: 0.7;
+  }
+  .phase-rule .pr-mark {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .phase-rule .pr-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--phase, var(--accent));
+    box-shadow: 0 0 12px var(--phase, var(--accent));
+  }
+  .phase-rule .pr-num {
+    color: var(--phase, var(--accent));
+    font-weight: 500;
+  }
+  .phase-rule .pr-name {
+    color: var(--phase, var(--accent));
+  }
+  .phase-rule .pr-tag {
+    color: var(--ink-mute);
+    font-family: var(--serif);
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    font-size: 16px;
+  }
+  .phase-rule .pr-sep {
+    color: var(--ink-dim);
+    opacity: 0.55;
+  }
+  @media (max-width: 720px) {
+    .phase-rule { gap: 14px; }
+    .phase-rule .pr-mark { gap: 10px; }
+    .phase-rule .pr-tag { font-size: 14px; }
+  }
+
   /* fade-in on scroll */
   .reveal {
     opacity: 0;
@@ -792,6 +1406,74 @@
     opacity: 1;
     transform: none;
   }
+
+  /* ─── Project cards as links ────────────────────────────────────── */
+  .proj-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .proj-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .proj-link-cue {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--phase, var(--accent));
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity .25s, transform .25s;
+  }
+  .proj:hover .proj-link-cue { opacity: 1; transform: none; }
+
+  /* Achievements row as link */
+  .ach-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    text-decoration: none;
+    color: inherit;
+    transition: color .2s;
+  }
+  .ach-link span { display: inline; }
+  .ach-link:hover { color: var(--phase, var(--accent)); }
+  .ach-link .ext { margin-left: 4px; }
+
+  /* Phase accent overrides on per-section context */
+  section .ach-num { color: var(--phase, var(--accent)); }
+  section .proj-icon svg { color: var(--phase, var(--accent)); }
+  section .proj:hover { border-color: var(--phase, var(--accent)); }
+  section .proj::before { background: linear-gradient(90deg, transparent, var(--phase, var(--accent)), transparent); }
+  section .skill-group h4 { color: var(--phase, var(--accent)); }
+  section .skill-list li:hover { border-color: var(--phase, var(--accent)); color: var(--phase, var(--accent)); }
+  section .stat .n { color: var(--phase, var(--accent)); }
+  section .tab.active { background: var(--phase, var(--accent)); color: oklch(20% 0.04 60); }
+  section .exp-co { color: var(--phase, var(--accent)); }
+  section .exp-bullets li::before { background: var(--phase, var(--accent)); }
+  section .exp-item:hover .exp-date { color: var(--phase, var(--accent)); }
+  section .exp-item { transition: padding-left .3s, background .3s; }
+  section .exp-item::before {
+    content: "";
+    position: absolute;
+  }
+  /* faint left tick on hover */
+  .exp-item { position: relative; }
+  .exp-item:hover::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 32px; bottom: 32px;
+    width: 2px;
+    background: var(--phase, var(--accent));
+    opacity: 0.8;
+  }
 </style>
 </head>
 <body>
@@ -800,8 +1482,11 @@
   <div id="root"></div>
 
   <script>
-    /* ── neural backdrop: drifting nodes + nearest-neighbour edges,
-          with occasional signal pulses traveling along edges ────────── */
+    /* ── phase-aware neural backdrop ───────────────────────────────
+       morphs particle behaviour and tint to match the current
+       training-pipeline phase (data → preprocessing → architecture
+       → loss → optimizer → training).  the React app sets
+       window.__phase by dispatching 'phase-change' events. */
     (function(){
       const c = document.getElementById('stars');
       const ctx = c.getContext('2d');
@@ -809,6 +1494,23 @@
       let nodes = [];
       let pulses = [];
       let raf;
+
+      const CONFIGS = {
+        hero:         { edgeR: 140, pulse: 1100, hue: 75,  drift: 0.045, density: 32000 },
+        about:        { edgeR: 70,  pulse: 1700, hue: 75,  drift: 0.05,  density: 38000 },
+        experience:   { edgeR: 130, pulse: 1300, hue: 195, drift: 0.04,  density: 34000 },
+        research:     { edgeR: 160, pulse: 1100, hue: 285, drift: 0.035, density: 30000 },
+        projects:     { edgeR: 105, pulse: 1300, hue: 25,  drift: 0.04,  density: 34000 },
+        skills:       { edgeR: 95,  pulse: 1400, hue: 145, drift: 0.04,  density: 34000 },
+        achievements: { edgeR: 125, pulse: 1300, hue: 235, drift: 0.04,  density: 32000 },
+        contact:      { edgeR: 140, pulse: 1200, hue: 75,  drift: 0.045, density: 32000 },
+      };
+      let cur = { ...CONFIGS.hero };
+      let tgt = { ...CONFIGS.hero };
+      window.__setBackdropPhase = (k) => {
+        if (CONFIGS[k]) Object.assign(tgt, CONFIGS[k]);
+      };
+      window.addEventListener('phase-change', e => window.__setBackdropPhase(e.detail));
 
       function resize(){
         DPR = Math.min(devicePixelRatio || 1, 2);
@@ -818,28 +1520,59 @@
         c.style.width  = W+'px';
         c.style.height = H+'px';
         ctx.setTransform(DPR,0,0,DPR,0,0);
-        const target = Math.round((W * H) / 22000);
+        const target = Math.round((W * H) / 34000);
         nodes = new Array(target).fill(0).map(() => ({
           x: Math.random()*W,
           y: Math.random()*H,
-          vx: (Math.random()-0.5)*0.06,
-          vy: (Math.random()-0.5)*0.06,
-          r: Math.random()<0.85 ? 1.0 : 1.6,
-          a: Math.random()*0.35 + 0.18,
+          vx: (Math.random()-0.5)*0.04,
+          vy: (Math.random()-0.5)*0.04,
+          r: Math.random()<0.85 ? 1.0 : 1.5,
+          a: Math.random()*0.25 + 0.15,
         }));
+      }
+
+      function lerpAngle(a, b, k){
+        let d = b - a;
+        if (d > 180) d -= 360;
+        if (d < -180) d += 360;
+        return (a + d * k + 360) % 360;
+      }
+      function lerpConfig(dt){
+        // slow morph — ~3s to settle
+        const k = Math.min(0.0018 * dt, 0.04);
+        cur.edgeR += (tgt.edgeR - cur.edgeR) * k;
+        cur.drift += (tgt.drift - cur.drift) * k;
+        cur.pulse += (tgt.pulse - cur.pulse) * k;
+        cur.hue    = lerpAngle(cur.hue, tgt.hue, k);
+      }
+
+      function applyForces(dt){
+        // pure gentle drift — no per-phase formation forces.
+        // phase changes are communicated via tint, density and pulse rate only.
+        for (const n of nodes){
+          n.vx *= 0.978;
+          n.vy *= 0.978;
+          n.vx += (Math.random() - 0.5) * cur.drift * 0.045;
+          n.vy += (Math.random() - 0.5) * cur.drift * 0.045;
+          n.x += n.vx * dt * 0.55;
+          n.y += n.vy * dt * 0.55;
+          if (n.x < -20) n.x = W+20;
+          if (n.x > W+20) n.x = -20;
+          if (n.y < -20) n.y = H+20;
+          if (n.y > H+20) n.y = -20;
+        }
       }
 
       function spawnPulse(){
         if (!nodes.length) return;
         const a = nodes[(Math.random()*nodes.length)|0];
-        // find nearest neighbour within radius
-        let best = null, bd = 200*200;
+        let best = null, bd = 240*240;
         for (const n of nodes){
           if (n===a) continue;
           const dx = n.x-a.x, dy = n.y-a.y, d = dx*dx+dy*dy;
           if (d<bd){ bd=d; best=n; }
         }
-        if (best) pulses.push({ a, b: best, t: 0, life: 1.0 });
+        if (best) pulses.push({ a, b: best, t: 0 });
       }
 
       let last = performance.now();
@@ -847,67 +1580,62 @@
       function frame(now){
         const dt = Math.min(40, now-last); last = now;
         ctx.clearRect(0,0,W,H);
+        lerpConfig(dt);
+        applyForces(dt);
 
-        // drift
-        for (const n of nodes){
-          n.x += n.vx * dt * 0.5;
-          n.y += n.vy * dt * 0.5;
-          if (n.x < -20) n.x = W+20;
-          if (n.x > W+20) n.x = -20;
-          if (n.y < -20) n.y = H+20;
-          if (n.y > H+20) n.y = -20;
-        }
+        const hueI = cur.hue | 0;
 
         // edges
-        const R = 150, R2 = R*R;
-        ctx.lineWidth = 1;
-        for (let i=0;i<nodes.length;i++){
-          for (let j=i+1;j<nodes.length;j++){
-            const a = nodes[i], b = nodes[j];
-            const dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx+dy*dy;
-            if (d2 < R2){
-              const t = 1 - Math.sqrt(d2)/R;
-              const alpha = t * 0.07;
-              ctx.strokeStyle = `oklch(78% 0.06 75 / ${alpha})`;
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.stroke();
+        const R = cur.edgeR, R2 = R*R;
+        if (R > 5){
+          ctx.lineWidth = 1;
+          for (let i=0;i<nodes.length;i++){
+            for (let j=i+1;j<nodes.length;j++){
+              const a = nodes[i], b = nodes[j];
+              const dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx+dy*dy;
+              if (d2 < R2){
+                const t = 1 - Math.sqrt(d2)/R;
+                const alpha = t * 0.055;
+                ctx.strokeStyle = `oklch(72% 0.06 ${hueI} / ${alpha})`;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.stroke();
+              }
             }
           }
         }
 
         // nodes
         for (const n of nodes){
-          ctx.fillStyle = `oklch(94% 0.012 85 / ${n.a})`;
+          ctx.fillStyle = `oklch(92% 0.02 ${hueI} / ${n.a * 0.85})`;
           ctx.beginPath();
           ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
           ctx.fill();
         }
 
-        // pulses
+        // pulses — slower and softer
         pulseTimer += dt;
-        if (pulseTimer > 700){ spawnPulse(); pulseTimer = 0; }
+        if (cur.pulse > 100 && pulseTimer > cur.pulse){ spawnPulse(); pulseTimer = 0; }
         for (let i=pulses.length-1; i>=0; i--){
           const p = pulses[i];
-          p.t += dt * 0.0012;
+          p.t += dt * 0.0008;
           if (p.t >= 1){ pulses.splice(i,1); continue; }
           const x = p.a.x + (p.b.x - p.a.x) * p.t;
           const y = p.a.y + (p.b.y - p.a.y) * p.t;
           const g = ctx.createRadialGradient(x,y,0,x,y,9);
-          g.addColorStop(0, 'oklch(82% 0.13 75 / 0.85)');
-          g.addColorStop(1, 'oklch(82% 0.13 75 / 0)');
+          g.addColorStop(0, `oklch(82% 0.13 ${hueI} / 0.7)`);
+          g.addColorStop(1, `oklch(82% 0.13 ${hueI} / 0)`);
           ctx.fillStyle = g;
           ctx.beginPath(); ctx.arc(x,y,9,0,Math.PI*2); ctx.fill();
-          ctx.fillStyle = 'oklch(94% 0.05 85 / 0.95)';
-          ctx.beginPath(); ctx.arc(x,y,1.6,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle = `oklch(94% 0.05 ${hueI} / 0.85)`;
+          ctx.beginPath(); ctx.arc(x,y,1.5,0,Math.PI*2); ctx.fill();
         }
 
         raf = requestAnimationFrame(frame);
       }
 
       let t; addEventListener('resize', ()=>{ clearTimeout(t); t=setTimeout(resize,160); });
-      // pause when tab hidden
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) cancelAnimationFrame(raf);
         else { last = performance.now(); raf = requestAnimationFrame(frame); }
