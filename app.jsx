@@ -430,13 +430,107 @@ const GlyphTrain = () => {
   );
 };
 
+/* ── INFERENCE · model emits a distribution of outputs ──────────────── */
+const GlyphInference = () => {
+  const t = useFrame();
+  // 5 output streams emerging from a black-box model
+  const period = 3.0;
+  const u = (t % period) / period;
+  const outputs = [
+    { y: 18, label: "0.62" },
+    { y: 34, label: "0.21" },
+    { y: 50, label: "0.09" },
+    { y: 66, label: "0.05" },
+    { y: 82, label: "0.03" },
+  ];
+  const modelX1 = 60, modelX2 = 110;
+  const modelY1 = 18, modelY2 = 82;
+  return (
+    <svg viewBox={`0 0 ${GLYPH_W} ${GLYPH_H}`}>
+      {/* input arrow */}
+      <line x1="12" y1="50" x2="55" y2="50" stroke="currentColor"
+            strokeWidth="1.1" opacity={0.85}/>
+      <path d="M52 47 L56 50 L52 53 Z" fill="currentColor" opacity="0.9"/>
+      <text x="14" y="44" fontFamily={monoStack} fontSize="6.5"
+            fill="currentColor" opacity="0.7">x</text>
+      {/* model black box */}
+      <rect x={modelX1} y={modelY1} width={modelX2 - modelX1} height={modelY2 - modelY1}
+            rx="3" fill="var(--bg-card, #16182a)" stroke="currentColor" strokeWidth="1"/>
+      <text x={(modelX1 + modelX2)/2} y="48" textAnchor="middle"
+            fontFamily={monoStack} fontSize="7" fill="currentColor">f_θ</text>
+      <text x={(modelX1 + modelX2)/2} y="58" textAnchor="middle"
+            fontFamily={monoStack} fontSize="5.5" fill="currentColor" opacity="0.55">
+            MODEL
+      </text>
+      {/* output streams */}
+      {outputs.map((o, i) => {
+        const start = i * 0.12;
+        const local = Math.max(0, Math.min(1, (u - start) / 0.6));
+        const x = modelX2 + 6 + (GLYPH_W - 30 - modelX2) * local;
+        return (
+          <g key={i}>
+            <line x1={modelX2 + 2} y1={o.y} x2={GLYPH_W - 30} y2={o.y}
+                  stroke="currentColor" strokeWidth="0.55" opacity="0.35"
+                  strokeDasharray="2 3"/>
+            <circle cx={x} cy={o.y} r="2"
+                    fill="currentColor"
+                    opacity={Math.max(0.15, local * 0.85)}/>
+            <text x={GLYPH_W - 26} y={o.y + 2} fontFamily={monoStack} fontSize="6"
+                  fill="currentColor"
+                  opacity={Math.max(0.25, local * 0.85)}>{o.label}</text>
+          </g>
+        );
+      })}
+      {/* arg-max bar */}
+      <line x1={modelX2 + 6} y1={outputs[0].y - 3} x2={GLYPH_W - 28} y2={outputs[0].y - 3}
+            stroke="var(--accent)" strokeWidth="0.5" opacity="0.6"/>
+      <text x={GLYPH_W - 6} y={GLYPH_H - 4} textAnchor="end"
+            fontFamily={monoStack} fontSize="6.5" fill="currentColor"
+            opacity="0.55" letterSpacing="0.18em">ŷ = softmax(f_θ(x))</text>
+    </svg>
+  );
+};
+
+/* INFERENCE · drifting streams of predictions emerge from a centre point */
+const BdInference = () => {
+  const t = useFrame();
+  const streams = useMemo(() => Array.from({ length: 18 }, (_, i) => ({
+    y: 60 + Math.random() * (BD_H - 120),
+    speed: 36 + Math.random() * 60,
+    offset: Math.random() * BD_W,
+    op: 0.05 + Math.random() * 0.09,
+  })), []);
+  return (
+    <svg className="bd-svg" viewBox={`0 0 ${BD_W} ${BD_H}`} preserveAspectRatio="xMidYMid slice">
+      {/* central seed line */}
+      <line x1="180" y1="80" x2="180" y2={BD_H - 80}
+            stroke="currentColor" strokeWidth="0.8" opacity="0.18"/>
+      {streams.map((s, i) => {
+        const head = ((t * s.speed + s.offset) % (BD_W + 200)) - 80;
+        return (
+          <g key={i} opacity={s.op}>
+            <line x1="180" y1={s.y} x2={BD_W} y2={s.y}
+                  stroke="currentColor" strokeWidth="0.5"
+                  strokeDasharray="6 14"
+                  strokeDashoffset={-t * s.speed * 0.6}/>
+            {head > 180 && (
+              <circle cx={head} cy={s.y} r="3" fill="currentColor" opacity="2"/>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+};
+
 const Glyphs = {
   about:        GlyphData,
   experience:   GlyphPreproc,
   research:     GlyphArch,
   projects:     GlyphLoss,
   skills:       GlyphOpt,
-  achievements: GlyphTrain
+  achievements: GlyphTrain,
+  inference:    GlyphInference
 };
 
 /* ── per-section animated backdrops ─────────────────────────────────────
@@ -642,6 +736,7 @@ const Backdrops = {
   projects:     BdLoss,
   skills:       BdOpt,
   achievements: BdTrain,
+  inference:    BdInference,
 };
 
 const PhaseBackdrop = ({ kind }) => {
@@ -701,6 +796,7 @@ const Nav = () => {
     { id: "research", label: "Research" },
     { id: "projects", label: "Projects" },
     { id: "skills", label: "Skills" },
+    { id: "inference", label: "Posts" },
     { id: "contact", label: "Contact" }
   ];
   return (
@@ -1351,6 +1447,7 @@ const ARCH_DUR_MS = 5200;
 const ArchSlideshow = () => {
   const [idx, setIdx] = useState(0);
   const [cycle, setCycle] = useState(0);
+    const unlocked = useUnlockAfterSeen('arch-notebooks-unlocked');
   useEffect(() => {
     const id = setInterval(() => {
       setIdx(i => {
@@ -1367,17 +1464,23 @@ const ArchSlideshow = () => {
     <div className="arch-slide">
       <div className="arch-head">
         <span className="arch-counter">0{idx + 1} / 0{ARCH_SLIDES.length} · Architectures</span>
-        <a className="arch-tag arch-tag-link"
-           href={slide.colab}
-           target="_blank"
-           rel="noreferrer"
-           title={`Open ${slide.name} notebook in Colab`}>
-          <span>{slide.id}</span>
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 17 17 7"/><path d="M7 7h10v10"/>
-          </svg>
-        </a>
+        {unlocked ? (
+          <a className="arch-tag arch-tag-link"
+             href={slide.colab}
+             target="_blank"
+             rel="noreferrer"
+             title={`Open ${slide.name} notebook in Colab`}>
+            <span>{slide.id}</span>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17 17 7"/><path d="M7 7h10v10"/>
+            </svg>
+          </a>
+        ) : (
+          <span className="arch-tag arch-tag-locked">
+            {slide.id}
+          </span>
+        )}
       </div>
       <div className="arch-canvas" key={slide.id}>
         <C />
@@ -1400,81 +1503,93 @@ const ArchSlideshow = () => {
   );
 };
 
-/* ── Colab prompt (appears after 60s OR full scroll) ─────────────────── */
-const ColabPrompt = () => {
-  const [visible, setVisible] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
+/* ── shared "site has been seen" trigger ────────────────────────────── */
+const useUnlockAfterSeen = (storageKey) => {
+  const [unlocked, setUnlocked] = useState(
+    () => !!sessionStorage.getItem(storageKey)
+  );
   useEffect(() => {
-    if (sessionStorage.getItem('colab-dismissed')) return;
-    let timer;
-    const show = () => {
-      if (!sessionStorage.getItem('colab-dismissed')) setVisible(true);
+    if (unlocked) return;
+    const unlock = () => {
+      sessionStorage.setItem(storageKey, '1');
+      setUnlocked(true);
     };
-    // trigger after 60 s
-    timer = setTimeout(show, 60000);
-    // or when user reaches the contact section
+    const timer = setTimeout(unlock, 60000);
     const onScroll = () => {
-      const el = document.getElementById('contact');
-      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.85) {
-        show();
+      const el = document.getElementById('inference') || document.getElementById('contact');
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+        unlock();
         window.removeEventListener('scroll', onScroll);
       }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => { clearTimeout(timer); window.removeEventListener('scroll', onScroll); };
-  }, []);
+  }, [unlocked]);
+  return unlocked;
+};
 
+/* ── Blog-post floating prompt ───────────────────────────────────────── */
+const BlogPrompt = () => {
+  const triggered = useUnlockAfterSeen('site-seen-blog');
+  const [visible, setVisible] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => {
+    if (triggered && !sessionStorage.getItem('blog-prompt-dismissed') && !sessionStorage.getItem('site-seen-blog-shown')) {
+      // small delay so it doesn't flash on first render
+      const t = setTimeout(() => setVisible(true), 400);
+      sessionStorage.setItem('site-seen-blog-shown', '1');
+      return () => clearTimeout(t);
+    }
+  }, [triggered]);
   const dismiss = (e) => {
-    e.stopPropagation();
+    e && e.stopPropagation();
     setVisible(false);
     setExpanded(false);
-    sessionStorage.setItem('colab-dismissed', '1');
+    sessionStorage.setItem('blog-prompt-dismissed', '1');
   };
-
   if (!visible) return null;
   return (
-    <div className={"colab-prompt" + (expanded ? " colab-expanded" : "")}>
+    <div className={"blog-prompt" + (expanded ? " blog-prompt-expanded" : "")}>
       {!expanded ? (
-        <button className="colab-pill" onClick={() => setExpanded(true)}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M2 8 12 3l10 5-10 5L2 8z"/>
-            <path d="M6 11v5c0 2 3 3 6 3s6-1 6-3v-5"/>
-          </svg>
-          <span>Explore code notebooks</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+        <div className="blog-pill" role="button" tabIndex={0}
+             onClick={() => setExpanded(true)}
+             onKeyDown={e => e.key === 'Enter' && setExpanded(true)}>
+          <span className="blog-pill-dot"></span>
+          <span>Field notes</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
           </svg>
-          <button className="colab-dismiss" onClick={dismiss} aria-label="Dismiss">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+          <span className="bp-dismiss" role="button" tabIndex={0}
+                onClick={dismiss} onKeyDown={e => e.key === 'Enter' && dismiss(e)}
+                aria-label="Dismiss">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M18 6 6 18M6 6l12 12"/>
             </svg>
-          </button>
-        </button>
+          </span>
+        </div>
       ) : (
-        <div className="colab-panel">
-          <div className="colab-panel-head">
-            <span className="colab-panel-title">Code notebooks</span>
-            <button className="colab-dismiss" onClick={dismiss} aria-label="Close">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+        <div className="blog-pane">
+          <div className="blog-pane-head">
+            <span className="blog-pane-title">Field notes</span>
+            <button className="bp-dismiss" onClick={dismiss} aria-label="Close">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M18 6 6 18M6 6l12 12"/>
               </svg>
             </button>
           </div>
-          <p className="colab-panel-sub">Open any architecture in Google Colab.</p>
-          <div className="colab-panel-links">
-            {ARCH_SLIDES.map(s => (
-              <a key={s.id} className="colab-link" href={s.colab}
-                 target="_blank" rel="noreferrer">
-                <span className="colab-link-id">{s.id}</span>
-                <span className="colab-link-name">{s.name}</span>
+          <p className="blog-pane-sub">Inference-time notes from the research.</p>
+          <div className="blog-pane-list">
+            {DATA.blogs.map((b, i) => (
+              <a key={i} className="blog-pane-item" href="#inference">
+                <span className="bpi-slot">{b.slot}</span>
+                <span className="bpi-title">{b.title}</span>
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M7 17 17 7"/><path d="M7 7h10v10"/>
+                  <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
                 </svg>
               </a>
             ))}
@@ -1484,7 +1599,6 @@ const ColabPrompt = () => {
     </div>
   );
 };
-
 
 const HERO_TAGLINES = [
   {
@@ -1770,6 +1884,39 @@ const Achievements = () => {
   );
 };
 
+/* ── inference (phase 07 · BLOG POSTS) ──────────────────────────────── */
+const Inference = () => {
+  const p = DATA.phases[6];
+  return (
+    <section id={p.id} style={{ "--phase": `oklch(78% 0.13 ${p.hue})` }}>
+      <PhaseBackdrop kind={p.id} />
+      <div className="wrap">
+        <PhaseHead phase={p} title="Field notes, in progress."
+          sub="Short writeups on the questions, dead ends and ideas-in-flight from my research. Inferences from the work, before they become papers." />
+        <div className="blog-grid">
+          {DATA.blogs.map((b, i) => (
+            <article className="blog-card" key={i}>
+              <div className="blog-card-rule" aria-hidden="true"></div>
+              <div className="blog-head">
+                <span className="blog-slot">{b.slot}</span>
+                <span className="blog-date">{b.date}</span>
+              </div>
+              <h3 className="blog-title">{b.title}</h3>
+              <p className="blog-excerpt">{b.excerpt}</p>
+              <div className="blog-cta">
+                <span className="blog-status">
+                  <span className="blog-status-dot"></span>
+                  Working on it actively
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 /* ── contact ─────────────────────────────────────────────────────────── */
 const Contact = () => (
   <section id="contact" className="contact">
@@ -1814,7 +1961,7 @@ const App = () => (
   <React.Fragment>
     <Nav />
     <Rail />
-    <ColabPrompt />
+    <BlogPrompt />
     <Hero />
     <About />
     <Experience />
@@ -1822,6 +1969,7 @@ const App = () => (
     <Projects />
     <Skills />
     <Achievements />
+    <Inference />
     <Contact />
   </React.Fragment>
 );

@@ -1226,19 +1226,16 @@
   }
   .data-link:hover svg { transform: scale(1.08); }
 
-  /* ─── Colab floating prompt ─────────────────────────────────────── */
-  .colab-prompt {
+
+    /* ─── Blog floating prompt ──────────────────────────────────────── */
+  .blog-prompt {
     position: fixed;
     bottom: 32px;
     right: 32px;
     z-index: 200;
     animation: colab-rise .5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  @keyframes colab-rise {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: none; }
-  }
-  .colab-pill {
+  .blog-pill {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -1246,7 +1243,7 @@
     background: oklch(17% 0.025 260 / 0.92);
     border: 1px solid var(--accent);
     border-radius: 999px;
-    color: var(--ink);
+    color: var(--ink-mute);
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.12em;
@@ -1257,10 +1254,15 @@
     box-shadow: 0 0 24px oklch(82% 0.12 75 / 0.18), 0 4px 24px oklch(0% 0 0 / 0.4);
     transition: background .2s, transform .2s;
   }
-  .colab-pill:hover { background: oklch(20% 0.03 260 / 0.95); transform: translateY(-1px); }
-  .colab-pill svg:first-child { color: var(--accent); }
-  .colab-pill > span { color: var(--ink-mute); }
-  .colab-dismiss {
+  .blog-pill:hover { background: oklch(20% 0.03 260 / 0.95); transform: translateY(-1px); }
+  .blog-pill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  .bp-dismiss {
     background: none;
     border: none;
     cursor: pointer;
@@ -1271,43 +1273,39 @@
     transition: color .2s;
     line-height: 1;
   }
-  .colab-dismiss:hover { color: var(--ink); }
-  .colab-panel {
+  .bp-dismiss:hover { color: var(--ink); }
+  .blog-pane {
     background: oklch(16% 0.022 260 / 0.96);
     border: 1px solid var(--line);
     border-top-color: var(--accent);
     border-radius: 8px;
     padding: 20px;
-    width: 280px;
+    width: 270px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 8px 40px oklch(0% 0 0 / 0.5), 0 0 30px oklch(82% 0.12 75 / 0.12);
   }
-  .colab-panel-head {
+  .blog-pane-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
   }
-  .colab-panel-title {
+  .blog-pane-title {
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--accent);
   }
-  .colab-panel-sub {
+  .blog-pane-sub {
     color: var(--ink-mute);
     font-size: 13px;
-    margin: 0 0 18px;
+    margin: 0 0 16px;
     line-height: 1.5;
   }
-  .colab-panel-links {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .colab-link {
+  .blog-pane-list { display: flex; flex-direction: column; gap: 5px; }
+  .blog-pane-item {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1315,30 +1313,133 @@
     border: 1px solid var(--line);
     border-radius: 4px;
     text-decoration: none;
-    color: var(--ink);
-    transition: border-color .2s, background .2s, transform .2s;
     background: oklch(13% 0.02 260 / 0.5);
+    transition: border-color .2s, background .2s, transform .2s;
+    color: var(--ink);
   }
-  .colab-link:hover {
+  .blog-pane-item:hover {
     border-color: var(--accent);
-    background: oklch(18% 0.024 260 / 0.8);
+    background: oklch(18% 0.024 260);
     transform: translateX(2px);
   }
-  .colab-link-id {
+  .bpi-slot {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    min-width: 42px;
+  }
+  .bpi-title { flex: 1; font-size: 13px; color: var(--ink-mute); }
+  .blog-pane-item:hover .bpi-title { color: var(--ink); }
+  .blog-pane-item svg { opacity: 0.45; transition: opacity .2s, transform .2s; }
+  .blog-pane-item:hover svg { opacity: 1; transform: translateX(2px); }
+
+/* ─── Architecture chip lock state ──────────────────────────────── */
+  .arch-tag-locked {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 9.5px;
+    cursor: default;
+  }
+  .arch-tag-locked:hover { opacity: 1; }
+
+  /* ─── Blog post cards (Phase 07 · Inference) ────────────────────── */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 880px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+  .blog-card {
+    position: relative;
+    padding: 26px 24px 22px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: oklch(15% 0.02 260 / 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 220px;
+    transition: border-color .25s, transform .25s, background .25s;
+    overflow: hidden;
+  }
+  .blog-card:hover {
+    border-color: var(--phase, var(--accent));
+    background: oklch(17% 0.022 260 / 0.6);
+    transform: translateY(-2px);
+  }
+  .blog-card-rule {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--phase, var(--accent)), transparent);
+    opacity: 0.55;
+  }
+  .blog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-family: var(--mono);
     font-size: 10px;
-    letter-spacing: 0.14em;
-    color: var(--accent);
-    min-width: 32px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
-  .colab-link-name {
+  .blog-slot {
+    color: var(--phase, var(--accent));
+  }
+  .blog-date {
+    color: var(--ink-dim);
+  }
+  .blog-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .blog-excerpt {
+    color: var(--ink-mute);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0;
     flex: 1;
-    font-size: 13.5px;
+  }
+  .blog-cta {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 14px;
+  }
+  .blog-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
     color: var(--ink-mute);
   }
-  .colab-link:hover .colab-link-name { color: var(--ink); }
-  .colab-link svg { opacity: 0.5; transition: opacity .2s, transform .2s; }
-  .colab-link:hover svg { opacity: 1; transform: translate(1px, -1px); }
+  .blog-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--phase, var(--accent));
+    box-shadow: 0 0 8px var(--phase, var(--accent));
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 0.55; transform: scale(0.85); }
+    50%      { opacity: 1;    transform: scale(1.15); }
+  }
 
   /* ─── Section divider rule ──────────────────────────────────────── */
   .phase-rule {

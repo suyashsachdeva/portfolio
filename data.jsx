@@ -261,6 +261,31 @@ window.DATA = {
     { id: "research",     n: "03", phase: "Architecture", tag: "the model",      hue: 285 },
     { id: "projects",     n: "04", phase: "Loss",         tag: "the objective",  hue: 25 },
     { id: "skills",       n: "05", phase: "Optimizer",    tag: "the gradient",   hue: 145 },
-    { id: "achievements", n: "06", phase: "Training",     tag: "the run",        hue: 235 }
+    { id: "achievements", n: "06", phase: "Training",     tag: "the run",        hue: 235 },
+    { id: "inference",    n: "07", phase: "Inference",    tag: "the outputs",    hue: 320 }
+  ],
+
+  blogs: [
+    {
+      slot:    "Post 01",
+      tag:     "Draft",
+      date:    "Q1 2026",
+      title:   "Working on it actively.",
+      excerpt: "A field note on a research thread in progress — placeholder until the post lands."
+    },
+    {
+      slot:    "Post 02",
+      tag:     "Draft",
+      date:    "Q1 2026",
+      title:   "Working on it actively.",
+      excerpt: "A field note on a research thread in progress — placeholder until the post lands."
+    },
+    {
+      slot:    "Post 03",
+      tag:     "Draft",
+      date:    "Q2 2026",
+      title:   "Working on it actively.",
+      excerpt: "A field note on a research thread in progress — placeholder until the post lands."
+    }
   ]
 };
