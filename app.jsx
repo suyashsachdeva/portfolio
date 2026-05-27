@@ -54,6 +54,44 @@ const useFrame = () => {
   return t;
 };
 
+/* ── lazy-mount hooks for phased loading ────────────────────────────── */
+/* useDelayedMount(ms): returns true after `ms` milliseconds (after mount).
+   Use to stagger heavy widgets onto the page without blocking first paint. */
+const useDelayedMount = (delay) => {
+  const [ready, setReady] = useState(delay === 0);
+  useEffect(() => {
+    if (delay === 0) return;
+    const id = setTimeout(() => setReady(true), delay);
+    return () => clearTimeout(id);
+  }, [delay]);
+  return ready;
+};
+
+/* useInViewMount(ref, opts): returns true the first time `ref.current` is
+   near (or in) the viewport. One-shot — never flips back. Heavy section
+   widgets (backdrops, glyphs) defer to this so off-screen sections never
+   spin up an animation loop. */
+const useInViewMount = (ref, { rootMargin = "300px", delay = 0 } = {}) => {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    let timeoutId;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) {
+        if (delay > 0) {
+          timeoutId = setTimeout(() => setInView(true), delay);
+        } else {
+          setInView(true);
+        }
+        io.disconnect();
+      }
+    }, { rootMargin });
+    io.observe(ref.current);
+    return () => { io.disconnect(); if (timeoutId) clearTimeout(timeoutId); };
+  }, [ref, rootMargin, delay]);
+  return inView;
+};
+
 const GLYPH_W = 200, GLYPH_H = 100;
 const monoStack = '"Geist Mono", ui-monospace, monospace';
 
@@ -741,13 +779,21 @@ const Backdrops = {
 
 const PhaseBackdrop = ({ kind }) => {
   const C = Backdrops[kind];
+  const ref = useRef(null);
+  const inView = useInViewMount(ref, { rootMargin: "200px" });
   if (!C) return null;
-  return <div className="section-bg" aria-hidden="true"><C /></div>;
+  return (
+    <div className="section-bg" aria-hidden="true" ref={ref}>
+      {inView && <C />}
+    </div>
+  );
 };
 
 /* ── section header (phase rule + title + glyph) ────────────────────── */
 const PhaseHead = ({ phase, title, sub, children }) => {
   const G = Glyphs[phase.id];
+  const ref = useRef(null);
+  const inView = useInViewMount(ref, { rootMargin: "150px" });
   return (
     <>
       <div className="phase-rule" aria-hidden="true">
@@ -769,8 +815,8 @@ const PhaseHead = ({ phase, title, sub, children }) => {
           {sub && <p className="sec-sub">{sub}</p>}
           {children}
         </div>
-        <div className="phase-glyph">
-          {G && <G />}
+        <div className="phase-glyph" ref={ref}>
+          {G && inView && <G />}
         </div>
       </header>
     </>
@@ -1447,8 +1493,13 @@ const ARCH_DUR_MS = 5200;
 const ArchSlideshow = () => {
   const [idx, setIdx] = useState(0);
   const [cycle, setCycle] = useState(0);
-    const unlocked = useUnlockAfterSeen('arch-notebooks-unlocked');
+  const unlocked = useUnlockAfterSeen('arch-notebooks-unlocked');
+  // Defer rotation by 1.2s so the first paint shows the static FFN
+  // immediately without competing for CPU while the rest of the page
+  // is still settling in.
+  const rotationReady = useDelayedMount(1200);
   useEffect(() => {
+    if (!rotationReady) return;
     const id = setInterval(() => {
       setIdx(i => {
         const next = (i + 1) % ARCH_SLIDES.length;
@@ -1457,7 +1508,7 @@ const ArchSlideshow = () => {
       });
     }, ARCH_DUR_MS);
     return () => clearInterval(id);
-  }, []);
+  }, [rotationReady]);
   const slide = ARCH_SLIDES[idx];
   const C = slide.Comp;
   return (
@@ -1957,22 +2008,35 @@ const Contact = () => (
 );
 
 /* ── app ─────────────────────────────────────────────────────────────── */
-const App = () => (
-  <React.Fragment>
-    <Nav />
-    <Rail />
-    <BlogPrompt />
-    <Hero />
-    <About />
-    <Experience />
-    <Research />
-    <Projects />
-    <Skills />
-    <Achievements />
-    <Inference />
-    <Contact />
-  </React.Fragment>
-);
+const App = () => {
+  // After the first paint, tell the loader to fade out. Two rAFs ensures
+  // the browser has committed the first frame of real content.
+  useEffect(() => {
+    let raf1, raf2;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        window.dispatchEvent(new Event('app-ready'));
+      });
+    });
+    return () => { cancelAnimationFrame(raf1); cancelAnimationFrame(raf2); };
+  }, []);
+  return (
+    <React.Fragment>
+      <Nav />
+      <Rail />
+      <BlogPrompt />
+      <Hero />
+      <About />
+      <Experience />
+      <Research />
+      <Projects />
+      <Skills />
+      <Achievements />
+      <Inference />
+      <Contact />
+    </React.Fragment>
+  );
+};
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 

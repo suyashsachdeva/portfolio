@@ -8,6 +8,158 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
+  /* ── PRE-REACT LOADER ── inlined so it paints on first byte ───────── */
+  :root {
+    --ld-bg:     oklch(13% 0.02 260);
+    --ld-ink:    oklch(94% 0.012 85);
+    --ld-mute:   oklch(60% 0.014 260);
+    --ld-accent: oklch(82% 0.12 75);
+    --ld-line:   oklch(94% 0.012 85 / 0.16);
+  }
+  #loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: radial-gradient(ellipse at 50% 45%, oklch(16% 0.022 260) 0%, oklch(11% 0.02 260) 70%);
+    display: grid;
+    place-items: center;
+    transition: opacity .55s ease, visibility .55s;
+    font-family: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    color: var(--ld-ink);
+  }
+  #loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  .ld-stack { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+  .ld-nn {
+    width: 240px;
+    height: 144px;
+    overflow: visible;
+  }
+  .ld-nn .ld-edge {
+    stroke: var(--ld-line);
+    stroke-width: 1;
+    fill: none;
+  }
+  .ld-nn .ld-edge.lit {
+    stroke: var(--ld-accent);
+    stroke-opacity: 0.85;
+    stroke-width: 1.3;
+    filter: drop-shadow(0 0 4px var(--ld-accent));
+  }
+  .ld-nn .ld-node {
+    fill: var(--ld-bg);
+    stroke: oklch(70% 0.02 260);
+    stroke-width: 1;
+  }
+  .ld-nn .ld-node.lit {
+    fill: var(--ld-accent);
+    stroke: var(--ld-accent);
+    filter: drop-shadow(0 0 8px var(--ld-accent));
+  }
+  .ld-nn .ld-wave {
+    stroke: var(--ld-accent);
+    stroke-width: 1.2;
+    opacity: 0;
+  }
+  .ld-nn .ld-wave.on {
+    opacity: 0.6;
+  }
+  .ld-nn .ld-wave-glow {
+    stroke: var(--ld-accent);
+    stroke-width: 14;
+    opacity: 0;
+  }
+  .ld-nn .ld-wave-glow.on {
+    opacity: 0.16;
+  }
+
+  /* L0 nodes light on tick 0, L1 on tick 1, L2 on tick 2 (cycle of 3) */
+  /* edges L0→L1 light at ticks 0–1; L1→L2 at ticks 1–2 */
+  .ld-nn[data-t="0"] .ld-node.l0,
+  .ld-nn[data-t="1"] .ld-node.l1,
+  .ld-nn[data-t="2"] .ld-node.l2 { animation: ld-pop 0.6s ease-out; }
+  @keyframes ld-pop {
+    0%   { fill: var(--ld-bg);     stroke: oklch(70% 0.02 260); transform: scale(1); }
+    25%  { fill: var(--ld-accent); stroke: var(--ld-accent);    transform: scale(1.35); }
+    100% { fill: var(--ld-bg);     stroke: oklch(70% 0.02 260); transform: scale(1); }
+  }
+  .ld-nn .ld-node { transform-origin: center; transform-box: fill-box; transition: fill .2s, stroke .2s; }
+
+  .ld-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    min-width: 280px;
+  }
+  .ld-title {
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ld-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ld-title::before,
+  .ld-title::after {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--ld-accent);
+    opacity: 0.7;
+  }
+  .ld-bar {
+    width: 240px;
+    height: 1px;
+    background: var(--ld-line);
+    position: relative;
+    overflow: hidden;
+  }
+  .ld-bar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -40%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--ld-accent), transparent);
+    animation: ld-sweep 1.6s ease-in-out infinite;
+  }
+  @keyframes ld-sweep {
+    0%   { left: -40%; }
+    100% { left: 100%; }
+  }
+  .ld-status {
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ld-mute);
+    min-height: 14px;
+    text-align: center;
+  }
+  .ld-status .ld-dots::after {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    text-align: left;
+    animation: ld-dots 1.4s steps(4, end) infinite;
+  }
+  @keyframes ld-dots {
+    0%   { content: ""; }
+    25%  { content: "."; }
+    50%  { content: ".."; }
+    75%  { content: "..."; }
+  }
+  .ld-sig {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ld-mute);
+    letter-spacing: 0.01em;
+    margin-top: -6px;
+    opacity: 0.7;
+  }
+</style>
+<style>
   :root {
     --bg:        oklch(13% 0.02 260);
     --bg-soft:   oklch(16% 0.022 260);
@@ -1578,6 +1730,134 @@
 </style>
 </head>
 <body>
+  <!-- ── PRE-REACT LOADER · 3-2-3 forward pass ─────────────────────── -->
+  <div id="loader" role="status" aria-label="Loading portfolio">
+    <div class="ld-stack">
+      <svg class="ld-nn" data-t="0" viewBox="-100 -60 200 120" aria-hidden="true">
+        <!-- wavefront glow & line -->
+        <line class="ld-wave-glow" x1="0" y1="-50" x2="0" y2="50" data-wave-glow="1"/>
+        <line class="ld-wave"      x1="0" y1="-46" x2="0" y2="46" data-wave="1"/>
+        <!-- edges L0 → L1 -->
+        <g class="ld-edges">
+          <line class="ld-edge" data-e="01" x1="-60" y1="-32" x2="0" y2="-16"/>
+          <line class="ld-edge" data-e="01" x1="-60" y1="-32" x2="0" y2="16"/>
+          <line class="ld-edge" data-e="01" x1="-60" y1="0"   x2="0" y2="-16"/>
+          <line class="ld-edge" data-e="01" x1="-60" y1="0"   x2="0" y2="16"/>
+          <line class="ld-edge" data-e="01" x1="-60" y1="32"  x2="0" y2="-16"/>
+          <line class="ld-edge" data-e="01" x1="-60" y1="32"  x2="0" y2="16"/>
+          <!-- edges L1 → L2 -->
+          <line class="ld-edge" data-e="12" x1="0" y1="-16" x2="60" y2="-32"/>
+          <line class="ld-edge" data-e="12" x1="0" y1="-16" x2="60" y2="0"/>
+          <line class="ld-edge" data-e="12" x1="0" y1="-16" x2="60" y2="32"/>
+          <line class="ld-edge" data-e="12" x1="0" y1="16"  x2="60" y2="-32"/>
+          <line class="ld-edge" data-e="12" x1="0" y1="16"  x2="60" y2="0"/>
+          <line class="ld-edge" data-e="12" x1="0" y1="16"  x2="60" y2="32"/>
+        </g>
+        <!-- nodes -->
+        <g class="ld-nodes">
+          <circle class="ld-node l0" cx="-60" cy="-32" r="5"/>
+          <circle class="ld-node l0" cx="-60" cy="0"   r="5"/>
+          <circle class="ld-node l0" cx="-60" cy="32"  r="5"/>
+          <circle class="ld-node l1" cx="0"   cy="-16" r="5"/>
+          <circle class="ld-node l1" cx="0"   cy="16"  r="5"/>
+          <circle class="ld-node l2" cx="60"  cy="-32" r="5"/>
+          <circle class="ld-node l2" cx="60"  cy="0"   r="5"/>
+          <circle class="ld-node l2" cx="60"  cy="32"  r="5"/>
+        </g>
+        <!-- layer labels -->
+        <text x="-60" y="56" text-anchor="middle"
+              font-family="Geist Mono, monospace" font-size="6.5"
+              letter-spacing="0.22em" fill="oklch(60% 0.014 260)">INPUT</text>
+        <text x="0"   y="56" text-anchor="middle"
+              font-family="Geist Mono, monospace" font-size="6.5"
+              letter-spacing="0.22em" fill="oklch(60% 0.014 260)">HIDDEN</text>
+        <text x="60"  y="56" text-anchor="middle"
+              font-family="Geist Mono, monospace" font-size="6.5"
+              letter-spacing="0.22em" fill="oklch(60% 0.014 260)">OUTPUT</text>
+      </svg>
+      <div class="ld-meta">
+        <span class="ld-title">Forward pass</span>
+        <span class="ld-bar"><span class="ld-bar-fill"></span></span>
+        <span class="ld-status">Compiling network<span class="ld-dots"></span></span>
+      </div>
+      <span class="ld-sig">building the portfolio of Suyash Sachdeva</span>
+    </div>
+  </div>
+
+  <script>
+    /* drive the loader's forward-pass animation (pure JS, no React) */
+    (function(){
+      const nn = document.querySelector('.ld-nn');
+      const status = document.querySelector('.ld-status');
+      const waveGlow = nn.querySelector('[data-wave-glow]');
+      const wave     = nn.querySelector('[data-wave]');
+      const edges01 = nn.querySelectorAll('[data-e="01"]');
+      const edges12 = nn.querySelectorAll('[data-e="12"]');
+      const nodesL0 = nn.querySelectorAll('.l0');
+      const nodesL1 = nn.querySelectorAll('.l1');
+      const nodesL2 = nn.querySelectorAll('.l2');
+      const layers = [-60, 0, 60];
+      const msgs = ['Compiling network', 'Loading weights', 'Warming up', 'Almost there'];
+      let tick = 0;
+      let start = performance.now();
+      const stepMs = 700;       // per-layer dwell
+      const sweepMs = stepMs * 3;
+      let raf;
+      const tickStep = () => {
+        const now = performance.now();
+        const elapsed = (now - start);
+        const t = (elapsed % sweepMs) / sweepMs;     // 0..1 across full sweep
+        const x = -60 + t * 120;
+        wave.setAttribute('x1', x); wave.setAttribute('x2', x);
+        waveGlow.setAttribute('x1', x); waveGlow.setAttribute('x2', x);
+        wave.classList.add('on');
+        waveGlow.classList.add('on');
+        // discrete tick (which layer is hot)
+        const phase = Math.floor(t * 3); // 0,1,2
+        if (phase !== tick) {
+          tick = phase;
+          nn.setAttribute('data-t', String(phase));
+          // light edges based on phase
+          edges01.forEach(e => e.classList.toggle('lit', phase === 0 || phase === 1));
+          edges12.forEach(e => e.classList.toggle('lit', phase === 1 || phase === 2));
+          // light nodes
+          nodesL0.forEach(n => n.classList.toggle('lit', phase === 0));
+          nodesL1.forEach(n => n.classList.toggle('lit', phase === 1));
+          nodesL2.forEach(n => n.classList.toggle('lit', phase === 2));
+          // cycle status text every full sweep
+          if (phase === 0) {
+            const cycle = Math.floor(elapsed / sweepMs);
+            status.firstChild.nodeValue = msgs[cycle % msgs.length];
+          }
+        }
+        raf = requestAnimationFrame(tickStep);
+      };
+      raf = requestAnimationFrame(tickStep);
+      // expose stop fn so we can free the loop after the loader hides
+      window.__loaderStop = () => { cancelAnimationFrame(raf); };
+    })();
+
+    /* hide loader when React app fires app-ready, with a safety timeout */
+    (function(){
+      const ld = document.getElementById('loader');
+      let hidden = false;
+      const hide = () => {
+        if (hidden) return;
+        hidden = true;
+        ld.classList.add('hide');
+        setTimeout(() => {
+          if (window.__loaderStop) window.__loaderStop();
+          ld.remove();
+          // Now kick off the heavy canvas backdrop, after first paint
+          window.dispatchEvent(new CustomEvent('start-cosmos'));
+        }, 600);
+      };
+      window.addEventListener('app-ready', hide, { once: true });
+      // Safety: hide after 15s no matter what so user is never stuck
+      setTimeout(hide, 15000);
+    })();
+  </script>
+
   <div class="cosmos"></div>
   <canvas id="stars"></canvas>
   <div id="root"></div>
@@ -1741,8 +2021,17 @@
         if (document.hidden) cancelAnimationFrame(raf);
         else { last = performance.now(); raf = requestAnimationFrame(frame); }
       });
-      resize();
-      raf = requestAnimationFrame(frame);
+      // Don't start immediately — wait for the app-ready signal so the
+      // canvas loop doesn't compete with Babel compilation + first paint.
+      const start = () => {
+        if (raf) return;          // already running
+        resize();
+        last = performance.now();
+        raf = requestAnimationFrame(frame);
+      };
+      window.addEventListener('start-cosmos', start, { once: true });
+      // Safety fallback in case the loader path is skipped
+      setTimeout(() => { if (!raf) start(); }, 16000);
     })();
   </script>
 
