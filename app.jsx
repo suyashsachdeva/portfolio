@@ -36,21 +36,34 @@ const Lnk = ({ href, children, className = "", showExt = true }) => href ? (
   </a>
 ) : <span className={className}>{children}</span>;
 
-/* ── animation hook: ticks every frame, returns seconds elapsed ────── */
+/* ── animation hook: shared global rAF tick. Every component that needs
+   "the current time in seconds" subscribes to ONE rAF loop instead of
+   spinning up its own. With ~10 animated SVGs that's a 10× reduction in
+   per-frame React work, which is the dominant cost during scroll. ─── */
+const __frameTickers = new Set();
+let __frameRaf = null;
+let __frameStart = 0;
+const __frameLoop = () => {
+  const now = (performance.now() - __frameStart) / 1000;
+  for (const cb of __frameTickers) cb(now);
+  __frameRaf = requestAnimationFrame(__frameLoop);
+};
+const __frameSubscribe = (cb) => {
+  if (__frameTickers.size === 0) {
+    __frameStart = performance.now();
+    __frameRaf = requestAnimationFrame(__frameLoop);
+  }
+  __frameTickers.add(cb);
+  return () => {
+    __frameTickers.delete(cb);
+    if (__frameTickers.size === 0 && __frameRaf) {
+      cancelAnimationFrame(__frameRaf); __frameRaf = null;
+    }
+  };
+};
 const useFrame = () => {
   const [t, setT] = useState(0);
-  useEffect(() => {
-    let raf;
-    const start = performance.now();
-    let alive = true;
-    const loop = () => {
-      if (!alive) return;
-      setT((performance.now() - start) / 1000);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => { alive = false; cancelAnimationFrame(raf); };
-  }, []);
+  useEffect(() => __frameSubscribe(setT), []);
   return t;
 };
 
@@ -71,24 +84,32 @@ const useDelayedMount = (delay) => {
    near (or in) the viewport. One-shot — never flips back. Heavy section
    widgets (backdrops, glyphs) defer to this so off-screen sections never
    spin up an animation loop. */
-const useInViewMount = (ref, { rootMargin = "300px", delay = 0 } = {}) => {
+const useInViewMount = (ref, { rootMargin = "300px", delay = 0, fallback = 1800 } = {}) => {
   const [inView, setInView] = useState(false);
   useEffect(() => {
     if (!ref.current) return;
-    let timeoutId;
+    let timeoutId, fallbackId;
+    const trigger = () => {
+      if (delay > 0) timeoutId = setTimeout(() => setInView(true), delay);
+      else setInView(true);
+    };
     const io = new IntersectionObserver((entries) => {
       if (entries.some(e => e.isIntersecting)) {
-        if (delay > 0) {
-          timeoutId = setTimeout(() => setInView(true), delay);
-        } else {
-          setInView(true);
-        }
+        trigger();
         io.disconnect();
+        if (fallbackId) clearTimeout(fallbackId);
       }
     }, { rootMargin });
     io.observe(ref.current);
-    return () => { io.disconnect(); if (timeoutId) clearTimeout(timeoutId); };
-  }, [ref, rootMargin, delay]);
+    // Safety: if IO never fires (some embedded contexts swallow it), mount
+    // anyway after `fallback` ms so the section never appears empty.
+    fallbackId = setTimeout(() => { trigger(); io.disconnect(); }, fallback);
+    return () => {
+      io.disconnect();
+      if (timeoutId) clearTimeout(timeoutId);
+      if (fallbackId) clearTimeout(fallbackId);
+    };
+  }, [ref, rootMargin, delay, fallback]);
   return inView;
 };
 
@@ -2009,22 +2030,31 @@ const Contact = () => (
 
 /* ── app ─────────────────────────────────────────────────────────────── */
 const App = () => {
-  // After the first paint, tell the loader to fade out. Two rAFs ensures
-  // the browser has committed the first frame of real content.
+  // Non-critical UI (left rail, floating blog prompt) waits for browser
+  // idle. Eliminates their scroll listener + state churn from the TBT
+  // budget around first paint without touching how they look.
+  const [chromeReady, setChromeReady] = useState(false);
   useEffect(() => {
-    let raf1, raf2;
+    let raf1, raf2, idleId, timeoutId;
     raf1 = requestAnimationFrame(() => {
       raf2 = requestAnimationFrame(() => {
         window.dispatchEvent(new Event('app-ready'));
+        const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 600));
+        idleId = idle(() => setChromeReady(true), { timeout: 1800 });
       });
     });
-    return () => { cancelAnimationFrame(raf1); cancelAnimationFrame(raf2); };
+    timeoutId = setTimeout(() => setChromeReady(true), 2200);
+    return () => {
+      cancelAnimationFrame(raf1); cancelAnimationFrame(raf2);
+      clearTimeout(timeoutId);
+      if (window.cancelIdleCallback && idleId) window.cancelIdleCallback(idleId);
+    };
   }, []);
   return (
     <React.Fragment>
       <Nav />
-      <Rail />
-      <BlogPrompt />
+      {chromeReady && <Rail />}
+      {chromeReady && <BlogPrompt />}
       <Hero />
       <About />
       <Experience />
