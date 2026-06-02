@@ -14,8 +14,15 @@
   --line-soft: oklch(94% 0.012 85 / 0.07);
   --accent:    oklch(82% 0.12 75);
   --accent-d:  oklch(70% 0.13 70);
+  --on-accent: oklch(20% 0.04 60);
   /* Inference phase hue (this note lives under Phase 07) */
   --phase:     oklch(74% 0.13 320);
+  /* loader palette */
+  --ld-bg:     oklch(13% 0.02 260);
+  --ld-ink:    oklch(94% 0.012 85);
+  --ld-mute:   oklch(60% 0.014 260);
+  --ld-accent: oklch(82% 0.12 75);
+  --ld-line:   oklch(94% 0.012 85 / 0.16);
   --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
   --mono:  "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -614,3 +621,78 @@ figcaption b { color: var(--ink-mute); font-weight: 500; }
   .reveal { opacity: 1; transform: none; transition: none; }
   * { scroll-behavior: auto; }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   LIGHT THEME — matches the portfolio's paper-and-slate light mode.
+   ───────────────────────────────────────────────────────────────────── */
+:root[data-theme="light"] {
+  --bg:        oklch(96.5% 0.006 85);
+  --bg-soft:   oklch(93.5% 0.008 85);
+  --bg-card:   oklch(98.5% 0.004 85);
+  --ink:       oklch(28% 0.022 265);
+  --ink-mute:  oklch(46% 0.022 265);
+  --ink-dim:   oklch(58% 0.02 265);
+  --line:      oklch(28% 0.04 265 / 0.16);
+  --line-soft: oklch(28% 0.04 265 / 0.07);
+  --accent:    oklch(56% 0.15 56);
+  --accent-d:  oklch(48% 0.16 50);
+  --on-accent: oklch(98% 0.01 85);
+  --phase:     oklch(52% 0.16 320);
+  --ld-bg:     oklch(96.5% 0.006 85);
+  --ld-ink:    oklch(28% 0.022 265);
+  --ld-mute:   oklch(50% 0.02 265);
+  --ld-accent: oklch(56% 0.15 56);
+  --ld-line:   oklch(28% 0.04 265 / 0.18);
+}
+:root[data-theme="light"] .cosmos {
+  background:
+    radial-gradient(1100px 720px at 84% -12%, oklch(72% 0.1 320 / 0.16), transparent 60%),
+    radial-gradient(900px 640px at 6% 108%, oklch(78% 0.06 40 / 0.14), transparent 60%),
+    linear-gradient(180deg, oklch(97% 0.006 85) 0%, oklch(94.5% 0.008 85) 100%);
+}
+:root[data-theme="light"] .cosmos::after {
+  background-image:
+    linear-gradient(oklch(28% 0.02 265 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(28% 0.02 265 / 0.04) 1px, transparent 1px);
+}
+:root[data-theme="light"] .topbar     { background: oklch(96.5% 0.006 85 / 0.74); }
+:root[data-theme="light"] .abstract-box,
+:root[data-theme="light"] .takeaways-box { background: oklch(98.5% 0.004 85 / 0.6); }
+:root[data-theme="light"] figure.fig .frame {
+  background:
+    radial-gradient(900px 400px at 50% -20%, oklch(72% 0.08 320 / 0.12), transparent 70%),
+    oklch(99% 0.004 85 / 0.6);
+}
+:root[data-theme="light"] .card { background: oklch(99% 0.004 85 / 0.55); }
+:root[data-theme="light"] .eq {
+  background: oklch(28% 0.04 265 / 0.06);
+  border-color: var(--line-soft);
+}
+:root[data-theme="light"] .foot {
+  background: radial-gradient(700px 300px at 50% 120%, oklch(72% 0.08 320 / 0.16), transparent 70%);
+}
+:root[data-theme="light"] #loader {
+  background: radial-gradient(ellipse at 50% 45%, oklch(98.5% 0.004 85) 0%, oklch(94% 0.008 85) 70%);
+}
+
+/* ── theme toggle (topbar) ─────────────────────────────────────────── */
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 36px; height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0;
+  transition: color .2s, border-color .2s, transform .2s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+.theme-toggle svg { width: 16px; height: 16px; display: block; }
+.theme-toggle .ico-sun  { display: none; }
+.theme-toggle .ico-moon { display: block; }
+:root[data-theme="light"] .theme-toggle .ico-sun  { display: block; }
+:root[data-theme="light"] .theme-toggle .ico-moon { display: none; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
