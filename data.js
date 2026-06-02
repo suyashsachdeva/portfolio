@@ -10,7 +10,7 @@ window.DATA = {
   github: "https://github.com/suyashsachdeva",
   website: "https://suyashsachdeva.github.io/portfolio/",
   tagline: "Deep Learning Researcher and Engineer with 5+ years in AI/ML — specialising in steganography, one-shot learning, and neural-network-based signal modeling, with applied research in healthcare computer vision and 3D electronic integration.",
-  about: ["I build neural networks for problems where the data is small, the signal is fragile, and the consequence of being wrong is real — medical imaging, secure communication, semiconductor packaging.", "My work sits between research and product: nine peer-reviewed papers in IEEE and Elsevier venues, a healthcare startup I co-founded, and computer-vision pipelines deployed in industry. I care most about translating careful research into systems that hold up outside the lab."],
+  about: ["I build neural networks for problems where the data is small, the signal is fragile, and the consequence of being wrong is real — medical imaging, secure communication, semiconductor packaging.", "My work sits between research and product: nine peer-reviewed papers in IEEE and Elsevier venues, an AI-powered medical device I co-built, and computer-vision pipelines deployed in industry. I care most about translating careful research into systems that hold up outside the lab."],
   stats: [{
     n: "9",
     l: "Papers · Journals + Conf."
@@ -18,11 +18,11 @@ window.DATA = {
     n: "5+",
     l: "Years in AI/ML R&D"
   }, {
-    n: "5",
+    n: "4",
     l: "Research roles"
   }, {
-    n: "1",
-    l: "Healthcare startup"
+    n: "3",
+    l: "Side projects built"
   }],
   experience: [{
     role: "Research Intern",
@@ -30,7 +30,16 @@ window.DATA = {
     coLink: "https://sites.google.com/site/visionlabiisc",
     roleLink: "https://drive.google.com/file/d/1_LwaCTss9nQDLXy7JKvxImHCmxQgwDdF/view?usp=sharing",
     loc: "Remote",
-    date: "May 2026 — Present",
+    date: "May 2026 — Jun 2026",
+    bullets: ["Developing ASR pipelines for automated assessment of children's reading fluency.", "Building a fully automated pipeline that converts handwritten + printed PDFs into editable Word documents."],
+    tags: ["ASR", "OCR"]
+  }, {
+    role: "Research Assistant",
+    co: "VisionLab, IISc Bangalore",
+    coLink: "https://sites.google.com/site/visionlabiisc",
+    roleLink: "https://drive.google.com/file/d/1_LwaCTss9nQDLXy7JKvxImHCmxQgwDdF/view?usp=sharing",
+    loc: "Remote",
+    date: "Jun 2026 — Present",
     bullets: ["Developing ASR pipelines for automated assessment of children's reading fluency.", "Building a fully automated pipeline that converts handwritten + printed PDFs into editable Word documents."],
     tags: ["ASR", "OCR"]
   }, {
@@ -42,14 +51,6 @@ window.DATA = {
     date: "Jul 2025 — Jan 2026",
     bullets: ["Built a statistical and deep-learning pipeline for five-shot satellite object detection.", "Developed object detection, landmarking, and few-shot face-recognition models."],
     tags: ["Few-shot", "Detection"]
-  }, {
-    role: "Co-Founder & AI Developer",
-    co: "Aushika Healthcare — Advanced Drug Dispenser",
-    coLink: "https://youtube.com/shorts/1pvlPtVkpd0?si=hPmKwVJtLnHu8ZxD",
-    loc: "Hamirpur, HP",
-    date: "Nov 2023 — Sep 2025",
-    bullets: ["Led product ideation, planning and design with cross-functional teammates.", "Designed and implemented the deep-learning and computer-vision pipeline shipped in the product."],
-    tags: ["Healthcare", "Product"]
   }, {
     role: "Deep Learning Researcher Intern",
     co: "BIT Sindri",
@@ -132,12 +133,13 @@ window.DATA = {
     link: "https://ieeexplore.ieee.org/abstract/document/10482113"
   }],
   projects: [{
-    title: "EyeCAD",
+    title: "Aushika",
     mark: "01 · Healthcare",
-    date: "Feb 2022 — May 2022",
-    body: "Custom DenseNet for diabetic-retinopathy classification from retinal fundus images. End-to-end training and grading pipeline.",
+    date: "Nov 2023 — Sep 2025",
+    body: "Advanced AI-powered drug dispenser. Designed and shipped the full deep-learning and computer-vision pipeline embedded in the hardware product.",
     icon: "eye",
-    link: "https://github.com/suyashsachdeva/Diabetic_Retinopathy_classification/tree/main"
+    link: "https://youtube.com/shorts/1pvlPtVkpd0?si=hPmKwVJtLnHu8ZxD",
+    linkLabel: "Watch on YouTube"
   }, {
     title: "Militia",
     mark: "02 · Security",
@@ -173,9 +175,6 @@ window.DATA = {
     html: "<b>Winner</b> — Anonymous Tips Website problem statement at <b>Hack the Build 2.0, IIT Jammu</b>.",
     link: "https://drive.google.com/file/d/1x6iqgS64bbnXtR9slTBGbzdUDs11YLwg/view?usp=sharing"
   }, {
-    html: "Qualified for the <b>AWS DeepRacer 2022 Scholarship</b> in autonomous driving and RL simulation.",
-    link: null
-  }, {
     html: "<b>Coordinator, SPEC</b> — directed a 65-person team for events and workshops with 300+ participants.",
     link: "https://drive.google.com/file/d/1TvQ-CboVYm-3QLa8lAbHO_bwF1ni1eIa/view?usp=sharing"
   }, {
@@ -184,9 +183,6 @@ window.DATA = {
   }, {
     html: "<b>Organiser, ELECTROTHON 5.0</b> — led a 50-person team for an MLH hackathon with 2,000+ participants.",
     link: "https://drive.google.com/file/d/1TvQ-CboVYm-3QLa8lAbHO_bwF1ni1eIa/view?usp=sharing"
-  }, {
-    html: "Integrated <b>B.Tech + M.Tech, ECE</b> at NIT Hamirpur (minor in Neural Networks).",
-    link: null
   }],
   education: {
     school: "National Institute of Technology, Hamirpur",
@@ -241,10 +237,11 @@ window.DATA = {
   }],
   blogs: [{
     slot: "Post 01",
-    tag: "Draft",
-    date: "Q1 2026",
-    title: "Working on it actively.",
-    excerpt: "A field note on a research thread in progress — placeholder until the post lands."
+    tag: "Published",
+    date: "Jun 2026",
+    title: "Why a Chaotic Loss Landscape Still Works",
+    excerpt: "A plain-language tour of fractal geometry in neural-network loss landscapes — roughness, flat minima, the edge of stability, and why SGD navigates the mess so well.",
+    link: "blog/fractal-loss-landscapes.html"
   }, {
     slot: "Post 02",
     tag: "Draft",

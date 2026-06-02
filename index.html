@@ -1599,6 +1599,22 @@
     50%      { opacity: 1;    transform: scale(1.15); }
   }
 
+  /* ─── Live (linked) blog card ───────────────────────────────────── */
+  a.blog-card {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  a.blog-card.blog-card-live {
+    border-color: oklch(82% 0.12 75 / 0.35);
+  }
+  a.blog-card.blog-card-live:hover {
+    border-color: var(--phase, var(--accent));
+    transform: translateY(-3px);
+  }
+  a.blog-card.blog-card-live .blog-status { color: var(--phase, var(--accent)); }
+  a.blog-card.blog-card-live .blog-card-rule { opacity: 1; }
+
   /* ─── Section divider rule ──────────────────────────────────────── */
   .phase-rule {
     display: flex;

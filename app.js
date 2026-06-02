@@ -2610,7 +2610,7 @@ const BlogPrompt = () => {
   }, DATA.blogs.map((b, i) => React.createElement("a", {
     key: i,
     className: "blog-pane-item",
-    href: "#inference"
+    href: b.link || "#inference"
   }, React.createElement("span", {
     className: "bpi-slot"
   }, b.slot), React.createElement("span", {
@@ -2892,7 +2892,7 @@ const Projects = () => {
     className: "proj-date"
   }, React.createElement("span", null, pr.date), React.createElement("span", {
     className: "proj-link-cue"
-  }, "View on GitHub ", React.createElement(Icon, {
+  }, pr.linkLabel || "View on GitHub ", React.createElement(Icon, {
     name: "external",
     size: 11
   }))))))));
@@ -2978,29 +2978,40 @@ const Inference = () => {
     sub: "Short writeups on the questions, dead ends and ideas-in-flight from my research. Inferences from the work, before they become papers."
   }), React.createElement("div", {
     className: "blog-grid"
-  }, DATA.blogs.map((b, i) => React.createElement("article", {
-    className: "blog-card",
-    key: i
-  }, React.createElement("div", {
-    className: "blog-card-rule",
-    "aria-hidden": "true"
-  }), React.createElement("div", {
-    className: "blog-head"
-  }, React.createElement("span", {
-    className: "blog-slot"
-  }, b.slot), React.createElement("span", {
-    className: "blog-date"
-  }, b.date)), React.createElement("h3", {
-    className: "blog-title"
-  }, b.title), React.createElement("p", {
-    className: "blog-excerpt"
-  }, b.excerpt), React.createElement("div", {
-    className: "blog-cta"
-  }, React.createElement("span", {
-    className: "blog-status"
-  }, React.createElement("span", {
-    className: "blog-status-dot"
-  }), "Working on it actively")))))));
+  }, DATA.blogs.map((b, i) => {
+    const isLive = !!b.link;
+    const attrs = {
+      className: "blog-card" + (isLive ? " blog-card-live" : ""),
+      key: i
+    };
+    if (isLive) attrs.href = b.link;
+    return React.createElement(isLive ? "a" : "article", attrs,
+      React.createElement("div", {
+        className: "blog-card-rule",
+        "aria-hidden": "true"
+      }),
+      React.createElement("div", {
+        className: "blog-head"
+      }, React.createElement("span", {
+        className: "blog-slot"
+      }, b.slot), React.createElement("span", {
+        className: "blog-date"
+      }, b.date)),
+      React.createElement("h3", {
+        className: "blog-title"
+      }, b.title),
+      React.createElement("p", {
+        className: "blog-excerpt"
+      }, b.excerpt),
+      React.createElement("div", {
+        className: "blog-cta"
+      }, React.createElement("span", {
+        className: "blog-status"
+      }, React.createElement("span", {
+        className: "blog-status-dot"
+      }), isLive ? "Read note \u2192" : "Working on it actively"))
+    );
+  }))));
 };
 const Contact = () => React.createElement("section", {
   id: "contact",
