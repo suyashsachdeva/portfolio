@@ -4,6 +4,20 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Suyash Sachdeva — Deep Learning Researcher</title>
+<script>
+  /* Set theme before first paint to avoid any flash. Default: dark. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t !== 'light' && t !== 'dark') {
+        t = 'dark'; /* portfolio's signature look stays the default */
+      }
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://unpkg.com" crossorigin />
@@ -12,7 +26,8 @@
 <link rel="preload" as="script" href="app.js" />
 <link rel="preload" as="script" href="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous" />
 <link rel="preload" as="script" href="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous" />
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" /></noscript>
 <style>
   /* ── PRE-REACT LOADER ── inlined so it paints on first byte ───────── */
   :root {
@@ -177,6 +192,7 @@
     --line-soft: oklch(94% 0.012 85 / 0.07);
     --accent:    oklch(82% 0.12 75);
     --accent-d:  oklch(70% 0.13 70);
+    --on-accent: oklch(20% 0.04 60);
     --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
     --sans:  "Geist", ui-sans-serif, system-ui, sans-serif;
     --mono:  "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -282,6 +298,11 @@
   }
   .nav-links a:hover { color: var(--ink); }
   .nav-links a.active { color: var(--accent); }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
   .nav-cta {
     border: 1px solid var(--line);
     padding: 8px 16px;
@@ -524,7 +545,7 @@
   }
   .arch-tag-link:hover {
     background: var(--accent);
-    color: oklch(20% 0.04 60);
+    color: var(--on-accent);
     transform: translateY(-1px);
   }
   .arch-tag-link svg { opacity: 0.7; }
@@ -639,7 +660,7 @@
   }
   .btn.primary {
     background: var(--accent);
-    color: oklch(20% 0.04 60);
+    color: var(--on-accent);
     border-color: var(--accent);
   }
   .btn.primary:hover {
@@ -765,39 +786,101 @@
 
   /* ─── Experience ────────────────────────────────────────────────────── */
   .exp-list { display: grid; gap: 0; }
-  .exp-item {
+
+  /* ── organisation block — the org name is ALWAYS on top, whether it
+        holds one role or several, so the section reads consistently ── */
+  .exp-org {
     display: grid;
-    grid-template-columns: 180px 1fr auto;
+    grid-template-columns: 220px 1fr;
     gap: 40px;
-    padding: 32px 0;
+    padding: 38px 0;
     border-top: 1px solid var(--line);
-    align-items: start;
-    transition: padding-left .3s;
   }
-  .exp-item:last-child { border-bottom: 1px solid var(--line); }
-  .exp-item:hover { padding-left: 16px; }
-  .exp-date {
+  .exp-org:last-child { border-bottom: 1px solid var(--line); }
+  .exp-org-head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 92px;
+    align-self: start;
+  }
+  .exp-org-co {
+    font-family: var(--serif);
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1.16;
+    margin: 0;
+    color: var(--ink);
+  }
+  a.exp-org-co.lnk { background-size: 0% 1px; background-image: linear-gradient(var(--phase, var(--accent)), var(--phase, var(--accent))); }
+  a.exp-org-co.lnk:hover { background-size: 100% 1px; color: var(--phase, var(--accent)); }
+  .exp-org-range {
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--ink-mute);
-    padding-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
   }
-  .exp-role {
+  .exp-org-count {
+    color: var(--phase, var(--accent));
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+
+  /* ── roles within an org: a quiet vertical timeline ── */
+  .exp-roles { position: relative; }
+  .exp-roles.multi::before {
+    content: "";
+    position: absolute;
+    left: 4px; top: 9px; bottom: 9px;
+    width: 1px;
+    background: var(--line);
+  }
+  .exp-role-item { position: relative; padding-left: 28px; }
+  .exp-roles:not(.multi) .exp-role-item { padding-left: 0; }
+  .exp-role-item + .exp-role-item { margin-top: 30px; }
+  .exp-roles.multi .exp-role-item::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 7px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--ink-dim);
+    z-index: 1;
+  }
+  .exp-roles.multi .exp-role-item:first-child::before {
+    background: var(--phase, var(--accent));
+    border-color: var(--phase, var(--accent));
+    box-shadow: 0 0 10px var(--phase, var(--accent));
+  }
+  .exp-role-title {
     font-family: var(--serif);
-    font-size: 26px;
+    font-size: 21px;
     font-weight: 400;
-    line-height: 1.2;
-    margin: 0 0 4px;
+    line-height: 1.25;
+    margin: 0 0 6px;
+    color: var(--ink);
+    display: inline-block;
   }
-  .exp-co {
-    color: var(--accent);
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    margin: 0 0 14px;
+  a.exp-role-title.lnk { background-size: 0% 1px; background-image: linear-gradient(var(--phase, var(--accent)), var(--phase, var(--accent))); }
+  a.exp-role-title.lnk:hover { background-size: 100% 1px; color: var(--phase, var(--accent)); }
+  .exp-role-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--ink-mute);
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    align-items: center;
   }
-  .exp-co span { color: var(--ink-dim); margin-left: 8px; }
+  .exp-role-sep { color: var(--ink-dim); opacity: 0.6; }
   .exp-bullets {
     list-style: none;
     padding: 0;
@@ -819,11 +902,11 @@
     height: 1px;
     background: var(--accent);
   }
-  .exp-tags {
+  .exp-role-tags {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 6px;
-    align-items: flex-end;
+    margin-top: 14px;
   }
   .tag {
     font-family: var(--mono);
@@ -837,8 +920,9 @@
     white-space: nowrap;
   }
   @media (max-width: 880px) {
-    .exp-item { grid-template-columns: 1fr; gap: 12px; }
-    .exp-tags { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+    .exp-org { grid-template-columns: 1fr; gap: 18px; }
+    .exp-org-head { position: static; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
+    .exp-org-range { flex-direction: row; gap: 12px; }
   }
 
   /* ─── Research ──────────────────────────────────────────────────────── */
@@ -866,7 +950,7 @@
   .tab:hover { color: var(--ink); }
   .tab.active {
     background: var(--accent);
-    color: oklch(20% 0.04 60);
+    color: var(--on-accent);
   }
   .pub-list { display: grid; gap: 0; }
   .pub {
@@ -1316,11 +1400,11 @@
   .lnk:hover .ext { opacity: 1; transform: translateY(-2px) translateX(1px); }
 
   /* role title can be a link */
-  .exp-role.lnk {
+  .exp-role-title.lnk {
     background-size: 0% 1px;
     background-image: linear-gradient(var(--phase, var(--accent)), var(--phase, var(--accent)));
   }
-  .exp-role.lnk:hover { background-size: 100% 1px; color: var(--phase, var(--accent)); }
+  .exp-role-title.lnk:hover { background-size: 100% 1px; color: var(--phase, var(--accent)); }
 
   .pub-title.lnk {
     background-size: 0% 1px;
@@ -1330,7 +1414,14 @@
   .pub:hover .pub-title { color: var(--phase, var(--accent)); }
 
   /* override the existing eyebrow ::before bar to use phase hue */
-  section { --phase: var(--accent); }
+  /* --phase is composed from a hue (set per-section via --phase-h) plus
+     theme-dependent lightness/chroma so colored accents stay legible in
+     both light and dark. */
+  section {
+    --phase-l: 78%;
+    --phase-c: 0.13;
+    --phase: oklch(var(--phase-l) var(--phase-c) var(--phase-h, 75));
+  }
 
   /* ─── Per-section animated backdrop ───────────────────────────── */
   section { isolation: isolate; }
@@ -1730,25 +1821,108 @@
   section .skill-group h4 { color: var(--phase, var(--accent)); }
   section .skill-list li:hover { border-color: var(--phase, var(--accent)); color: var(--phase, var(--accent)); }
   section .stat .n { color: var(--phase, var(--accent)); }
-  section .tab.active { background: var(--phase, var(--accent)); color: oklch(20% 0.04 60); }
-  section .exp-co { color: var(--phase, var(--accent)); }
+  section .tab.active { background: var(--phase, var(--accent)); color: var(--on-accent); }
   section .exp-bullets li::before { background: var(--phase, var(--accent)); }
-  section .exp-item:hover .exp-date { color: var(--phase, var(--accent)); }
-  section .exp-item { transition: padding-left .3s, background .3s; }
-  section .exp-item::before {
-    content: "";
-    position: absolute;
+</style>
+<style id="theme-light">
+  /* ─────────────────────────────────────────────────────────────────
+     LIGHT THEME · warm paper + slate ink, deepened amber accent.
+     Activated by [data-theme="light"] on <html>. Dark stays default.
+     ───────────────────────────────────────────────────────────────── */
+  :root[data-theme="light"] {
+    --bg:        oklch(96.5% 0.006 85);
+    --bg-soft:   oklch(93.5% 0.008 85);
+    --bg-card:   oklch(98.5% 0.004 85);
+    --ink:       oklch(28% 0.022 265);
+    --ink-mute:  oklch(46% 0.022 265);
+    --ink-dim:   oklch(58% 0.02 265);
+    --line:      oklch(28% 0.04 265 / 0.16);
+    --line-soft: oklch(28% 0.04 265 / 0.07);
+    --accent:    oklch(56% 0.15 56);
+    --accent-d:  oklch(48% 0.16 50);
+    --on-accent: oklch(98% 0.01 85);
+    /* loader palette */
+    --ld-bg:     oklch(96.5% 0.006 85);
+    --ld-ink:    oklch(28% 0.022 265);
+    --ld-mute:   oklch(50% 0.02 265);
+    --ld-accent: oklch(56% 0.15 56);
+    --ld-line:   oklch(28% 0.04 265 / 0.18);
   }
-  /* faint left tick on hover */
-  .exp-item { position: relative; }
-  .exp-item:hover::after {
-    content: "";
-    position: absolute;
-    left: 0; top: 32px; bottom: 32px;
-    width: 2px;
-    background: var(--phase, var(--accent));
-    opacity: 0.8;
+  /* colored phase accents: darker + a touch more chroma so they read on paper */
+  :root[data-theme="light"] section { --phase-l: 54%; --phase-c: 0.15; }
+
+  /* backdrops */
+  :root[data-theme="light"] #loader {
+    background: radial-gradient(ellipse at 50% 45%, oklch(98.5% 0.004 85) 0%, oklch(94% 0.008 85) 70%);
   }
+  :root[data-theme="light"] .cosmos {
+    background:
+      radial-gradient(1100px 720px at 82% -10%, oklch(78% 0.08 75 / 0.22), transparent 60%),
+      radial-gradient(900px 600px at 8% 110%, oklch(78% 0.06 30 / 0.14), transparent 60%),
+      linear-gradient(180deg, oklch(97% 0.006 85) 0%, oklch(94.5% 0.008 85) 100%);
+  }
+  :root[data-theme="light"] .cosmos::after {
+    background-image:
+      linear-gradient(oklch(28% 0.02 265 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(28% 0.02 265 / 0.045) 1px, transparent 1px);
+  }
+
+  /* glassy surfaces → light glass */
+  :root[data-theme="light"] .nav            { background: oklch(96.5% 0.006 85 / 0.72); }
+  :root[data-theme="light"] .arch-slide      { background: oklch(99% 0.004 85 / 0.55); }
+  :root[data-theme="light"] .proj            { background: oklch(99% 0.004 85 / 0.5); }
+  :root[data-theme="light"] .data-link,
+  :root[data-theme="light"] .arch-colab,
+  :root[data-theme="light"] .blog-pane-item  { background: oklch(99% 0.004 85 / 0.6); }
+  :root[data-theme="light"] .blog-pane-item:hover { background: oklch(93.5% 0.008 85); }
+  :root[data-theme="light"] .blog-card       { background: oklch(99% 0.004 85 / 0.55); }
+  :root[data-theme="light"] .blog-card:hover { background: oklch(97% 0.006 85 / 0.8); }
+  :root[data-theme="light"] .contact-row     { background: oklch(98.5% 0.004 85); }
+  :root[data-theme="light"] .contact-row:hover { background: oklch(94% 0.01 85); }
+  :root[data-theme="light"] .rail            { background: oklch(98.5% 0.004 85 / 0.72); }
+  :root[data-theme="light"] .rail a .num     { background: oklch(98.5% 0.004 85 / 0.95); }
+  :root[data-theme="light"] .phase-eyebrow .pn { background: oklch(96.5% 0.006 85); }
+  :root[data-theme="light"] .blog-pill       { background: oklch(98.5% 0.004 85 / 0.95); }
+  :root[data-theme="light"] .blog-pill:hover { background: oklch(95% 0.008 85 / 0.97); }
+  :root[data-theme="light"] .blog-pane       { background: oklch(98.5% 0.004 85 / 0.97); }
+  :root[data-theme="light"] .pub:hover       { background: oklch(28% 0.04 265 / 0.04); }
+  :root[data-theme="light"] .contact {
+    background: radial-gradient(700px 400px at 50% 0%, oklch(78% 0.08 75 / 0.3), transparent 65%);
+  }
+
+  /* ─── Theme toggle (used on site + blog) ─────────────────────────── */
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 38px; height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink-mute);
+    cursor: pointer;
+    padding: 0;
+    transition: color .2s, border-color .2s, transform .2s, background .2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .theme-toggle svg { width: 17px; height: 17px; display: block; }
+  /* sun marks light, moon marks dark — show the glyph for the active theme */
+  .theme-toggle .ico-sun  { display: none; }
+  .theme-toggle .ico-moon { display: block; }
+  :root[data-theme="light"] .theme-toggle .ico-sun  { display: block; }
+  :root[data-theme="light"] .theme-toggle .ico-moon { display: none; }
+
+  /* rail dots derive their hue the same theme-aware way as sections */
+  .rail a {
+    --phase-l: 74%;
+    --phase-c: 0.13;
+    --phase: oklch(var(--phase-l) var(--phase-c) var(--phase-h, 75));
+  }
+  :root[data-theme="light"] .rail a { --phase-l: 52%; --phase-c: 0.15; }
 </style>
 </head>
 <body>
@@ -1910,6 +2084,9 @@
       };
       let cur = { ...CONFIGS.hero };
       let tgt = { ...CONFIGS.hero };
+      /* theme-aware tint: in light mode the particle field must be dark on paper */
+      let isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      window.addEventListener('theme-change', e => { isLight = (e && e.detail === 'light'); });
       window.__setBackdropPhase = (k) => {
         if (CONFIGS[k]) Object.assign(tgt, CONFIGS[k]);
       };
@@ -2002,8 +2179,8 @@
               const dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx+dy*dy;
               if (d2 < R2){
                 const t = 1 - Math.sqrt(d2)/R;
-                const alpha = t * 0.055;
-                ctx.strokeStyle = `oklch(72% 0.06 ${hueI} / ${alpha})`;
+                const alpha = t * (isLight ? 0.075 : 0.055);
+                ctx.strokeStyle = `oklch(${isLight ? '52%' : '72%'} 0.06 ${hueI} / ${alpha})`;
                 ctx.beginPath();
                 ctx.moveTo(a.x, a.y);
                 ctx.lineTo(b.x, b.y);
@@ -2015,7 +2192,7 @@
 
         // nodes
         for (const n of nodes){
-          ctx.fillStyle = `oklch(92% 0.02 ${hueI} / ${n.a * 0.85})`;
+          ctx.fillStyle = `oklch(${isLight ? '44%' : '92%'} 0.03 ${hueI} / ${n.a * (isLight ? 1.05 : 0.85)})`;
           ctx.beginPath();
           ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
           ctx.fill();
@@ -2031,11 +2208,11 @@
           const x = p.a.x + (p.b.x - p.a.x) * p.t;
           const y = p.a.y + (p.b.y - p.a.y) * p.t;
           const g = ctx.createRadialGradient(x,y,0,x,y,9);
-          g.addColorStop(0, `oklch(82% 0.13 ${hueI} / 0.7)`);
-          g.addColorStop(1, `oklch(82% 0.13 ${hueI} / 0)`);
+          g.addColorStop(0, `oklch(${isLight ? '55%' : '82%'} 0.13 ${hueI} / 0.7)`);
+          g.addColorStop(1, `oklch(${isLight ? '55%' : '82%'} 0.13 ${hueI} / 0)`);
           ctx.fillStyle = g;
           ctx.beginPath(); ctx.arc(x,y,9,0,Math.PI*2); ctx.fill();
-          ctx.fillStyle = `oklch(94% 0.05 ${hueI} / 0.85)`;
+          ctx.fillStyle = `oklch(${isLight ? '50%' : '94%'} 0.05 ${hueI} / 0.85)`;
           ctx.beginPath(); ctx.arc(x,y,1.5,0,Math.PI*2); ctx.fill();
         }
 

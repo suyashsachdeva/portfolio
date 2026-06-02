@@ -1387,6 +1387,57 @@ const PhaseHead = ({
     ref: ref
   }, G && inView && React.createElement(G, null))));
 };
+const applyTheme = t => {
+  document.documentElement.setAttribute("data-theme", t);
+  try {
+    localStorage.setItem("theme", t);
+  } catch (e) {}
+  window.dispatchEvent(new CustomEvent("theme-change", {
+    detail: t
+  }));
+};
+const ThemeToggle = () => {
+  const [theme, setTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "dark");
+  const toggle = () => {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    applyTheme(next);
+  };
+  const label = theme === "light" ? "Switch to dark theme" : "Switch to light theme";
+  return React.createElement("button", {
+    className: "theme-toggle",
+    type: "button",
+    onClick: toggle,
+    "aria-label": label,
+    title: label
+  }, React.createElement("svg", {
+    className: "ico-sun",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, React.createElement("circle", {
+    cx: 12,
+    cy: 12,
+    r: 4
+  }), React.createElement("path", {
+    d: "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+  })), React.createElement("svg", {
+    className: "ico-moon",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, React.createElement("path", {
+    d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"
+  })));
+};
 const Nav = () => {
   const [active, setActive] = useState("about");
   useEffect(() => {
@@ -1444,10 +1495,12 @@ const Nav = () => {
     key: s.id,
     href: "#" + s.id,
     className: active === s.id ? "active" : ""
-  }, s.label))), React.createElement("a", {
+  }, s.label))), React.createElement("div", {
+    className: "nav-actions"
+  }, React.createElement(ThemeToggle, null), React.createElement("a", {
     className: "nav-cta",
     href: "#contact"
-  }, "Get in touch")));
+  }, "Get in touch"))));
 };
 const Rail = () => {
   const [active, setActive] = useState(0);
@@ -1498,7 +1551,7 @@ const Rail = () => {
     href: "#" + p.id,
     className: i === active ? "active" : i < active ? "done" : "",
     style: {
-      "--phase": `oklch(74% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     },
     "aria-label": `${p.n} ${p.phase}`
   }, React.createElement("span", {
@@ -2610,7 +2663,9 @@ const BlogPrompt = () => {
   }, DATA.blogs.map((b, i) => React.createElement("a", {
     key: i,
     className: "blog-pane-item",
-    href: b.link || "#inference"
+    href: b.link || "#inference",
+    target: b.link ? "_blank" : undefined,
+    rel: b.link ? "noreferrer" : undefined
   }, React.createElement("span", {
     className: "bpi-slot"
   }, b.slot), React.createElement("span", {
@@ -2696,7 +2751,7 @@ const About = () => {
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2762,10 +2817,35 @@ const About = () => {
 };
 const Experience = () => {
   const p = DATA.phases[1];
+  // Group roles under their organisation so every entry reads org-first,
+  // whether the org holds one role or several.
+  const groups = [];
+  const byCo = {};
+  DATA.experience.forEach(e => {
+    let g = byCo[e.co];
+    if (!g) {
+      g = {
+        co: e.co,
+        coLink: e.coLink,
+        roles: []
+      };
+      byCo[e.co] = g;
+      groups.push(g);
+    }
+    g.roles.push(e);
+  });
+  const orgRange = roles => {
+    if (roles.length === 1) return roles[0].date;
+    const parse = d => (d || "").split("\u2014").map(s => s.trim());
+    const startLabel = parse(roles[roles.length - 1].date)[0]; // oldest role start
+    const newest = parse(roles[0].date); // newest role
+    const endLabel = newest.length > 1 ? newest[1] : newest[0];
+    return startLabel + " \u2014 " + endLabel;
+  };
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2776,35 +2856,52 @@ const Experience = () => {
     title: "Where the work was shaped."
   }), React.createElement("div", {
     className: "exp-list"
-  }, DATA.experience.map((e, i) => React.createElement("article", {
-    className: "exp-item",
+  }, groups.map((g, gi) => React.createElement("article", {
+    className: "exp-org",
+    key: gi
+  },
+  // ── organisation header (always on top) ──
+  React.createElement("div", {
+    className: "exp-org-head"
+  }, g.coLink ? React.createElement("a", {
+    className: "exp-org-co lnk",
+    href: g.coLink,
+    target: "_blank",
+    rel: "noreferrer"
+  }, g.co, React.createElement(Ext, null)) : React.createElement("h3", {
+    className: "exp-org-co"
+  }, g.co), React.createElement("span", {
+    className: "exp-org-range"
+  }, orgRange(g.roles), g.roles.length > 1 ? React.createElement("span", {
+    className: "exp-org-count"
+  }, g.roles.length + " roles") : null)),
+  // ── roles within the org ──
+  React.createElement("div", {
+    className: "exp-roles" + (g.roles.length > 1 ? " multi" : "")
+  }, g.roles.map((e, i) => React.createElement("div", {
+    className: "exp-role-item",
     key: i
-  }, React.createElement("div", {
-    className: "exp-date"
-  }, e.date), React.createElement("div", null, e.roleLink ? React.createElement("a", {
-    className: "exp-role lnk",
+  }, e.roleLink ? React.createElement("a", {
+    className: "exp-role-title lnk",
     href: e.roleLink,
     target: "_blank",
     rel: "noreferrer"
-  }, e.role, React.createElement(Ext, null)) : React.createElement("h3", {
-    className: "exp-role"
+  }, e.role, React.createElement(Ext, null)) : React.createElement("h4", {
+    className: "exp-role-title"
   }, e.role), React.createElement("div", {
-    className: "exp-co"
-  }, e.coLink ? React.createElement("a", {
-    className: "lnk",
-    href: e.coLink,
-    target: "_blank",
-    rel: "noreferrer"
-  }, e.co, React.createElement(Ext, null)) : e.co, React.createElement("span", null, e.loc)), React.createElement("ul", {
+    className: "exp-role-meta"
+  }, React.createElement("span", null, e.date), React.createElement("span", {
+    className: "exp-role-sep"
+  }, "\u00B7"), React.createElement("span", null, e.loc)), React.createElement("ul", {
     className: "exp-bullets"
   }, e.bullets.map((b, j) => React.createElement("li", {
     key: j
-  }, b)))), React.createElement("div", {
-    className: "exp-tags"
+  }, b))), e.tags && e.tags.length ? React.createElement("div", {
+    className: "exp-role-tags"
   }, e.tags.map(t => React.createElement("span", {
     key: t,
     className: "tag"
-  }, t))))))));
+  }, t))) : null))))))));
 };
 const Research = () => {
   const [tab, setTab] = useState("journals");
@@ -2813,7 +2910,7 @@ const Research = () => {
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2861,7 +2958,7 @@ const Projects = () => {
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2902,7 +2999,7 @@ const Skills = () => {
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2928,7 +3025,7 @@ const Achievements = () => {
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2966,7 +3063,7 @@ const Inference = () => {
   return React.createElement("section", {
     id: p.id,
     style: {
-      "--phase": `oklch(78% 0.13 ${p.hue})`
+      "--phase-h": p.hue
     }
   }, React.createElement(PhaseBackdrop, {
     kind: p.id
@@ -2984,7 +3081,11 @@ const Inference = () => {
       className: "blog-card" + (isLive ? " blog-card-live" : ""),
       key: i
     };
-    if (isLive) attrs.href = b.link;
+    if (isLive) {
+      attrs.href = b.link;
+      attrs.target = "_blank";
+      attrs.rel = "noreferrer";
+    }
     return React.createElement(isLive ? "a" : "article", attrs,
       React.createElement("div", {
         className: "blog-card-rule",
