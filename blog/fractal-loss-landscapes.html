@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Why a Chaotic Loss Landscape Still Works — Field Notes</title>
+<meta name="description" content="A plain-language tour of fractal and multifractal geometry in neural-network loss landscapes: roughness, flat minima, the edge of stability, and why SGD navigates the mess so well." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="blog.css" />
+</head>
+<body>
+<div class="cosmos"></div>
+<div class="progress" id="progress"></div>
+
+<!-- ── top bar ─────────────────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back-link" href="../index.html#inference">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+      Back to portfolio
+    </a>
+    <a class="topbar-brand" href="../index.html#top"><span class="dot"></span>Suyash Sachdeva</a>
+    <span class="topbar-tag">Field note 01</span>
+  </div>
+</header>
+
+<main class="shell" data-screen-label="Article">
+
+  <!-- ── header ────────────────────────────────────────────────────── -->
+  <div class="hd">
+    <div class="hd-inner">
+      <span class="eyebrow">Phase 07 · Inference — field note 01</span>
+      <h1>Why a Chaotic Loss Landscape <em>Still Works</em></h1>
+      <p class="dek">Training a neural network means walking downhill on a surface that turns out to be jagged at every scale — a fractal. Here is what that geometry is, and why optimisation succeeds anyway.</p>
+      <div class="byline">
+        <span class="who">By <b>Suyash Sachdeva</b></span>
+        <span class="sep">/</span>
+        <span>Deep Learning · Optimisation</span>
+        <span class="sep">/</span>
+        <span>14 min read</span>
+        <span class="sep">/</span>
+        <span>June 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── abstract / source ─────────────────────────────────────────── -->
+  <div class="abstract">
+    <div class="abstract-box reveal">
+      <div class="lbl">In one paragraph</div>
+      <p>A neural network is trained by minimising a loss function — in principle, just rolling downhill until the error is small. But the surface we roll on is not a smooth bowl. It is a high-dimensional landscape of valleys, ridges, plateaus and sharp pits, and recent work argues that it is <strong>fractal</strong>: zoom into any region and similar complexity reappears at finer and finer scales. This note explains that idea in plain language and shows why it helps make sense of unstable training, flat minima, and the strange reliability of stochastic gradient descent.</p>
+      <cite>Adapted from “Fractal Geometry in Neural Network Loss Landscapes: Mathematical Foundations and Optimization Implications.”<a class="cref" href="#ref-1">1</a></cite>
+    </div>
+  </div>
+
+  <article class="body col">
+
+    <!-- 1 -->
+    <section id="s1">
+      <span class="sec-num">01 — The surface we descend</span>
+      <h2>What a loss landscape actually is</h2>
+      <p class="lead"><span class="dropcap">A</span> modern neural network has millions — sometimes billions — of parameters. Every possible setting of those parameters is a single point in an enormous space, and at each point the loss function reports one number: how badly the network is doing.</p>
+      <p>Collect all of those points together with their loss values and you get the <span class="term">loss landscape</span> — the shape formed by every parameter setting and its corresponding error. Training is the act of moving across this shape, trying to reach a low point.</p>
+      <p>For a tiny model the landscape can be a clean convex bowl with one obvious bottom. Deep networks are nothing like that. Their landscapes are riddled with <strong>sharp minima</strong>, <strong>flat minima</strong>, <strong>saddle points</strong> and unstable boundaries, and these features connect to one another in complicated ways (Figure&nbsp;1). Instead of one tidy minimum, there are many — some reachable, some not.</p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 01</span>
+          <div class="fig-svg-wrap"><svg id="fig1" viewBox="0 0 940 360" role="img" aria-label="A simple convex bowl beside a complex non-convex loss profile"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 1</span><b>From a bowl to a badland.</b> Left: the idealised convex loss with a single minimum. Right: a slice through a deep network's loss, showing sharp minima, broad flat basins, a saddle, and a ragged boundary. A descent path (amber) settles into a wide basin rather than the deepest narrow pit.</figcaption>
+      </figure>
+    </section>
+
+    <!-- 2 -->
+    <section id="s2">
+      <span class="sec-num">02 — Complexity that never goes away</span>
+      <h2>Why fractals enter the picture</h2>
+      <p>A <span class="term">fractal</span> is a structure that stays complex no matter how far you zoom in. A coastline is the classic example: from orbit and from a few metres away it looks equally crinkled. The claim explored in the source paper is that neural-network loss landscapes behave similarly — <strong>zooming into a small region does not make it simple.</strong><a class="cref" href="#ref-1">1</a></p>
+      <p>More precisely, these landscapes are described as <span class="term">multifractal</span>: different parts have different degrees of roughness.<a class="cref" href="#ref-1">1</a> A rough region is crowded with sharp local minima and large fluctuations; a smoother region holds broad, gentle basins (Figure&nbsp;2). The surface is not uniformly bumpy — its bumpiness itself changes from place to place.</p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 02</span>
+          <div class="fig-svg-wrap"><svg id="fig2" viewBox="0 0 940 380" role="img" aria-label="A loss profile that is rough on one side and smooth on the other"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 2</span><b>A multifractal surface.</b> One continuous loss profile whose left half is rough — dense sharp minima and big swings — and whose right half is a smooth, wide basin. The same surface offers hard and easy optimisation depending on where you stand.</figcaption>
+      </figure>
+
+      <p>This single observation explains one of deep learning's most reliable empirical findings: models that finish training in <em>flatter</em> regions tend to perform better on data they have never seen. The geometry, not luck, is doing the work.</p>
+    </section>
+
+    <!-- 3 -->
+    <section id="s3">
+      <span class="sec-num">03 — Measuring roughness</span>
+      <h2>The Hölder exponent, in plain terms</h2>
+      <p>To talk about roughness precisely we need a number for it. That number is the <span class="term">Hölder exponent</span>, written <span class="eq">H</span>. Intuitively it answers a simple question: as you take a tiny step, how violently can the loss change?</p>
+      <ul>
+        <li><strong>Small <span class="eq">H</span></strong> → a rough region. Tiny steps can cause large jumps in loss; the surface is jagged, full of sharp minima.</li>
+        <li><strong>Large <span class="eq">H</span></strong> → a smooth region. The loss changes gently; minima are broad and stable.</li>
+      </ul>
+      <p>In a multifractal landscape this exponent is not fixed — it varies from one location to the next (Figure&nbsp;3). So an optimiser does not travel across a surface of uniform texture. It moves through a space where the very roughness underfoot keeps changing, which is part of why training can feel calm in one phase and turbulent in another.</p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 03</span>
+          <div class="fig-svg-wrap"><svg id="fig3" viewBox="0 0 940 320" role="img" aria-label="Two curve segments, one jagged with small Hölder exponent and one smooth with large exponent"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 3</span><b>Roughness has a number.</b> The same vertical distance is travelled by two segments: a jagged one (small&nbsp;<span class="eq">H</span>) and a gentle one (large&nbsp;<span class="eq">H</span>). The Hölder exponent quantifies how abruptly loss can change over a small step.</figcaption>
+      </figure>
+    </section>
+
+    <!-- 4 -->
+    <section id="s4">
+      <span class="sec-num">04 — The same shape at every scale</span>
+      <h2>Self-similarity, and why it matters</h2>
+      <p>The defining fractal property is <span class="term">self-similarity</span>: small regions resemble larger ones in structure.<a class="cref" href="#ref-1">1</a> For a loss landscape this has a practical sting. When training appears to settle into a small basin, that basin may itself contain smaller basins, ridges and unstable paths — and those, in turn, contain still finer structure (Figure&nbsp;4).</p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 04</span>
+          <div class="fig-svg-wrap"><svg id="fig4" viewBox="0 0 940 380" role="img" aria-label="A rugged curve with a boxed region zoomed in, revealing similar ruggedness, and zoomed again"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 4</span><b>Structure within structure.</b> A basin (left) is magnified twice. Each zoom reveals roughness statistically similar to the level above — the hallmark of a fractal. The animated frame highlights the region being magnified.</figcaption>
+      </figure>
+
+      <p class="pull">Optimisation is not just finding a minimum. It is navigating a multi-scale geometric object whose detail never runs out.</p>
+    </section>
+
+    <!-- 5 -->
+    <section id="s5">
+      <span class="sec-num">05 — Where the geometry comes from</span>
+      <h2>How architecture shapes the landscape</h2>
+      <p>The shape of the loss surface is not arbitrary — it is sculpted by how the network is built. Depth, activation functions, skip connections, width and normalisation all leave their fingerprints on the geometry.<a class="cref" href="#ref-1">1</a></p>
+
+      <div class="cards reveal">
+        <div class="card">
+          <div class="ct">Depth</div>
+          <p class="cb">Deeper networks generally have more complex landscapes. Very deep models without shortcuts can become extremely non-convex and unstable to train.</p>
+        </div>
+        <div class="card">
+          <div class="ct">Skip connections</div>
+          <p class="cb">Residual shortcuts (as in ResNets) make the surface far more navigable, reducing the chance of getting trapped in chaotic regions.<a class="cref" href="#ref-2">2</a></p>
+        </div>
+        <div class="card">
+          <div class="ct">Activation function</div>
+          <p class="cb">ReLU is not smooth at zero, so it stamps sharp, piecewise kinks into the surface. Smoother activations yield different basin structure.</p>
+        </div>
+        <div class="card">
+          <div class="ct">Width &amp; normalisation</div>
+          <p class="cb">Wider, over-parameterised networks tend to smooth the landscape; batch normalisation can stabilise the descent through it.</p>
+        </div>
+      </div>
+
+      <p>The same loss profile, then, can be made friendlier or more hostile by design choices alone (Figure&nbsp;5). A skip connection is not just an engineering trick — it is a way of reshaping the geometry into something an optimiser can actually cross.<a class="cref" href="#ref-2">2</a></p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 05</span>
+          <div class="fig-svg-wrap"><svg id="fig5" viewBox="0 0 940 300" role="img" aria-label="Four small loss profiles comparing deep-without-skip, with skip connections, ReLU kinks, and wide network"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 5</span><b>Design changes the terrain.</b> Sketches of how four choices alter a one-dimensional slice of the loss: a deep network without shortcuts (chaotic), the same with skip connections (a clean valley), ReLU's piecewise kinks, and a wide network's smoothed basin. Schematic, after the visualisations of Li&nbsp;et&nbsp;al.<a class="cref" href="#ref-2">2</a></figcaption>
+      </figure>
+    </section>
+
+    <!-- 6 -->
+    <section id="s6">
+      <span class="sec-num">06 — Moving through the mess</span>
+      <h2>Optimisation as a trajectory</h2>
+      <p>Training is a path through this landscape. Stochastic gradient descent (SGD) does not glide smoothly downhill in a straight line — it interacts with roughness, curvature and noise. In jagged regions it explores aggressively, bouncing around; in smoother regions it slows and settles into a wide basin.</p>
+      <p>The noise that comes from using small random batches is not merely a nuisance. It can help the optimiser jump out of narrow, sharp pits and find broader basins instead — one reason SGD generalises better than its smoother, full-batch cousin. The geometry rewards an explorer that knows when to settle.</p>
+    </section>
+
+    <!-- 7 -->
+    <section id="s7">
+      <span class="sec-num">07 — Fractals beyond the weights</span>
+      <h2>Ragged boundaries in hyperparameter space</h2>
+      <p>The fractal view is not confined to the model's parameters. It can also appear in the space of <em>hyperparameters</em> — especially the learning rate. Small changes to the learning rate, batch size or initialisation can flip training from stable convergence to outright divergence.<a class="cref" href="#ref-6">6</a></p>
+      <p>This is why hyperparameter tuning so often feels unpredictable. The frontier between "this configuration trains" and "this one blows up" need not be a smooth line — it can be irregular and scale-dependent, a fractal boundary in its own right (Figure&nbsp;6).<a class="cref" href="#ref-6">6</a></p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 06</span>
+          <div class="fig-svg-wrap"><svg id="fig6" viewBox="0 0 940 360" role="img" aria-label="A ragged fractal boundary separating trainable from divergent hyperparameter settings"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 6</span><b>A fractal frontier.</b> Across two hyperparameters (e.g. learning rate and initialisation scale), the region that trains successfully (amber) is separated from the region that diverges by a jagged, self-similar boundary — not a clean threshold. Schematic, after Sohl-Dickstein.<a class="cref" href="#ref-6">6</a></figcaption>
+      </figure>
+    </section>
+
+    <!-- 8 -->
+    <section id="s8">
+      <span class="sec-num">08 — Flat versus sharp</span>
+      <h2>Why flat minima generalise</h2>
+      <p>Perhaps the most useful practical consequence is the link between <span class="term">flat minima</span> and generalisation. A sharp minimum can fit the training data perfectly yet sit on a knife-edge: nudge the parameters slightly and the loss leaps. A flat minimum is forgiving — small perturbations barely change the loss, so the model is more robust to the inevitable mismatch between training and test data (Figure&nbsp;7).<a class="cref" href="#ref-3">3</a><a class="cref" href="#ref-4">4</a></p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 07</span>
+          <div class="fig-svg-wrap"><svg id="fig7" viewBox="0 0 940 380" role="img" aria-label="A sharp minimum and a flat minimum, with a shifted test curve showing the sharp one degrades"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 7</span><b>Sharp fits break; flat fits hold.</b> Solid line: training loss with a sharp pit and a wide basin. Dashed line: the test loss, slightly shifted. The sharp minimum's test error jumps; the flat minimum stays low. After Keskar&nbsp;et&nbsp;al.<a class="cref" href="#ref-3">3</a> and Hochreiter&nbsp;&amp;&nbsp;Schmidhuber.<a class="cref" href="#ref-4">4</a></figcaption>
+      </figure>
+
+      <p>The fractal framework gives this a geometric reading: flat minima live in the <em>smoother</em>, large-<span class="eq">H</span> regions of the landscape, while sharp minima cluster in the rough ones. Seeking flatness is, in effect, seeking the gentle parts of a fractal surface.</p>
+    </section>
+
+    <!-- 9 -->
+    <section id="s9">
+      <span class="sec-num">09 — One geometry, many phenomena</span>
+      <h2>What this perspective unifies</h2>
+      <p>The pleasing thing about the fractal picture is how many separate observations it ties together. Edge-of-stability training,<a class="cref" href="#ref-5">5</a> mode connectivity between solutions,<a class="cref" href="#ref-7">7</a> the success of flat minima,<a class="cref" href="#ref-3">3</a> anomalous diffusion of SGD, implicit regularisation, and the maddening sensitivity to hyperparameters<a class="cref" href="#ref-6">6</a> all become facets of the same underlying object (Figure&nbsp;8).</p>
+
+      <figure class="fig reveal">
+        <div class="frame">
+          <span class="fig-tag">Figure 08</span>
+          <div class="fig-svg-wrap"><svg id="fig8" viewBox="0 0 940 420" role="img" aria-label="A hub diagram connecting a fractal loss landscape to six deep-learning phenomena"></svg></div>
+        </div>
+        <figcaption><span class="fc-num">Fig. 8</span><b>A common root.</b> Six well-studied deep-learning phenomena, drawn as consequences of a single multifractal loss geometry. The pulses trace influence flowing outward from the centre.</figcaption>
+      </figure>
+    </section>
+
+    <!-- 10 -->
+    <section id="s10">
+      <span class="sec-num">10 — Takeaway</span>
+      <h2>Complexity is the feature, not the bug</h2>
+      <p>The loss landscape of a neural network is not merely complicated; it may be a genuinely <strong>multifractal</strong> object whose roughness, curvature and dynamics vary across scales. Read that way, complexity stops looking like an obstacle and starts looking like part of the explanation.</p>
+      <p>Neural networks do not succeed because their landscapes are simple. They succeed because optimisers — noisy, stubborn, and surprisingly well-suited to the terrain — are able to navigate landscapes that have no business being navigable.</p>
+    </section>
+  </article>
+
+  <!-- ── takeaways box ─────────────────────────────────────────────── -->
+  <div class="takeaways">
+    <div class="takeaways-box reveal">
+      <div class="lbl">Practical lessons</div>
+      <ol>
+        <li><strong>Learning rate is geometry-dependent.</strong> The same rate behaves differently in rough versus smooth regions — expect to retune as training moves.</li>
+        <li><strong>Skip connections reshape the surface.</strong> They are a tool for making the landscape trainable, not just a depth hack.</li>
+        <li><strong>Flat minima are meaningful, not lucky.</strong> They correspond to smoother fractal regions and tend to generalise.</li>
+        <li><strong>Instability is expected.</strong> Networks often train near the edge of stability, where small changes have outsized effects.</li>
+        <li><strong>SGD works by exploring then settling.</strong> Its noise helps escape sharp pits and find wide basins.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── references ────────────────────────────────────────────────── -->
+  <section class="refs reveal" aria-label="References">
+    <h2>References</h2>
+    <ol>
+      <li id="ref-1"><cite>Fractal Geometry in Neural Network Loss Landscapes: Mathematical Foundations and Optimization Implications.</cite> Source manuscript for this note (2026).</li>
+      <li id="ref-2">H. Li, Z. Xu, G. Taylor, C. Studer, T. Goldstein. <cite>Visualizing the Loss Landscape of Neural Nets.</cite> NeurIPS, 2018.</li>
+      <li id="ref-3">N. S. Keskar, D. Mudigere, J. Nocedal, M. Smelyanskiy, P. T. P. Tang. <cite>On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima.</cite> ICLR, 2017.</li>
+      <li id="ref-4">S. Hochreiter, J. Schmidhuber. <cite>Flat Minima.</cite> Neural Computation, 9(1), 1997.</li>
+      <li id="ref-5">J. Cohen, S. Kaur, Y. Li, J. Z. Kolter, A. Talwalkar. <cite>Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability.</cite> ICLR, 2021.</li>
+      <li id="ref-6">J. Sohl-Dickstein. <cite>The boundary of neural network trainability is fractal.</cite> arXiv:2402.06184, 2024.</li>
+      <li id="ref-7">T. Garipov, P. Izmailov, D. Podoprikhin, D. Vetrov, A. G. Wilson. <cite>Loss Surfaces, Mode Connectivity, and Fast Ensembling of DNNs.</cite> NeurIPS, 2018.</li>
+    </ol>
+  </section>
+
+  <!-- ── footer ────────────────────────────────────────────────────── -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="fnote">End of field note 01</div>
+      <a class="foot-back" href="../index.html#inference">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+        Back to all notes
+      </a>
+      <div class="foot-meta">© 2026 Suyash Sachdeva · Built with care, not noise.</div>
+    </div>
+  </footer>
+
+</main>
+
+<script src="blog.js"></script>
+</body>
+</html>
