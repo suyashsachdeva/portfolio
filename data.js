@@ -24,22 +24,22 @@ window.DATA = {
     n: "3",
     l: "Side projects built"
   }],
-  experience: [{
-    role: "Research Intern",
-    co: "VisionLab, IISc Bangalore",
-    coLink: "https://sites.google.com/site/visionlabiisc",
-    roleLink: "https://drive.google.com/file/d/1_LwaCTss9nQDLXy7JKvxImHCmxQgwDdF/view?usp=sharing",
-    loc: "Remote",
-    date: "May 2026 — Jun 2026",
-    bullets: ["Developing ASR pipelines for automated assessment of children's reading fluency.", "Building a fully automated pipeline that converts handwritten + printed PDFs into editable Word documents."],
-    tags: ["ASR", "OCR"]
-  }, {
+  experience: [ {
     role: "Research Assistant",
     co: "VisionLab, IISc Bangalore",
     coLink: "https://sites.google.com/site/visionlabiisc",
     roleLink: "https://drive.google.com/file/d/1_LwaCTss9nQDLXy7JKvxImHCmxQgwDdF/view?usp=sharing",
     loc: "Remote",
     date: "Jun 2026 — Present",
+    bullets: ["Developing ASR pipelines for automated assessment of children's reading fluency.", "Building a fully automated pipeline that converts handwritten + printed PDFs into editable Word documents."],
+    tags: ["ASR", "OCR"]
+  },{
+    role: "Research Intern",
+    co: "VisionLab, IISc Bangalore",
+    coLink: "https://sites.google.com/site/visionlabiisc",
+    roleLink: "https://drive.google.com/file/d/1_LwaCTss9nQDLXy7JKvxImHCmxQgwDdF/view?usp=sharing",
+    loc: "Remote",
+    date: "May 2026 — Jun 2026",
     bullets: ["Developing ASR pipelines for automated assessment of children's reading fluency.", "Building a fully automated pipeline that converts handwritten + printed PDFs into editable Word documents."],
     tags: ["ASR", "OCR"]
   }, {
