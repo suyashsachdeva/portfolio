@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fractal Loss Landscapes, Revisited — Field Notes</title>
+  <meta name="description" content="A plain‑language exploration of fractal and multifractal geometry in neural‑network loss landscapes: roughness, nested hierarchies, dynamic minima and why stochastic optimisation thrives in the chaos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="blog.css" />
+</head>
+<body>
+  <main id="main" class="main">
+    <!-- Header -->
+    <header class="hero col">
+      <h1>Fractal Loss Landscapes, Revisited</h1>
+      <p class="sub">Self‑similarity, nested hierarchies and dynamic minima</p>
+    </header>
+
+    <article class="body col">
+      <!-- 1 -->
+      <section id="f1">
+        <span class="sec-num">01 — A landscape like no other</span>
+        <h2>Why deep learning landscapes are fractal</h2>
+        <p class="lead"><span class="dropcap">S</span>take a tiny step in parameter space and record how the loss changes.  Now zoom out by a factor of ten and repeat.  If the resulting fluctuations look statistically similar at both scales, you are staring at a fractal.  Recent research reveals that neural‑network loss landscapes exhibit precisely this property: their roughness never truly disappears.  They are not monolithic bowls but <strong>multifractal</strong> surfaces with pointwise Hölder exponents varying from about 0.3 in jagged regions to 0.7 in smooth basins【358881580072179†L6-L18】.</p>
+        <p>These landscapes arise when many nonlinear layers compose together, each introducing its own wrinkles.  The covariance structure can be modelled as a multifractal Gaussian function whose local regularity is controlled by the Hölder exponent H(θ)【358881580072179†L21-L37】.  The result is a heterogeneous loss surface where sharp minima, wide valleys and saddle ridges coexist, creating an almost organic topography【358881580072179†L96-L104】.</p>
+      </section>
+
+      <!-- 2 -->
+      <section id="f2">
+        <span class="sec-num">02 — Roughness has a number</span>
+        <h2>The Hölder exponent</h2>
+        <p>The degree of roughness at a point θ is quantified by the <strong>Hölder exponent</strong> H(θ).  Intuitively, H measures how violently the loss can change under an infinitesimal parameter perturbation: small H implies jagged, rapidly changing loss; large H implies gentle slopes.  In multifractal landscapes this exponent is not constant – it varies across space【358881580072179†L6-L18】.  Regions with H ≈ 0.7 host broad, flat minima; regions with H ≈ 0.3 harbour sharp pits and high curvature.  The distribution of H values broadens as networks deepen, with shallow networks confined to 0.4–0.6 and deep networks spanning 0.3–0.7 or more【29920167878083†L66-L77】.</p>
+        <figure class="fig reveal">
+          <div class="frame">
+            <span class="fig-tag">Figure&nbsp;01</span>
+            <div class="fig-svg-wrap">
+              <img src="holder_exponent_distribution.png" alt="Histogram comparing Hölder exponent distributions in single‑layer and deep networks" />
+            </div>
+          </div>
+          <figcaption><span class="fc-num">Fig.&nbsp;1</span> <b>Distribution of Hölder exponents.</b> Histograms of simulated H values for single‑layer (green) and deep (pink) networks illustrate how multifractality broadens with depth【29920167878083†L66-L77】.  Shallow networks have a narrower range (0.4–0.6), whereas deep networks span 0.3–0.7.</figcaption>
+        </figure>
+      </section>
+
+      <!-- 3 -->
+      <section id="f3">
+        <span class="sec-num">03 — Self‑similarity across scales</span>
+        <h2>Zooming into the chaos</h2>
+        <p>The hallmark of a fractal is self‑similarity: zooming into a small region reveals structure reminiscent of the larger whole.  Loss landscapes display this property beautifully.  Box‑counting and Hausdorff dimension analyses show that roughness persists across more than ten orders of magnitude in scale【358881580072179†L44-L48】.  Visualisations reveal volcanic‑like basins where zooming in exposes ever finer undulations【358881580072179†L96-L116】.</p>
+        <p>To illustrate, the figure below plots a one‑dimensional slice through a loss landscape and highlights a region that is then magnified.  The zoomed inset exhibits fluctuations with similar statistical properties to the larger plot, capturing the essence of self‑similarity.</p>
+        <figure class="fig reveal">
+          <div class="frame">
+            <span class="fig-tag">Figure&nbsp;02</span>
+            <div class="fig-svg-wrap">
+              <img src="fractal_zoom2.png" alt="Fractal loss slice with a zoomed‑in inset showing similar roughness" />
+            </div>
+          </div>
+          <figcaption><span class="fc-num">Fig.&nbsp;2</span> <b>Self‑similarity in action.</b> A simulated loss slice (blue) with a highlighted region (yellow) and a zoomed inset (red) shows that the small‑scale structure echoes the large‑scale roughness【358881580072179†L44-L48】【358881580072179†L96-L110】.</figcaption>
+        </figure>
+      </section>
+
+      <!-- 4 -->
+      <section id="f4">
+        <span class="sec-num">04 — Layer‑by‑layer hierarchies</span>
+        <h2>Nesting fractals through composition</h2>
+        <p>Why do these fractals arise in the first place?  The answer lies in how neural networks build complexity by composing functions.  Mathematical analysis shows that when a function f<sub>2</sub> is composed with f<sub>1</sub>, the resulting loss landscape isn’t just the sum of their complexities – it contains an entire fractal substructure for each layer.  Every point in layer&nbsp;1’s landscape contains a mini‑landscape for layer&nbsp;2【429275041504759†L19-L25】.  Empirical studies visualise this “Russian doll” effect: two‑layer networks show simple fractal boundaries, three‑layer networks reveal nested basins, and deeper networks generate chaotic hierarchies unless architectural innovations like skip connections are used【429275041504759†L31-L44】.</p>
+        <p>As depth increases, the range of Hölder exponents widens and the fractal dimension grows【429275041504759†L84-L99】.  This nested structure is depicted in the following schematic: a background fractal texture is overlaid with nested boxes, each representing the landscape created by successive layers.</p>
+        <figure class="fig reveal">
+          <div class="frame">
+            <span class="fig-tag">Figure&nbsp;03</span>
+            <div class="fig-svg-wrap">
+              <img src="nested_fractal_hierarchy.png" alt="Nested fractal hierarchy illustrating how successive layers embed new fractal structures" />
+            </div>
+          </div>
+          <figcaption><span class="fc-num">Fig.&nbsp;3</span> <b>Nesting fractal hierarchies.</b> Each white box represents the loss landscape of a layer embedded within the landscape of the previous layer.  As depth increases, new fractal detail emerges inside existing structures【429275041504759†L19-L44】.</figcaption>
+        </figure>
+      </section>
+
+      <!-- 5 -->
+      <section id="f5">
+        <span class="sec-num">05 — Shallow networks are multifractal too</span>
+        <h2>Emergence at the first hidden layer</h2>
+        <p>Multifractality is not the exclusive domain of deep networks.  Even single‑layer neural networks – one hidden layer with a nonlinear activation – exhibit multifractal loss landscapes【29920167878083†L0-L20】.  In these shallow models all local minima are provably global minima under standard assumptions【29920167878083†L38-L41】, yet the introduction of a nonlinearity immediately broadens the Hölder spectrum from a single value (linear models) to a continuous range【29920167878083†L74-L98】.</p>
+        <p>Depth amplifies complexity.  Shallow networks typically have H ∈ (0.4, 0.6), whereas deep networks span 0.3–0.7 or wider【29920167878083†L66-L77】.  The generalized fractal dimensions D<sub>q</sub> increase non‑linearly with depth, plateauing around 5–10 layers for most architectures【29920167878083†L124-L128】.</p>
+      </section>
+
+      <!-- 6 -->
+      <section id="f6">
+        <span class="sec-num">06 — Landscapes in motion</span>
+        <h2>Dynamic minima and fractional diffusion</h2>
+        <p>The landscape described so far is not static.  During training, models actually <em>modify</em> the loss surface, digging their own local minima【551212703046245†L0-L7】.  Mini‑batch gradient descent does not simply traverse a fixed landscape; each mini‑batch creates a slightly different effective loss, and the stochastic noise sculpts new valleys and ridges【551212703046245†L67-L81】.  Fractional Langevin dynamics provide a mathematical framework for these motions: the diffusion exponent α = min{1, 2−2H} determines whether the optimizer behaves superdiffusively (rapid exploration in rough regions) or subdiffusively (slow exploitation in smooth basins)【551212703046245†L28-L31】.</p>
+        <p>Training progresses through phases: an initial chaotic transient where the Hessian spectrum stabilises【551212703046245†L33-L38】, an early‑to‑mid phase in which the model digs its own minima【551212703046245†L45-L48】, and a late phase of fine‑tuning.  Small mini‑batches introduce high variance, encouraging exploration and the creation of many sharp minima; medium batch sizes strike a balance between exploration and stability, while very large batches converge to pre‑existing sharp minima【551212703046245†L86-L94】.</p>
+      </section>
+
+      <!-- 7 -->
+      <section id="f7">
+        <span class="sec-num">07 — Consequences for practice</span>
+        <h2>Why fractals matter for optimisation</h2>
+        <p>Understanding the fractal nature of loss landscapes has practical benefits.  Rough regions (low H) favour exploration, and optimisers with noise (like stochastic gradient descent) naturally exhibit superdiffusive jumps that move quickly through jagged terrain【358881580072179†L127-L135】.  In smooth basins (high H) the same optimisers slow down, exploiting wide valleys and settling into flat minima that generalise well【358881580072179†L136-L159】.  Skip connections and normalisation layers can reshape the landscape, raising H values and smoothing the fractal hierarchy【429275041504759†L31-L44】.</p>
+        <p>Hyperparameter tuning also inherits a fractal character.  Small changes to learning rate, batch size or initialisation can flip training between success and divergence, and the boundary between these regimes is itself fractal【358881580072179†L77-L83】.  This explains why hyperparameter searches sometimes feel chaotic – the “edge of stability” is jagged, not smooth.  Recognising this helps practitioners embrace the inherent instability rather than fight it.</p>
+      </section>
+    </article>
+
+    <!-- Takeaways -->
+    <div class="takeaways">
+      <div class="takeaways-box reveal">
+        <div class="lbl">Practical lessons</div>
+        <ol>
+          <li><strong>Accept the chaos.</strong> Loss landscapes are multifractal objects – complexity is a feature, not a bug【358881580072179†L6-L19】.</li>
+          <li><strong>Use noise to explore.</strong> Stochastic optimisers naturally adapt to rough and smooth regions, exhibiting super‑ and subdiffusive behaviour【358881580072179†L127-L136】.</li>
+          <li><strong>Add skip connections.</strong> Architectural innovations like residual links raise the Hölder exponent and tame pathological fractal hierarchies【429275041504759†L31-L44】.</li>
+          <li><strong>Don’t ignore shallow models.</strong> Even single‑layer networks are multifractal, but their narrower Hölder spectrum makes them a valuable testing ground【29920167878083†L66-L77】.</li>
+          <li><strong>Hyperparameters are fractal too.</strong> Expect irregular boundaries between convergence and divergence when tuning learning rates and batch sizes【358881580072179†L77-L83】.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- References -->
+    <section class="refs reveal" aria-label="References">
+      <h2>References</h2>
+      <ol>
+        <li id="ref-f1"><cite>The fractal geometry of neural network loss landscapes.</cite> Provides mathematical foundations for multifractal loss surfaces and Hölder exponents【358881580072179†L6-L48】.</li>
+        <li id="ref-f2"><cite>Multifractal properties emerge even in single‑layer neural networks.</cite> Shows that nonlinearity immediately produces multifractality and analyses the range of H values【29920167878083†L0-L41】【29920167878083†L66-L98】.</li>
+        <li id="ref-f3"><cite>Neural network loss landscapes compose layer by layer in fractal hierarchies.</cite> Describes nested fractal formation through function composition and the effect of depth【429275041504759†L19-L99】.</li>
+        <li id="ref-f4"><cite>Deep learning models creating their own local minima: A comprehensive analysis.</cite> Examines how mini‑batch optimisation sculpts dynamic landscapes and introduces fractional diffusion【551212703046245†L0-L81】.</li>
+      </ol>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <div class="foot-inner">
+        <div class="fnote">End of field note</div>
+        <a class="foot-back" href="../index.html#inference" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+          Back to all notes
+        </a>
+        <div class="foot-meta">© 2026 Field Notes · Built with care.</div>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="blog.js"></script>
+  <script>
+    /* theme toggle */
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>
